@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Components"
+             xmlns:scomp="clr-namespace:IT13_AviahC.Views.Superadmin.Components"
+             x:Class="IT13_AviahC.Views.Superadmin.SuperadminCustomersPage"
+             BackgroundColor="#F3F0FA">
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Shared Sidebar -->
+        <components:SidebarView Grid.Column="0" CurrentPage="SuperadminCustomers" ModuleTitle="SUPER ADMIN MODULES" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <!-- Header -->
+            <scomp:SuperadminHeaderView Grid.Row="0" />
+
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="32" Spacing="32">
+                    <!-- Title and Top Actions -->
+                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="16">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Platform Subscribers" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                            <Label Text="MSME businesses using Aviah Collection ERP/CRM" FontSize="14" TextColor="#7D6A9E" />
+                        </VerticalStackLayout>
+                        
+                        <Border Grid.Column="1" StrokeShape="RoundRectangle 20" BackgroundColor="White" StrokeThickness="0" Padding="16,4" WidthRequest="300" VerticalOptions="Center">
+                            <HorizontalStackLayout Spacing="12">
+                                <Path Data="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                                      Fill="#94A3B8" Aspect="Uniform" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
+                                <Entry Placeholder="Search businesses..." TextColor="#1E293B" PlaceholderColor="#94A3B8" BackgroundColor="Transparent" FontSize="14" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <Button Grid.Column="2" Text="+ Add Business" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="20,0" FontAttributes="Bold" HeightRequest="40" VerticalOptions="Center" />
+                    </Grid>
+
+                    <!-- Main Content Grid -->
+                    <Grid ColumnDefinitions="320,*" ColumnSpacing="24">
+                        <!-- Left Column: Summary Stats -->
+                        <VerticalStackLayout Spacing="16">
+                            <!-- Premium Subscribers Card -->
+                            <Border BackgroundColor="#624890" StrokeShape="RoundRectangle 20" Padding="24" StrokeThickness="0">
+                                <VerticalStackLayout Spacing="20">
+                                    <HorizontalStackLayout Spacing="12">
+                                        <Path Data="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .55-.45 1-1 1H6c-.55 0-1-.45-1-1v-1h14v1z"
+                                              Fill="White" Aspect="Uniform" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
+                                        <Label Text="Premium Subscribers" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                    <VerticalStackLayout Spacing="4">
+                                        <Label Text="24" TextColor="White" FontSize="36" FontAttributes="Bold" />
+                                        <Label Text="₱48,000/mo revenue" TextColor="#D1C4E9" FontSize="12" />
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Total MSMEs Card -->
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="24" StrokeThickness="0">
+                                <VerticalStackLayout Spacing="20">
+                                    <HorizontalStackLayout Spacing="12">
+                                        <Path Data="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"
+                                              Fill="#624890" Aspect="Uniform" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
+                                        <Label Text="Total MSMEs" TextColor="#463366" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                    <VerticalStackLayout Spacing="4">
+                                        <Label Text="87" TextColor="#463366" FontSize="36" FontAttributes="Bold" />
+                                        <Label Text="+8 this month" TextColor="#15803D" FontSize="12" FontAttributes="Bold" />
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- MRR Card -->
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="24" StrokeThickness="0">
+                                <VerticalStackLayout Spacing="20">
+                                    <HorizontalStackLayout Spacing="12">
+                                        <Path Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V17c0-.55-.45-1-1-1h-1.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h2c.83 0 1.5-.67 1.5-1.5V12c0-.83-.67-1.5-1.5-1.5H12V9c0-.55-.45-1-1-1h-1.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h2.5c.55 0 1-.45 1-1s-.45-1-1-1H9.41V4c0-.55-.45-1-1-1s-1 .45-1 1v1.09c-1.15.26-2 1.28-2 2.5 0 1.15.74 2.13 1.76 2.45l.24.05V11c0 .55.45 1 1 1h1.5c.28 0 .5.22.5.5s-.22.5-.5.5h-2c-.83 0-1.5.67-1.5 1.5V16c0 .83.67 1.5 1.5 1.5H12v1.59c0 .55.45 1 1 1s1-.45 1-1z"
+                                              Fill="#624890" Aspect="Uniform" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
+                                        <Label Text="MRR" TextColor="#463366" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                    <VerticalStackLayout Spacing="4">
+                                        <Label Text="₱96,500" TextColor="#463366" FontSize="36" FontAttributes="Bold" />
+                                        <Label Text="+12.3% growth" TextColor="#15803D" FontSize="12" FontAttributes="Bold" />
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Right Column: Business Table -->
+                        <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="0" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="0">
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="2*,1.5*,*,*,*,Auto" Padding="32">
+                                    <!-- Table Header -->
+                                    <Border Grid.ColumnSpan="6" BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" HeightRequest="48" StrokeThickness="0" Margin="0,0,0,12" />
+                                    <Label Text="Business Name" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" Margin="24,0" />
+                                    <Label Grid.Column="1" Text="Contact" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                    <Label Grid.Column="2" Text="Subscription" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" HorizontalTextAlignment="Center" />
+                                    <Label Grid.Column="3" Text="Users" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" HorizontalTextAlignment="Center" />
+                                    <Label Grid.Column="4" Text="Monthly Fee" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                    <Label Grid.Column="5" Text="Renewal" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" Margin="0,0,24,0" />
+
+                                    <!-- Row 1 -->
+                                    <Label Grid.Row="1" Text="Violet Boutique Manila" FontSize="14" FontAttributes="Bold" TextColor="#1E293B" VerticalOptions="Center" Margin="24,20" />
+                                    <HorizontalStackLayout Grid.Row="1" Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                                        <Path Data="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+                                              Fill="#94A3B8" Aspect="Uniform" HeightRequest="14" WidthRequest="14" VerticalOptions="Center" />
+                                        <Label Text="maria@violetboutique.ph" FontSize="12" TextColor="#64748B" />
+                                    </HorizontalStackLayout>
+                                    <Border Grid.Row="1" Grid.Column="2" BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 10" Padding="12,4" HorizontalOptions="Center" VerticalOptions="Center" StrokeThickness="0">
+                                        <Label Text="Premium" FontSize="10" TextColor="#624890" FontAttributes="Bold" />
+                                    </Border>
+                                    <Label Grid.Row="1" Grid.Column="3" Text="12 users" FontSize="13" TextColor="#64748B" HorizontalTextAlignment="Center" VerticalOptions="Center" />
+                                    <Label Grid.Row="1" Grid.Column="4" Text="₱2,000" FontSize="13" FontAttributes="Bold" TextColor="#1E293B" VerticalOptions="Center" />
+                                    <HorizontalStackLayout Grid.Row="1" Grid.Column="5" Spacing="16" VerticalOptions="Center" Margin="0,0,24,0">
+                                        <Label Text="May 15" FontSize="12" TextColor="#64748B" />
+                                        <Path Data="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" Fill="#94A3B8" Aspect="Uniform" HeightRequest="16" WidthRequest="16" />
+                                    </HorizontalStackLayout>
+
+                                    <!-- Row 2 -->
+                                    <Label Grid.Row="2" Text="Fashion Hub Cebu" FontSize="14" FontAttributes="Bold" TextColor="#1E293B" VerticalOptions="Center" Margin="24,20" />
+                                    <HorizontalStackLayout Grid.Row="2" Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                                        <Path Data="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+                                              Fill="#94A3B8" Aspect="Uniform" HeightRequest="14" WidthRequest="14" VerticalOptions="Center" />
+                                        <Label Text="john@fashionhub.ph" FontSize="12" TextColor="#64748B" />
+                                    </HorizontalStackLayout>
+                                    <Border Grid.Row="2" Grid.Column="2" BackgroundColor="#EFF6FF" StrokeShape="RoundRectangle 10" Padding="12,4" HorizontalOptions="Center" VerticalOptions="Center" StrokeThickness="0">
+                                        <Label Text="Standard" FontSize="10" TextColor="#2563EB" FontAttributes="Bold" />
+                                    </Border>
+                                    <Label Grid.Row="2" Grid.Column="3" Text="5 users" FontSize="13" TextColor="#64748B" HorizontalTextAlignment="Center" VerticalOptions="Center" />
+                                    <Label Grid.Row="2" Grid.Column="4" Text="₱1,200" FontSize="13" FontAttributes="Bold" TextColor="#1E293B" VerticalOptions="Center" />
+                                    <HorizontalStackLayout Grid.Row="2" Grid.Column="5" Spacing="16" VerticalOptions="Center" Margin="0,0,24,0">
+                                        <Label Text="May 22" FontSize="12" TextColor="#64748B" />
+                                        <Path Data="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" Fill="#94A3B8" Aspect="Uniform" HeightRequest="16" WidthRequest="16" />
+                                    </HorizontalStackLayout>
+
+                                    <!-- Row 3 -->
+                                    <Label Grid.Row="3" Text="Elegant Threads Co." FontSize="14" FontAttributes="Bold" TextColor="#1E293B" VerticalOptions="Center" Margin="24,20" />
+                                    <HorizontalStackLayout Grid.Row="3" Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                                        <Path Data="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+                                              Fill="#94A3B8" Aspect="Uniform" HeightRequest="14" WidthRequest="14" VerticalOptions="Center" />
+                                        <Label Text="anna@elegantthreads.ph" FontSize="12" TextColor="#64748B" />
+                                    </HorizontalStackLayout>
+                                    <Border Grid.Row="3" Grid.Column="2" BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 10" Padding="12,4" HorizontalOptions="Center" VerticalOptions="Center" StrokeThickness="0">
+                                        <Label Text="Premium" FontSize="10" TextColor="#624890" FontAttributes="Bold" />
+                                    </Border>
+                                    <Label Grid.Row="3" Grid.Column="3" Text="8 users" FontSize="13" TextColor="#64748B" HorizontalTextAlignment="Center" VerticalOptions="Center" />
+                                    <Label Grid.Row="3" Grid.Column="4" Text="₱2,000" FontSize="13" FontAttributes="Bold" TextColor="#1E293B" VerticalOptions="Center" />
+                                    <HorizontalStackLayout Grid.Row="3" Grid.Column="5" Spacing="16" VerticalOptions="Center" Margin="0,0,24,0">
+                                        <Label Text="Jun 01" FontSize="12" TextColor="#64748B" />
+                                        <Path Data="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" Fill="#94A3B8" Aspect="Uniform" HeightRequest="16" WidthRequest="16" />
+                                    </HorizontalStackLayout>
+
+                                    <!-- Row 4 -->
+                                    <Label Grid.Row="4" Text="Chic Boutique QC" FontSize="14" FontAttributes="Bold" TextColor="#1E293B" VerticalOptions="Center" Margin="24,20" />
+                                    <HorizontalStackLayout Grid.Row="4" Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                                        <Path Data="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+                                              Fill="#94A3B8" Aspect="Uniform" HeightRequest="14" WidthRequest="14" VerticalOptions="Center" />
+                                        <Label Text="sarah@chicboutique.ph" FontSize="12" TextColor="#64748B" />
+                                    </HorizontalStackLayout>
+                                    <Border Grid.Row="4" Grid.Column="2" BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 10" Padding="12,4" HorizontalOptions="Center" VerticalOptions="Center" StrokeThickness="0">
+                                        <Label Text="Basic" FontSize="10" TextColor="#64748B" FontAttributes="Bold" />
+                                    </Border>
+                                    <Label Grid.Row="4" Grid.Column="3" Text="3 users" FontSize="13" TextColor="#64748B" HorizontalTextAlignment="Center" VerticalOptions="Center" />
+                                    <Label Grid.Row="4" Grid.Column="4" Text="₱500" FontSize="13" FontAttributes="Bold" TextColor="#1E293B" VerticalOptions="Center" />
+                                    <HorizontalStackLayout Grid.Row="4" Grid.Column="5" Spacing="16" VerticalOptions="Center" Margin="0,0,24,0">
+                                        <Label Text="May 18" FontSize="12" TextColor="#64748B" />
+                                        <Path Data="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" Fill="#94A3B8" Aspect="Uniform" HeightRequest="16" WidthRequest="16" />
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

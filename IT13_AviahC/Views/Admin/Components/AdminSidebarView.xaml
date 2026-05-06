@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="IT13_AviahC.Views.Admin.Components.AdminSidebarView"
+             x:Name="sidebarView"
+             WidthRequest="240"
+             MinimumWidthRequest="240"
+             HorizontalOptions="Start"
+             VerticalOptions="Fill">
+    <Grid x:Name="RootGrid"
+          BindingContext="{Binding Source={x:Reference sidebarView}}"
+          BackgroundColor="#624890"
+          Padding="16,24"
+          RowDefinitions="Auto,*,Auto">
+        
+        <!-- Header -->
+        <VerticalStackLayout Spacing="24" Margin="8,0,0,32">
+            <HorizontalStackLayout Spacing="12">
+                <Border BackgroundColor="#7B5EB0"
+                        StrokeShape="RoundRectangle 10"
+                        HeightRequest="40"
+                        WidthRequest="40">
+                    <Label Text="A"
+                           TextColor="White"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
+                <Label Text="Aviah System"
+                       TextColor="White"
+                       FontAttributes="Bold"
+                       FontSize="20"
+                       VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+
+        <!-- Navigation Links -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="6">
+                
+                <!-- Dashboard -->
+                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminDashboard" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="30,*" ColumnSpacing="12">
+                        <Path Data="M3 3h7v7H3V3zm11 0h7v7h-7V3zm0 11h7v7h-7v-7zM3 14h7v7H3v-7z"
+                              Fill="White"
+                              Aspect="Uniform"
+                              HeightRequest="18"
+                              WidthRequest="18"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="Dashboard" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                    </Grid>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding CurrentPage}" Value="AdminDashboard">
+                            <Setter Property="BackgroundColor" Value="#463366" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                </Border>
+
+                <!-- Inventory -->
+                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminInventory" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="30,*" ColumnSpacing="12">
+                        <Path Data="M21 16.5c0 .38-.21.71-.53.88l-7.97 4.43c-.16.09-.33.14-.5.14s-.34-.05-.5-.14l-7.97-4.43c-.32-.17-.53-.5-.53-.88V7.5c0-.38.21-.71.53-.88l7.97-4.43c.16-.09.33-.14.5-.14s.34.05.5.14l7.97 4.43c.32.17.53.5.53.88v9zM12 4.15L6.04 7.5 12 10.85l5.96-3.35L12 4.15zM5 15.91l6 3.35v-6.71L5 9.21v6.7zm14 0V9.21l-6 3.34v6.71l6-3.35z"
+                              Fill="White"
+                              Aspect="Uniform"
+                              HeightRequest="18"
+                              WidthRequest="18"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="Inventory" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                    </Grid>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding CurrentPage}" Value="AdminInventory">
+                            <Setter Property="BackgroundColor" Value="#463366" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                </Border>
+
+                <!-- Production -->
+                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminProduction" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="30,*" ColumnSpacing="12">
+                        <Path Data="M9.64 7.64c.2-.2.5-.2.7 0l3.02 3.02c.2.2.2.5 0 .7l-3.02 3.02c-.2.2-.5.2-.7 0l-3.02-3.02c-.2-.2-.2-.5 0-.7l3.02-3.02zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+                              Fill="White"
+                              Aspect="Uniform"
+                              HeightRequest="18"
+                              WidthRequest="18"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="Production" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                    </Grid>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding CurrentPage}" Value="AdminProduction">
+                            <Setter Property="BackgroundColor" Value="#463366" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                </Border>
+
+                <!-- Sales -->
+                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminSales" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="30,*" ColumnSpacing="12">
+                        <Path Data="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"
+                              Fill="White"
+                              Aspect="Uniform"
+                              HeightRequest="18"
+                              WidthRequest="18"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="Sales" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                    </Grid>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding CurrentPage}" Value="AdminSales">
+                            <Setter Property="BackgroundColor" Value="#463366" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                </Border>
+
+                <!-- Suppliers -->
+                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminSuppliers" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="30,*" ColumnSpacing="12">
+                        <Path Data="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"
+                              Fill="White"
+                              Aspect="Uniform"
+                              HeightRequest="18"
+                              WidthRequest="18"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="Suppliers" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                    </Grid>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding CurrentPage}" Value="AdminSuppliers">
+                            <Setter Property="BackgroundColor" Value="#463366" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                </Border>
+
+                <!-- Customers -->
+                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminCustomers" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="30,*" ColumnSpacing="12">
+                        <Path Data="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"
+                              Fill="White"
+                              Aspect="Uniform"
+                              HeightRequest="18"
+                              WidthRequest="18"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="Customers" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                    </Grid>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding CurrentPage}" Value="AdminCustomers">
+                            <Setter Property="BackgroundColor" Value="#463366" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                </Border>
+
+                <!-- Logistics -->
+                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="#01000000" InputTransparent="False">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminLogistics" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="30,*" ColumnSpacing="12" InputTransparent="True">
+                        <Path Data="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13-1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm1.91-4.5H17V9.5h2.5l1.41 1.5z"
+                               Fill="White"
+                               Aspect="Uniform"
+                               HeightRequest="18"
+                               WidthRequest="18"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="Logistics" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                    </Grid>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding CurrentPage}" Value="AdminLogistics">
+                            <Setter Property="BackgroundColor" Value="#463366" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                </Border>
+
+                <!-- Reports -->
+                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminReports" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="30,*" ColumnSpacing="12">
+                        <Path Data="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
+                              Fill="White"
+                              Aspect="Uniform"
+                              HeightRequest="18"
+                              WidthRequest="18"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="Reports" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                    </Grid>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding CurrentPage}" Value="AdminReports">
+                            <Setter Property="BackgroundColor" Value="#463366" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                </Border>
+
+                <!-- Promotions -->
+                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminPromotions" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="30,*" ColumnSpacing="12">
+                        <Path Data="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"
+                              Fill="White"
+                              Aspect="Uniform"
+                              HeightRequest="18"
+                              WidthRequest="18"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="Promotions" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                    </Grid>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding CurrentPage}" Value="AdminPromotions">
+                            <Setter Property="BackgroundColor" Value="#463366" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                </Border>
+
+                <!-- Subscription -->
+                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminSubscription" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="30,*" ColumnSpacing="12">
+                        <Path Data="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .55-.45 1-1 1H6c-.55 0-1-.45-1-1v-1h14v1z"
+                              Fill="White"
+                              Aspect="Uniform"
+                              HeightRequest="18"
+                              WidthRequest="18"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="Subscription" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                    </Grid>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding CurrentPage}" Value="AdminSubscription">
+                            <Setter Property="BackgroundColor" Value="#463366" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Footer -->
+        <VerticalStackLayout Grid.Row="2" Spacing="8" Margin="0,20,0,0">
+            <BoxView HeightRequest="1" BackgroundColor="#7B5EB0" Margin="0,0,0,16" />
+            <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="Login" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="30,*" ColumnSpacing="12">
+                    <Path Data="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+                          Fill="White"
+                          Aspect="Uniform"
+                          HeightRequest="18"
+                          WidthRequest="18"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="Logout" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+        </VerticalStackLayout>
+    </Grid>
+</ContentView>

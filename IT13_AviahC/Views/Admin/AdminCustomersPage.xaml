@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Admin.Components"
+             x:Class="IT13_AviahC.Views.Admin.AdminCustomersPage"
+             BackgroundColor="#F3F0FA">
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Reusable Sidebar -->
+        <components:AdminSidebarView Grid.Column="0" CurrentPage="AdminCustomers" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <!-- Header -->
+            <components:AdminHeaderView Grid.Row="0" />
+
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="32" Spacing="24">
+                    <!-- Title Row -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Customer Relations (CRM)" FontSize="24" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                        <HorizontalStackLayout Grid.Column="1" Spacing="12">
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="16,8" StrokeThickness="0">
+                                <HorizontalStackLayout Spacing="8">
+                                    <Path Data="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"
+                                          Fill="#624890" Aspect="Uniform" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                    <Label Text="Filter" TextColor="#624890" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Border>
+                            <Button Text="+ New Customer" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="16,0" FontAttributes="Bold" FontSize="13" HeightRequest="40" />
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <!-- Main Card -->
+                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="0" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="0">
+                            <!-- Tabs -->
+                            <Grid ColumnDefinitions="Auto,Auto,Auto,*" HeightRequest="60">
+                                <VerticalStackLayout Spacing="0" VerticalOptions="Center">
+                                    <Label Text="All Customers" TextColor="#624890" FontAttributes="Bold" FontSize="15" Padding="32,0" />
+                                    <BoxView HeightRequest="3" BackgroundColor="#624890" Margin="32,8,32,0" />
+                                </VerticalStackLayout>
+                                <Label Grid.Column="1" Text="VIP Tier" TextColor="#94A3B8" FontAttributes="Bold" FontSize="15" Padding="24,15" VerticalOptions="Center" />
+                                <Label Grid.Column="2" Text="Inactive" TextColor="#94A3B8" FontAttributes="Bold" FontSize="15" Padding="24,15" VerticalOptions="Center" />
+                                <BoxView Grid.Column="3" HeightRequest="1" BackgroundColor="#E2E8F0" VerticalOptions="End" />
+                            </Grid>
+
+                            <VerticalStackLayout Padding="32" Spacing="24">
+                                <!-- Search -->
+                                <Border StrokeShape="RoundRectangle 20" BackgroundColor="#F8FAFC" StrokeThickness="0" Padding="16,4" HorizontalOptions="Start" WidthRequest="450">
+                                    <HorizontalStackLayout Spacing="12">
+                                        <Path Data="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                                              Fill="#94A3B8" Aspect="Uniform" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
+                                        <Entry Placeholder="Search by name, email or phone..." TextColor="#1E293B" PlaceholderColor="#94A3B8" BackgroundColor="Transparent" FontSize="14" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+
+                                 <!-- Dynamic Table -->
+                                 <CollectionView x:Name="CustomersCollection" Margin="0,8,0,0">
+                                     <CollectionView.Header>
+                                         <Grid ColumnDefinitions="2*,1.5*,*,*,*,Auto" ColumnSpacing="10" Padding="0,0,0,8">
+                                             <Border Grid.ColumnSpan="6" BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" HeightRequest="48" StrokeThickness="0" />
+                                             <Label Text="Customer Name" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" Margin="24,0" />
+                                             <Label Grid.Column="1" Text="Email Address" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                             <Label Grid.Column="2" Text="Phone" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                             <Label Grid.Column="3" Text="Address" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                             <Label Grid.Column="4" Text="Status" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                             <Label Grid.Column="5" Text="Actions" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" Margin="0,0,24,0" HorizontalTextAlignment="End" />
+                                         </Grid>
+                                     </CollectionView.Header>
+                                     <CollectionView.ItemTemplate>
+                                         <DataTemplate>
+                                             <Grid ColumnDefinitions="2*,1.5*,*,*,*,Auto" ColumnSpacing="10" Padding="0,12">
+                                                 <HorizontalStackLayout Spacing="12" Margin="24,0">
+                                                     <Border BackgroundColor="#D1C4E9" StrokeShape="RoundRectangle 20" HeightRequest="40" WidthRequest="40" StrokeThickness="0">
+                                                         <Label Text="JD" FontSize="12" FontAttributes="Bold" TextColor="#463366" HorizontalOptions="Center" VerticalOptions="Center" />
+                                                     </Border>
+                                                     <Label Text="{Binding FullName}" FontAttributes="Bold" FontSize="14" VerticalOptions="Center" TextColor="#1E293B" />
+                                                 </HorizontalStackLayout>
+                                                 <Label Grid.Column="1" Text="{Binding Email}" FontSize="13" VerticalOptions="Center" TextColor="#64748B" />
+                                                 <Label Grid.Column="2" Text="{Binding Phone}" FontSize="13" VerticalOptions="Center" TextColor="#1E293B" />
+                                                 <Label Grid.Column="3" Text="{Binding Address}" FontSize="13" VerticalOptions="Center" TextColor="#64748B" MaxLines="1" />
+                                                 <Border Grid.Column="4" BackgroundColor="#DCFCE7" StrokeShape="RoundRectangle 12" Padding="10,4" HorizontalOptions="Start" VerticalOptions="Center" StrokeThickness="0">
+                                                     <Label Text="{Binding Status}" FontSize="11" TextColor="#15803D" FontAttributes="Bold" />
+                                                 </Border>
+                                                 <Label Grid.Column="5" Text="Manage" TextColor="#624890" FontSize="13" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="End" Margin="0,0,24,0" />
+                                             </Grid>
+                                         </DataTemplate>
+                                     </CollectionView.ItemTemplate>
+                                 </CollectionView>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

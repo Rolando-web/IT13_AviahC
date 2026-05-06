@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Components"
+             xmlns:scomp="clr-namespace:IT13_AviahC.Views.Superadmin.Components"
+             x:Class="IT13_AviahC.Views.Superadmin.SuperadminReportsPage"
+             BackgroundColor="#F3F0FA">
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Shared Sidebar -->
+        <components:SidebarView Grid.Column="0" CurrentPage="SuperadminReports" ModuleTitle="SUPER ADMIN MODULES" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <!-- Header -->
+            <scomp:SuperadminHeaderView Grid.Row="0" />
+
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="32" Spacing="24">
+                    <!-- Title Row -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Advanced Analytics &amp; Reports" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                            <Label Text="Comprehensive global system performance and tenant analytics" FontSize="14" TextColor="#7D6A9E" />
+                        </VerticalStackLayout>
+                        <HorizontalStackLayout Grid.Column="1" Spacing="12">
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="16,8" StrokeThickness="0">
+                                <HorizontalStackLayout Spacing="8">
+                                    <Path Data="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"
+                                          Fill="#624890" Aspect="Uniform" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                    <Label Text="Global View: 2026" TextColor="#624890" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Border>
+                            <Button Text="Generate Custom Report" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="20,0" FontAttributes="Bold" FontSize="13" HeightRequest="40" />
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <!-- Large Global Revenue Chart Card -->
+                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="32">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Global Revenue &amp; Tenant Growth" FontSize="18" FontAttributes="Bold" TextColor="#463366" />
+                                <HorizontalStackLayout Grid.Column="1" Spacing="24">
+                                    <HorizontalStackLayout Spacing="8">
+                                        <Ellipse WidthRequest="10" HeightRequest="10" Fill="#624890" VerticalOptions="Center" />
+                                        <Label Text="Revenue" FontSize="12" TextColor="#64748B" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Spacing="8">
+                                        <Ellipse WidthRequest="10" HeightRequest="10" Fill="#10B981" VerticalOptions="Center" />
+                                        <Label Text="Active Tenants" FontSize="12" TextColor="#64748B" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </HorizontalStackLayout>
+                            </Grid>
+                            
+                            <Grid HeightRequest="250">
+                                <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="32" VerticalOptions="End">
+                                    <Border Grid.Column="0" BackgroundColor="#624890" StrokeShape="RoundRectangle 8,8,0,0" HeightRequest="180" VerticalOptions="End" StrokeThickness="0" />
+                                    <Border Grid.Column="1" BackgroundColor="#624890" StrokeShape="RoundRectangle 8,8,0,0" HeightRequest="140" VerticalOptions="End" StrokeThickness="0" />
+                                    <Border Grid.Column="2" BackgroundColor="#624890" StrokeShape="RoundRectangle 8,8,0,0" HeightRequest="220" VerticalOptions="End" StrokeThickness="0" />
+                                    <Border Grid.Column="3" BackgroundColor="#624890" StrokeShape="RoundRectangle 8,8,0,0" HeightRequest="190" VerticalOptions="End" StrokeThickness="0" />
+                                    <Border Grid.Column="4" BackgroundColor="#624890" StrokeShape="RoundRectangle 8,8,0,0" HeightRequest="240" VerticalOptions="End" StrokeThickness="0" />
+                                    <Border Grid.Column="5" BackgroundColor="#624890" StrokeShape="RoundRectangle 8,8,0,0" HeightRequest="210" VerticalOptions="End" StrokeThickness="0" />
+                                    <Border Grid.Column="6" BackgroundColor="#624890" StrokeShape="RoundRectangle 8,8,0,0" HeightRequest="250" VerticalOptions="End" StrokeThickness="0" />
+                                </Grid>
+                                <BoxView HeightRequest="1" BackgroundColor="#E2E8F0" VerticalOptions="End" />
+                            </Grid>
+                            <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="32">
+                                <Label Grid.Column="0" Text="Jan" FontSize="11" TextColor="#94A3B8" HorizontalOptions="Center" />
+                                <Label Grid.Column="1" Text="Feb" FontSize="11" TextColor="#94A3B8" HorizontalOptions="Center" />
+                                <Label Grid.Column="2" Text="Mar" FontSize="11" TextColor="#94A3B8" HorizontalOptions="Center" />
+                                <Label Grid.Column="3" Text="Apr" FontSize="11" TextColor="#94A3B8" HorizontalOptions="Center" />
+                                <Label Grid.Column="4" Text="May" FontSize="11" TextColor="#94A3B8" HorizontalOptions="Center" />
+                                <Label Grid.Column="5" Text="Jun" FontSize="11" TextColor="#94A3B8" HorizontalOptions="Center" />
+                                <Label Grid.Column="6" Text="Jul" FontSize="11" TextColor="#94A3B8" HorizontalOptions="Center" />
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Bottom Analytics Grid -->
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="24">
+                        <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="20">
+                                <Label Text="Revenue by Module" FontAttributes="Bold" FontSize="16" TextColor="#463366" />
+                                <VerticalStackLayout Spacing="16">
+                                    <VerticalStackLayout Spacing="6">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <Label Text="ERP / Production" FontSize="13" TextColor="#1E293B" />
+                                            <Label Grid.Column="1" Text="45%" FontAttributes="Bold" TextColor="#463366" />
+                                        </Grid>
+                                        <Border BackgroundColor="#F1F5F9" HeightRequest="8" StrokeShape="RoundRectangle 4" StrokeThickness="0">
+                                            <BoxView BackgroundColor="#624890" WidthRequest="160" HorizontalOptions="Start" />
+                                        </Border>
+                                    </VerticalStackLayout>
+                                    
+                                    <VerticalStackLayout Spacing="6">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <Label Text="CRM / Sales" FontSize="13" TextColor="#1E293B" />
+                                            <Label Grid.Column="1" Text="30%" FontAttributes="Bold" TextColor="#463366" />
+                                        </Grid>
+                                        <Border BackgroundColor="#F1F5F9" HeightRequest="8" StrokeShape="RoundRectangle 4" StrokeThickness="0">
+                                            <BoxView BackgroundColor="#624890" WidthRequest="110" HorizontalOptions="Start" />
+                                        </Border>
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Spacing="6">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <Label Text="Logistics / POS" FontSize="13" TextColor="#1E293B" />
+                                            <Label Grid.Column="1" Text="25%" FontAttributes="Bold" TextColor="#463366" />
+                                        </Grid>
+                                        <Border BackgroundColor="#F1F5F9" HeightRequest="8" StrokeShape="RoundRectangle 4" StrokeThickness="0">
+                                            <BoxView BackgroundColor="#624890" WidthRequest="90" HorizontalOptions="Start" />
+                                        </Border>
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="20">
+                                <Label Text="Tenant Retention" FontAttributes="Bold" FontSize="16" TextColor="#463366" />
+                                <VerticalStackLayout Spacing="8">
+                                    <Label Text="98.2%" FontSize="36" FontAttributes="Bold" TextColor="#10B981" />
+                                    <Label Text="High retention across all plans" FontSize="12" TextColor="#64748B" />
+                                </VerticalStackLayout>
+                                <Border BackgroundColor="#DCFCE7" StrokeShape="RoundRectangle 12" Padding="12,6" HorizontalOptions="Start" StrokeThickness="0">
+                                    <Label Text="Stable Trend" TextColor="#15803D" FontSize="11" FontAttributes="Bold" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="2" BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="20">
+                                <Label Text="System Load Avg" FontAttributes="Bold" FontSize="16" TextColor="#463366" />
+                                <VerticalStackLayout Spacing="8">
+                                    <Label Text="24%" FontSize="36" FontAttributes="Bold" TextColor="#624890" />
+                                    <Label Text="Optimal resource distribution" FontSize="12" TextColor="#64748B" />
+                                </VerticalStackLayout>
+                                <Button Text="Server Health" BackgroundColor="Transparent" BorderColor="#624890" BorderWidth="1" TextColor="#624890" CornerRadius="12" FontAttributes="Bold" HeightRequest="44" HorizontalOptions="Start" Padding="20,0" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Report History -->
+                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="0" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="0">
+                            <Label Text="Report Export History" FontAttributes="Bold" FontSize="18" Padding="32,24" TextColor="#463366" />
+                            <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" />
+                            <VerticalStackLayout Padding="32" Spacing="16">
+                                <!-- Row 1 -->
+                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 16" Padding="20" StrokeThickness="0">
+                                    <Grid ColumnDefinitions="2*,*,*,Auto" ColumnSpacing="20">
+                                        <VerticalStackLayout Spacing="4">
+                                            <Label Text="Global Financial Summary 2025" FontAttributes="Bold" FontSize="15" TextColor="#463366" />
+                                            <Label Text="Generated by System Admin" FontSize="12" TextColor="#94A3B8" />
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="1" Text="Jan 05, 2026" FontSize="14" TextColor="#64748B" VerticalOptions="Center" />
+                                        <Border Grid.Column="2" BackgroundColor="#DBEAFE" StrokeShape="RoundRectangle 10" Padding="12,4" HorizontalOptions="Start" VerticalOptions="Center" StrokeThickness="0">
+                                            <Label Text="PDF" FontSize="11" TextColor="#1D4ED8" FontAttributes="Bold" />
+                                        </Border>
+                                        <Label Grid.Column="3" Text="Download" TextColor="#624890" FontAttributes="Bold" FontSize="14" VerticalOptions="Center" />
+                                    </Grid>
+                                </Border>
+
+                                <!-- Row 2 -->
+                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 16" Padding="20" StrokeThickness="0">
+                                    <Grid ColumnDefinitions="2*,*,*,Auto" ColumnSpacing="20">
+                                        <VerticalStackLayout Spacing="4">
+                                            <Label Text="Tenant Growth Analysis Q4" FontAttributes="Bold" FontSize="15" TextColor="#463366" />
+                                            <Label Text="Generated by automated cron" FontSize="12" TextColor="#94A3B8" />
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="1" Text="Dec 28, 2025" FontSize="14" TextColor="#64748B" VerticalOptions="Center" />
+                                        <Border Grid.Column="2" BackgroundColor="#DCFCE7" StrokeShape="RoundRectangle 10" Padding="12,4" HorizontalOptions="Start" VerticalOptions="Center" StrokeThickness="0">
+                                            <Label Text="XLSX" FontSize="11" TextColor="#15803D" FontAttributes="Bold" />
+                                        </Border>
+                                        <Label Grid.Column="3" Text="Download" TextColor="#624890" FontAttributes="Bold" FontSize="14" VerticalOptions="Center" />
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

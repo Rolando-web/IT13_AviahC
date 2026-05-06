@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell x:Class="IT13_AviahC.AppShell"
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:auth="clr-namespace:IT13_AviahC.Views.Auth"
+       xmlns:superadmin="clr-namespace:IT13_AviahC.Views.Superadmin"
+       xmlns:admin="clr-namespace:IT13_AviahC.Views.Admin"
+       xmlns:customer="clr-namespace:IT13_AviahC.Views.Customer"
+       Shell.NavBarIsVisible="False"
+       Shell.TabBarIsVisible="False"
+       Shell.FlyoutBehavior="Disabled"
+       Title="Aviah System">
+
+    <ShellContent Title="Login" ContentTemplate="{DataTemplate auth:LoginPage}" Route="Login" />
+    
+    <!-- Superadmin Module -->
+    <FlyoutItem Title="Superadmin" Route="Superadmin" FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent Title="Dashboard" ContentTemplate="{DataTemplate superadmin:SuperadminDashboardPage}" Route="SuperadminDashboard" />
+        <ShellContent Title="Customers" ContentTemplate="{DataTemplate superadmin:SuperadminCustomersPage}" Route="SuperadminCustomers" />
+        <ShellContent Title="Reports" ContentTemplate="{DataTemplate superadmin:SuperadminReportsPage}" Route="SuperadminReports" />
+        <ShellContent Title="Subscription" ContentTemplate="{DataTemplate superadmin:SuperadminSubscriptionPage}" Route="SuperadminSubscription" />
+        <ShellContent Title="Audit Logs" ContentTemplate="{DataTemplate superadmin:SuperadminAuditLogsPage}" Route="SuperadminAuditLogs" />
+        <ShellContent Title="Terms &amp; Conditions" ContentTemplate="{DataTemplate superadmin:SuperadminTermsPage}" Route="SuperadminTerms" />
+        <ShellContent Title="Settings" ContentTemplate="{DataTemplate superadmin:SuperadminSettingsPage}" Route="SuperadminSettings" />
+    </FlyoutItem>
+
+    <!-- Admin Module -->
+    <FlyoutItem Title="Admin" Route="Admin" FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent Title="Admin Dashboard" ContentTemplate="{DataTemplate admin:AdminDashboardPage}" Route="AdminDashboard" />
+        <ShellContent Title="Admin Inventory" ContentTemplate="{DataTemplate admin:AdminInventoryPage}" Route="AdminInventory" />
+        <ShellContent Title="Admin Production" ContentTemplate="{DataTemplate admin:AdminProductionPage}" Route="AdminProduction" />
+        <ShellContent Title="Admin Sales" ContentTemplate="{DataTemplate admin:AdminSalesPage}" Route="AdminSales" />
+        <ShellContent Title="Admin Suppliers" ContentTemplate="{DataTemplate admin:AdminSuppliersPage}" Route="AdminSuppliers" />
+        <ShellContent Title="Admin Customers" ContentTemplate="{DataTemplate admin:AdminCustomersPage}" Route="AdminCustomers" />
+        <ShellContent Title="Admin Logistics" ContentTemplate="{DataTemplate admin:AdminLogisticsPage}" Route="AdminLogistics" />
+        <ShellContent Title="Admin Reports" ContentTemplate="{DataTemplate admin:AdminReportsPage}" Route="AdminReports" />
+        <ShellContent Title="Admin Promotions" ContentTemplate="{DataTemplate admin:AdminPromotionsPage}" Route="AdminPromotions" />
+        <ShellContent Title="Admin Subscription" ContentTemplate="{DataTemplate admin:AdminSubscriptionPage}" Route="AdminSubscription" />
+    </FlyoutItem>
+
+    <!-- Customer Module -->
+    <FlyoutItem Title="Customer Portal" Route="CustomerPortal" FlyoutItem.IsVisible="False">
+        <ShellContent Title="Boutique" ContentTemplate="{DataTemplate customer:BoutiquePage}" Route="CustomerBoutique" />
+        <ShellContent Title="Special Offers" ContentTemplate="{DataTemplate customer:SpecialOffersPage}" Route="CustomerOffers" />
+        <ShellContent Title="My Orders" ContentTemplate="{DataTemplate customer:MyOrdersPage}" Route="CustomerOrders" />
+    </FlyoutItem>
+</Shell>

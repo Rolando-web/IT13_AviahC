@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Components"
+             xmlns:scomp="clr-namespace:IT13_AviahC.Views.Superadmin.Components"
+             x:Class="IT13_AviahC.Views.Superadmin.SuperadminSubscriptionPage"
+             BackgroundColor="#F3F0FA">
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Shared Sidebar -->
+        <components:SidebarView Grid.Column="0" CurrentPage="SuperadminSubscription" ModuleTitle="SUPER ADMIN MODULES" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <!-- Header -->
+            <scomp:SuperadminHeaderView Grid.Row="0" />
+
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="32" Spacing="32">
+                    <!-- Title Section -->
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="16">
+                            <Path Data="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" Fill="#463366" VerticalOptions="Center" HeightRequest="20" WidthRequest="20" />
+                            <Label Text="Subscription Management" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                        </HorizontalStackLayout>
+                        <Label Text="Manage subscription tiers and accessible services" FontSize="14" TextColor="#7D6A9E" Margin="36,0,0,0" />
+                    </VerticalStackLayout>
+
+                    <!-- Pricing Section -->
+                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="40">
+                            <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
+                                <Label Text="Upgrade your plan" FontSize="32" FontAttributes="Bold" TextColor="#463366" HorizontalOptions="Center" />
+                                <Label Text="Choose the perfect plan for your business needs" FontSize="16" TextColor="#7D6A9E" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+
+                            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="24">
+                                <!-- Basic Card -->
+                                <Border BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="32" StrokeThickness="1" Stroke="#E2E8F0">
+                                    <VerticalStackLayout Spacing="24">
+                                        <VerticalStackLayout Spacing="4">
+                                            <Label Text="Basic" FontSize="20" FontAttributes="Bold" TextColor="#1E293B" />
+                                            <Label Text="Starter MSMEs" FontSize="13" TextColor="#94A3B8" />
+                                        </VerticalStackLayout>
+                                        
+                                        <VerticalStackLayout Spacing="2">
+                                            <Label Text="Free" FontSize="44" FontAttributes="Bold" TextColor="#1E293B" />
+                                            <Label Text="Get started at zero cost" FontSize="12" TextColor="#94A3B8" />
+                                        </VerticalStackLayout>
+
+                                        <Label Text="Accessible Pages / Services:" FontAttributes="Bold" FontSize="13" TextColor="#1E293B" Margin="0,8,0,0" />
+                                        
+                                        <VerticalStackLayout Spacing="12">
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Ellipse WidthRequest="16" HeightRequest="16" Stroke="#94A3B8" StrokeThickness="1.5" VerticalOptions="Center">
+                                                    <Ellipse.GestureRecognizers>
+                                                        <TapGestureRecognizer />
+                                                    </Ellipse.GestureRecognizers>
+                                                </Ellipse>
+                                                <Label Text="Login &amp; Dashboard (basic KPIs)" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Ellipse WidthRequest="16" HeightRequest="16" Stroke="#94A3B8" StrokeThickness="1.5" VerticalOptions="Center" />
+                                                <Label Text="Warehouse Inventory (view only)" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Ellipse WidthRequest="16" HeightRequest="16" Stroke="#94A3B8" StrokeThickness="1.5" VerticalOptions="Center" />
+                                                <Label Text="Boutique Inventory (view only)" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Ellipse WidthRequest="16" HeightRequest="16" Stroke="#94A3B8" StrokeThickness="1.5" VerticalOptions="Center" />
+                                                <Label Text="Sales Recording (manual entry)" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+
+                                        <Button Text="Downgrade" BackgroundColor="#475569" TextColor="White" CornerRadius="12" HeightRequest="48" FontAttributes="Bold" />
+                                    </VerticalStackLayout>
+                                </Border>
+
+                                <!-- Standard Card -->
+                                <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="32" StrokeThickness="1" Stroke="#E2E8F0">
+                                    <VerticalStackLayout Spacing="24">
+                                        <VerticalStackLayout Spacing="4">
+                                            <Label Text="Standard" FontSize="20" FontAttributes="Bold" TextColor="#2563EB" />
+                                            <Label Text="Growing MSMEs" FontSize="13" TextColor="#94A3B8" />
+                                        </VerticalStackLayout>
+                                        
+                                        <VerticalStackLayout Spacing="2">
+                                            <HorizontalStackLayout Spacing="4">
+                                                <Label Text="₱900" FontSize="44" FontAttributes="Bold" TextColor="#2563EB" />
+                                                <Label Text="/month" FontSize="14" TextColor="#94A3B8" VerticalOptions="End" Margin="0,0,0,10" />
+                                            </HorizontalStackLayout>
+                                            <Label Text="Scale and grow with expanded access" FontSize="12" TextColor="#94A3B8" />
+                                        </VerticalStackLayout>
+
+                                        <Label Text="Accessible Pages / Services:" FontAttributes="Bold" FontSize="13" TextColor="#1E293B" Margin="0,8,0,0" />
+                                        
+                                        <VerticalStackLayout Spacing="12">
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Fill="#2563EB" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                                <Label Text="All Tier 1 features" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Fill="#2563EB" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                                <Label Text="Warehouse Inventory (full CRUD)" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Fill="#2563EB" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                                <Label Text="Production Output Tracking" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Fill="#2563EB" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                                <Label Text="Boutique Inventory Management" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Fill="#2563EB" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                                <Label Text="Supplier Management" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Fill="#2563EB" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                                <Label Text="Reports (basic charts)" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+
+                                        <Button Text="Upgrade Now" BackgroundColor="#2563EB" TextColor="White" CornerRadius="12" HeightRequest="48" FontAttributes="Bold" />
+                                    </VerticalStackLayout>
+                                </Border>
+
+                                <!-- Premium Card -->
+                                <Border Grid.Column="2" BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="32" StrokeThickness="3" Stroke="#624890">
+                                    <VerticalStackLayout Spacing="24">
+                                        <Border BackgroundColor="#624890" StrokeShape="RoundRectangle 0,0,8,8" HorizontalOptions="Center" Padding="12,4" Margin="0,-32,0,0">
+                                            <HorizontalStackLayout Spacing="6">
+                                                <Path Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" Fill="White" HeightRequest="12" WidthRequest="12" VerticalOptions="Center" />
+                                                <Label Text="CURRENT PLAN" TextColor="White" FontSize="10" FontAttributes="Bold" CharacterSpacing="1" />
+                                            </HorizontalStackLayout>
+                                        </Border>
+
+                                        <VerticalStackLayout Spacing="4">
+                                            <Label Text="Premium" FontSize="20" FontAttributes="Bold" TextColor="#463366" />
+                                            <Label Text="Full ERP + CRM" FontSize="13" TextColor="#94A3B8" />
+                                        </VerticalStackLayout>
+                                        
+                                        <VerticalStackLayout Spacing="2">
+                                            <HorizontalStackLayout Spacing="4">
+                                                <Label Text="₱6,490" FontSize="44" FontAttributes="Bold" TextColor="#463366" />
+                                                <Label Text="/month" FontSize="14" TextColor="#94A3B8" VerticalOptions="End" Margin="0,0,0,10" />
+                                            </HorizontalStackLayout>
+                                            <Label Text="Maximize your productivity" FontSize="12" TextColor="#94A3B8" />
+                                        </VerticalStackLayout>
+
+                                        <Label Text="Accessible Pages / Services:" FontAttributes="Bold" FontSize="13" TextColor="#1E293B" Margin="0,8,0,0" />
+                                        
+                                        <VerticalStackLayout Spacing="12">
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Fill="#624890" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                                <Label Text="All Tier 2 features" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Fill="#624890" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                                <Label Text="Delivery Logistics &amp; Tracking" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Fill="#624890" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                                <Label Text="Customer Portal Integration" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Fill="#624890" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                                <Label Text="CRM Promotions &amp; Discounts" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Fill="#624890" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                                <Label Text="Advanced Reports &amp; AI Insights" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Fill="#624890" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                                <Label Text="Priority Support" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+
+                                        <Border StrokeShape="RoundRectangle 12" Stroke="#E2E8F0" StrokeThickness="2" Padding="0" HeightRequest="48">
+                                            <Label Text="Current Plan" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" TextColor="#463366" />
+                                        </Border>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Benefits Detail -->
+                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="24">
+                            <Label Text="Subscription Tier Benefits" FontSize="20" FontAttributes="Bold" TextColor="#463366" />
+                            
+                            <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 16" Padding="24" StrokeThickness="0">
+                                <VerticalStackLayout Spacing="12">
+                                    <HorizontalStackLayout Spacing="12">
+                                        <Border BackgroundColor="#475569" StrokeShape="RoundRectangle 4" Padding="8,2" StrokeThickness="0">
+                                            <Label Text="TIER 1" TextColor="White" FontSize="10" FontAttributes="Bold" />
+                                        </Border>
+                                        <Label Text="Basic – Starter MSMEs" FontAttributes="Bold" FontSize="16" TextColor="#1E293B" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                    <Label Text="Purpose: To give small tailoring shops and boutiques a simple digital system for tracking sales and viewing inventory without complex modules." FontSize="14" TextColor="#64748B" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Border BackgroundColor="#EFF6FF" StrokeShape="RoundRectangle 16" Padding="24" StrokeThickness="0">
+                                <VerticalStackLayout Spacing="12">
+                                    <HorizontalStackLayout Spacing="12">
+                                        <Border BackgroundColor="#2563EB" StrokeShape="RoundRectangle 4" Padding="8,2" StrokeThickness="0">
+                                            <Label Text="TIER 2" TextColor="White" FontSize="10" FontAttributes="Bold" />
+                                        </Border>
+                                        <Label Text="Standard – Growing MSMEs" FontAttributes="Bold" FontSize="16" TextColor="#1E293B" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                    <Label Text="Purpose: To support growing MSMEs with more advanced operations, including production and supplier management, while providing basic reporting." FontSize="14" TextColor="#64748B" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 16" Padding="24" StrokeThickness="3" Stroke="#624890">
+                                <VerticalStackLayout Spacing="12">
+                                    <HorizontalStackLayout Spacing="12">
+                                        <Border BackgroundColor="#624890" StrokeShape="RoundRectangle 4" Padding="8,2" StrokeThickness="0">
+                                            <Label Text="TIER 3" TextColor="White" FontSize="10" FontAttributes="Bold" />
+                                        </Border>
+                                        <Label Text="Premium – Full ERP + CRM" FontAttributes="Bold" FontSize="16" TextColor="#1E293B" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                    <Label Text="Purpose: To provide MSMEs with a complete ERP + CRM solution, including logistics, customer engagement, and advanced analytics for decision-making." FontSize="14" TextColor="#64748B" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

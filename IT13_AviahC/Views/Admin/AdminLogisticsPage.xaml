@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Admin.Components"
+             xmlns:local="clr-namespace:IT13_AviahC.Views.Admin"
+             x:Class="IT13_AviahC.Views.Admin.AdminLogisticsPage"
+             BackgroundColor="#F3F0FA">
+    <Grid>
+        <!-- Standard Sidebar/Content Layout -->
+        <Grid ColumnDefinitions="Auto,*">
+            <components:AdminSidebarView Grid.Column="0" CurrentPage="AdminLogistics" />
+
+            <Grid Grid.Column="1" RowDefinitions="Auto,*">
+                <components:AdminHeaderView Grid.Row="0" />
+
+                <!-- Main Content Area (No nested ScrollView here) -->
+                <Grid Grid.Row="1" ColumnDefinitions="*,380" ColumnSpacing="32" Padding="40">
+                    
+                    <!-- Left: Deliveries List (Scrollable) -->
+                    <VerticalStackLayout Grid.Column="0" Spacing="24">
+                        <Label Text="Live Delivery Tracking" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                        
+                        <CollectionView x:Name="DeliveriesCollection" SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="local:DeliveryItem">
+                                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" Margin="0,0,0,16" Padding="20" StrokeThickness="0">
+                                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="20">
+                                            <!-- Status Icon -->
+                                            <Border Grid.Column="0" BackgroundColor="{Binding StatusColorLight}" StrokeShape="RoundRectangle 12" HeightRequest="56" WidthRequest="56" StrokeThickness="0">
+                                                <Path Data="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13-1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm1.91-4.5H17V9.5h2.5l1.41 1.5z"
+                                                      Fill="{Binding StatusColorDark}" Aspect="Uniform" HeightRequest="28" WidthRequest="28" HorizontalOptions="Center" VerticalOptions="Center" />
+                                            </Border>
+
+                                            <!-- Info -->
+                                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                                <Label Text="{Binding DeliveryID}" FontSize="16" FontAttributes="Bold" TextColor="#1E293B" />
+                                                <Label Text="{Binding DetailsText}" FontSize="13" TextColor="#64748B" />
+                                                <HorizontalStackLayout Spacing="10">
+                                                    <Path Data="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" Fill="#D1C4E9" Aspect="Uniform" HeightRequest="14" WidthRequest="14" VerticalOptions="Center" />
+                                                    <Label Text="{Binding Destination, StringFormat='Dest: {0}'}" FontSize="12" TextColor="#64748B" />
+                                                </HorizontalStackLayout>
+                                            </VerticalStackLayout>
+
+                                            <!-- Right Side -->
+                                            <VerticalStackLayout Grid.Column="2" Spacing="12" HorizontalOptions="End" VerticalOptions="Center">
+                                                <VerticalStackLayout Spacing="2" HorizontalOptions="End">
+                                                    <Label Text="{Binding ETA, StringFormat='ETA: {0}'}" FontSize="13" TextColor="#64748B" />
+                                                    <Label Text="{Binding Status}" TextColor="{Binding StatusColorDark}" FontSize="12" FontAttributes="Bold" HorizontalOptions="End" />
+                                                </VerticalStackLayout>
+                                                <Button Text="Update" 
+                                                        BackgroundColor="#F8F7FD" 
+                                                        TextColor="#624890" 
+                                                        CornerRadius="12" 
+                                                        HeightRequest="36" 
+                                                        FontSize="12" 
+                                                        FontAttributes="Bold"
+                                                        Clicked="OnUpdateStatusClicked"
+                                                        CommandParameter="{Binding .}" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                    <!-- Right: Quick Actions -->
+                    <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0" VerticalOptions="Start">
+                        <VerticalStackLayout Spacing="32">
+                            <Label Text="Quick Controls" FontSize="20" FontAttributes="Bold" TextColor="#463366" />
+
+                            <VerticalStackLayout Spacing="16">
+                                <Label Text="ASSIGN NEW DRIVER" FontAttributes="Bold" FontSize="11" TextColor="#94A3B8" CharacterSpacing="1" />
+                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="12" StrokeThickness="0">
+                                    <VerticalStackLayout Spacing="8">
+                                        <Label Text="Delivery" FontSize="12" TextColor="#64748B" />
+                                        <Picker Title="Select Delivery" x:Name="DeliveryPicker" TextColor="#1E293B" FontSize="14" />
+                                    </VerticalStackLayout>
+                                </Border>
+
+                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="12" StrokeThickness="0">
+                                    <VerticalStackLayout Spacing="8">
+                                        <Label Text="Driver" FontSize="12" TextColor="#64748B" />
+                                        <Picker Title="Select Driver" x:Name="DriverPicker" TextColor="#1E293B" FontSize="14" />
+                                    </VerticalStackLayout>
+                                </Border>
+
+                                <Button Text="Assign Driver" BackgroundColor="#624890" TextColor="White" CornerRadius="16" HeightRequest="50" FontAttributes="Bold" />
+                            </VerticalStackLayout>
+
+                            <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" />
+
+                            <VerticalStackLayout Spacing="16">
+                                <Label Text="DAILY STATS" FontAttributes="Bold" FontSize="11" TextColor="#94A3B8" CharacterSpacing="1" />
+                                <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+                                    <Border BackgroundColor="#F0FDF4" StrokeShape="RoundRectangle 16" Padding="16" StrokeThickness="0">
+                                        <VerticalStackLayout>
+                                            <Label Text="Delivered" FontSize="12" TextColor="#15803D" />
+                                            <Label Text="24" FontSize="20" FontAttributes="Bold" TextColor="#15803D" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                    <Border Grid.Column="1" BackgroundColor="#EFF6FF" StrokeShape="RoundRectangle 16" Padding="16" StrokeThickness="0">
+                                        <VerticalStackLayout>
+                                            <Label Text="Pending" FontSize="12" TextColor="#1D4ED8" />
+                                            <Label Text="12" FontSize="20" FontAttributes="Bold" TextColor="#1D4ED8" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!-- Status Update Modal Overlay -->
+        <Grid x:Name="ModalOverlay" BackgroundColor="#80000000" IsVisible="False">
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" WidthRequest="450" VerticalOptions="Center" HorizontalOptions="Center" Padding="32" StrokeThickness="0">
+                <VerticalStackLayout Spacing="24">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label x:Name="ModalTitle" Text="Update Status" FontSize="20" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                        <Button Grid.Column="1" Text="✕" BackgroundColor="Transparent" TextColor="#64748B" FontSize="20" Clicked="OnCloseModalClicked" HeightRequest="40" WidthRequest="40" />
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="CHOOSE NEW STATUS" FontAttributes="Bold" FontSize="11" TextColor="#94A3B8" CharacterSpacing="1" />
+                        <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="4" StrokeThickness="0">
+                            <Picker x:Name="StatusPicker" Title="Select status..." TextColor="#1E293B" FontSize="15">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>In Transit</x:String>
+                                        <x:String>Out for Delivery</x:String>
+                                        <x:String>Delivered</x:String>
+                                        <x:String>Cancelled</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </Border>
+
+                        <Label Text="LOCATION/DETAILS" FontAttributes="Bold" FontSize="11" TextColor="#94A3B8" CharacterSpacing="1" />
+                        <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="12" StrokeThickness="0">
+                            <Entry x:Name="DetailsEntry" Placeholder="Current location..." TextColor="#1E293B" FontSize="14" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <Button Text="Confirm" BackgroundColor="#624890" TextColor="White" CornerRadius="16" FontAttributes="Bold" HeightRequest="60" Clicked="OnConfirmUpdateClicked" />
+                        <Button Grid.Column="1" Text="Cancel" BackgroundColor="White" BorderColor="#E2E8F0" BorderWidth="1" TextColor="#64748B" CornerRadius="16" HeightRequest="60" Padding="40,0" Clicked="OnCloseModalClicked" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

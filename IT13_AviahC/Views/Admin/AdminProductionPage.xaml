@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Admin.Components"
+             x:Class="IT13_AviahC.Views.Admin.AdminProductionPage"
+             BackgroundColor="#F3F0FA">
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Reusable Sidebar -->
+        <components:AdminSidebarView Grid.Column="0" CurrentPage="AdminProduction" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <!-- Header -->
+            <components:AdminHeaderView Grid.Row="0" />
+
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="32" Spacing="24">
+                    <!-- Title Row -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Production Output" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                            <Label Text="Monitor and record manufacturing batches" FontSize="14" TextColor="#7D6A9E" />
+                        </VerticalStackLayout>
+                        <HorizontalStackLayout Grid.Column="1" Spacing="12">
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="16,8" StrokeThickness="0">
+                                <HorizontalStackLayout Spacing="8">
+                                    <Path Data="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"
+                                          Fill="#624890" Aspect="Uniform" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                    <Label Text="Filter" TextColor="#624890" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Border>
+                            <Button Text="+ New Batch" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="20,0" FontAttributes="Bold" FontSize="13" HeightRequest="40" />
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="2*,*" ColumnSpacing="24">
+                        <!-- Left: Active Batches -->
+                        <VerticalStackLayout Grid.Column="0" Spacing="16">
+                            <Label Text="Active &amp; Recent Batches" FontSize="16" FontAttributes="Bold" TextColor="#7D6A9E" />
+                            
+                            <CollectionView x:Name="ProductionCollection">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="24" StrokeThickness="0" Margin="0,0,0,16">
+                                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="20">
+                                                <Border BackgroundColor="{Binding StatusColorLight}" StrokeShape="RoundRectangle 12" HeightRequest="56" WidthRequest="56" StrokeThickness="0">
+                                                    <Path Data="{Binding IconData}"
+                                                          Fill="{Binding StatusColorDark}" Aspect="Uniform" HeightRequest="24" WidthRequest="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                                                </Border>
+                                                <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                                    <HorizontalStackLayout Spacing="12">
+                                                        <Label Text="{Binding ProductName}" FontAttributes="Bold" FontSize="16" TextColor="#463366" />
+                                                        <Border BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 8" Padding="8,2" StrokeThickness="0">
+                                                            <Label Text="{Binding BatchID}" FontSize="10" TextColor="#64748B" FontAttributes="Bold" />
+                                                        </Border>
+                                                    </HorizontalStackLayout>
+                                                    <HorizontalStackLayout Spacing="8">
+                                                        <Path Data="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zM12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"
+                                                              Fill="#94A3B8" Aspect="Uniform" HeightRequest="14" WidthRequest="14" VerticalOptions="Center" />
+                                                        <Label Text="{Binding DateText}" FontSize="12" TextColor="#64748B" />
+                                                    </HorizontalStackLayout>
+                                                    <Label Text="{Binding TargetText}" TextColor="#624890" FontAttributes="Bold" FontSize="13" />
+                                                </VerticalStackLayout>
+                                                <VerticalStackLayout Grid.Column="2" Spacing="8" HorizontalOptions="End" VerticalOptions="Center">
+                                                    <Label Text="{Binding ProgressText}" FontSize="13" FontAttributes="Bold" TextColor="{Binding StatusColorDark}" HorizontalOptions="End" />
+                                                    <Border BackgroundColor="{Binding StatusColorLight}" StrokeShape="RoundRectangle 8" HeightRequest="10" WidthRequest="180" StrokeThickness="0">
+                                                        <BoxView BackgroundColor="{Binding StatusColorDark}" HeightRequest="10" WidthRequest="{Binding ProgressWidth}" HorizontalOptions="Start" />
+                                                    </Border>
+                                                    <Button Text="Update Progress" BackgroundColor="Transparent" BorderColor="#624890" BorderWidth="1" TextColor="#624890" CornerRadius="10" Padding="12,0" HeightRequest="32" FontSize="11" FontAttributes="Bold" IsVisible="{Binding IsActive}" />
+                                                </VerticalStackLayout>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+
+                        <!-- Right: Daily Record -->
+                        <VerticalStackLayout Grid.Column="1" Spacing="16">
+                            <Label Text="Record Daily Output" FontSize="16" FontAttributes="Bold" TextColor="#7D6A9E" />
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
+                                <VerticalStackLayout Spacing="24">
+                                    <VerticalStackLayout Spacing="8">
+                                        <Label Text="Batch ID" FontSize="13" FontAttributes="Bold" TextColor="#463366" />
+                                        <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="4" StrokeThickness="0">
+                                            <Picker Title="Select Active Batch" TextColor="#1E293B" FontSize="14" />
+                                        </Border>
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Spacing="8">
+                                        <Label Text="Quantity Produced" FontSize="13" FontAttributes="Bold" TextColor="#463366" />
+                                        <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="12" StrokeThickness="0">
+                                            <Entry Placeholder="0" Keyboard="Numeric" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
+                                        </Border>
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Spacing="8">
+                                        <Label Text="Defects / Rejects" FontSize="13" FontAttributes="Bold" TextColor="#463366" />
+                                        <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="12" StrokeThickness="0">
+                                            <Entry Placeholder="0" Keyboard="Numeric" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
+                                        </Border>
+                                    </VerticalStackLayout>
+                                    <Button Text="Save Production Record" BackgroundColor="#624890" TextColor="White" CornerRadius="12" FontAttributes="Bold" HeightRequest="48" Margin="0,8,0,0" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Summary Card -->
+                            <Border BackgroundColor="#624890" StrokeShape="RoundRectangle 24" Padding="24" StrokeThickness="0">
+                                <VerticalStackLayout Spacing="16">
+                                    <Label Text="Weekly Goal" TextColor="White" FontAttributes="Bold" FontSize="14" />
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Spacing="4">
+                                            <Label Text="1,240 / 2,000" TextColor="White" FontSize="20" FontAttributes="Bold" />
+                                            <Label Text="Units Produced" TextColor="#D1C4E9" FontSize="12" />
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="1" Text="62%" TextColor="White" FontSize="24" FontAttributes="Bold" VerticalOptions="Center" />
+                                    </Grid>
+                                    <Border BackgroundColor="#7D6A9E" StrokeShape="RoundRectangle 8" HeightRequest="8" StrokeThickness="0">
+                                        <BoxView BackgroundColor="White" HeightRequest="8" WidthRequest="180" HorizontalOptions="Start" />
+                                    </Border>
+                                </VerticalStackLayout>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

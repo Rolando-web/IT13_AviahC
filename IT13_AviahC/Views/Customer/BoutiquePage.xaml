@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Customer.Components"
+             x:Class="IT13_AviahC.Views.Customer.BoutiquePage"
+             BackgroundColor="#F8FAFC"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+            <!-- Header -->
+            <components:CustomerHeaderView ActiveTab="Boutique" />
+
+            <VerticalStackLayout Padding="20" Spacing="20">
+                <Label Text="Welcome to Aviah Boutique" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+                
+                <CollectionView x:Name="ItemsCollection" Margin="0,20">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame HasShadow="True" Padding="15" Margin="5">
+                                <HorizontalStackLayout Spacing="20">
+                                    <Label Text="{Binding ItemName}" FontSize="18" VerticalOptions="Center" WidthRequest="200" />
+                                    <Label Text="{Binding FormattedPrice}" FontSize="18" TextColor="#624890" FontAttributes="Bold" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

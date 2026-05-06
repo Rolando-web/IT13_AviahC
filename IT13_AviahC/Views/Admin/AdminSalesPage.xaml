@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Admin.Components"
+             x:Class="IT13_AviahC.Views.Admin.AdminSalesPage"
+             BackgroundColor="#F3F0FA">
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Reusable Sidebar -->
+        <components:AdminSidebarView Grid.Column="0" CurrentPage="AdminSales" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <!-- Header -->
+            <components:AdminHeaderView Grid.Row="0" />
+
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="32" Spacing="24">
+                    <!-- Title Row -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Sales &amp; Orders" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                            <Label Text="Track and manage customer transactions" FontSize="14" TextColor="#7D6A9E" />
+                        </VerticalStackLayout>
+                        <HorizontalStackLayout Grid.Column="1" Spacing="12">
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="16,8" StrokeThickness="0">
+                                <HorizontalStackLayout Spacing="8">
+                                    <Path Data="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"
+                                          Fill="#624890" Aspect="Uniform" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                    <Label Text="Filter" TextColor="#624890" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Border>
+                            <Button Text="+ Record Sale" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="20,0" FontAttributes="Bold" FontSize="13" HeightRequest="40" />
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <!-- Stats Row -->
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="20">
+                        <Border BackgroundColor="#624890" StrokeShape="RoundRectangle 20" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="12">
+                                <Border BackgroundColor="#7D6A9E" StrokeShape="RoundRectangle 12" HeightRequest="44" WidthRequest="44" HorizontalOptions="Start" StrokeThickness="0">
+                                    <Path Data="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"
+                                          Fill="White" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
+                                <Label Text="Today's Sales" TextColor="#D1C4E9" FontSize="13" FontAttributes="Bold" />
+                                <Label Text="₱12,450.00" TextColor="White" FontSize="28" FontAttributes="Bold" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="12">
+                                <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 12" HeightRequest="44" WidthRequest="44" HorizontalOptions="Start" StrokeThickness="0">
+                                    <Path Data="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"
+                                          Fill="#624890" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
+                                <Label Text="Weekly Revenue" TextColor="#7D6A9E" FontSize="13" FontAttributes="Bold" />
+                                <Label Text="₱84,500.00" TextColor="#463366" FontSize="28" FontAttributes="Bold" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="2" BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="12">
+                                <Border BackgroundColor="#FFF7ED" StrokeShape="RoundRectangle 12" HeightRequest="44" WidthRequest="44" HorizontalOptions="Start" StrokeThickness="0">
+                                    <Path Data="M20 8l-8 5-8-5V6l8 5 8-5v2zm0-4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"
+                                          Fill="#EA580C" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
+                                <Label Text="Pending Orders" TextColor="#7D6A9E" FontSize="13" FontAttributes="Bold" />
+                                <Label Text="14" TextColor="#463366" FontSize="28" FontAttributes="Bold" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Main Transactions Card -->
+                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="0" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="0">
+                            <Grid ColumnDefinitions="*,Auto" Padding="32,24">
+                                <Border StrokeShape="RoundRectangle 20" BackgroundColor="#F8FAFC" StrokeThickness="0" Padding="16,4" HorizontalOptions="Start" WidthRequest="400">
+                                    <HorizontalStackLayout Spacing="12">
+                                        <Path Data="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                                              Fill="#94A3B8" Aspect="Uniform" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
+                                        <Entry Placeholder="Search transactions..." TextColor="#1E293B" PlaceholderColor="#94A3B8" BackgroundColor="Transparent" FontSize="14" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,2*,2*,1.5*,*,Auto" Padding="32,12" BackgroundColor="#F8FAFC" ColumnSpacing="10">
+                                <Label Text="ORDER ID" FontAttributes="Bold" FontSize="11" TextColor="#64748B" CharacterSpacing="1" />
+                                <Label Grid.Column="1" Text="CUSTOMER" FontAttributes="Bold" FontSize="11" TextColor="#64748B" CharacterSpacing="1" />
+                                <Label Grid.Column="2" Text="ITEMS" FontAttributes="Bold" FontSize="11" TextColor="#64748B" CharacterSpacing="1" />
+                                <Label Grid.Column="3" Text="DATE/TIME" FontAttributes="Bold" FontSize="11" TextColor="#64748B" CharacterSpacing="1" />
+                                <Label Grid.Column="4" Text="AMOUNT" FontAttributes="Bold" FontSize="11" TextColor="#64748B" CharacterSpacing="1" />
+                                <Label Grid.Column="5" Text="STATUS" FontAttributes="Bold" FontSize="11" TextColor="#64748B" CharacterSpacing="1" HorizontalTextAlignment="End" />
+                            </Grid>
+
+                            <CollectionView x:Name="SalesCollection">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,2*,2*,1.5*,*,Auto" Padding="32,16" ColumnSpacing="10">
+                                            <Label Text="{Binding OrderID}" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                            <Label Grid.Column="1" Text="{Binding CustomerName}" FontAttributes="Bold" FontSize="14" TextColor="#1E293B" VerticalOptions="Center" />
+                                            <Label Grid.Column="2" Text="{Binding ItemsSummary}" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                            <Label Grid.Column="3" Text="{Binding DateTime}" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                            <Label Grid.Column="4" Text="{Binding Amount, StringFormat='₱{0:N2}'}" FontAttributes="Bold" FontSize="14" TextColor="#1E293B" VerticalOptions="Center" />
+                                            <Border Grid.Column="5" BackgroundColor="{Binding StatusColorLight}" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="End" VerticalOptions="Center" StrokeThickness="0">
+                                                <Label Text="{Binding Status}" FontSize="11" TextColor="{Binding StatusColorDark}" FontAttributes="Bold" />
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

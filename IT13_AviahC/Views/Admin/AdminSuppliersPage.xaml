@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Admin.Components"
+             x:Class="IT13_AviahC.Views.Admin.AdminSuppliersPage"
+             BackgroundColor="#F3F0FA">
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Reusable Sidebar -->
+        <components:AdminSidebarView Grid.Column="0" CurrentPage="AdminSuppliers" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <!-- Header -->
+            <components:AdminHeaderView Grid.Row="0" />
+
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="32" Spacing="24">
+                    <!-- Title Row -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Supplier Management" FontSize="24" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                        <HorizontalStackLayout Grid.Column="1" Spacing="12">
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="16,8" StrokeThickness="0">
+                                <HorizontalStackLayout Spacing="8">
+                                    <Path Data="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"
+                                          Fill="#624890" Aspect="Uniform" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                    <Label Text="Filter" TextColor="#624890" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Border>
+                            <Button Text="+ New Supplier" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="16,0" FontAttributes="Bold" FontSize="13" HeightRequest="40" />
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <!-- Supplier Cards Grid -->
+                    <!-- Dynamic Suppliers List -->
+                    <CollectionView x:Name="SuppliersCollection" ItemsSource="{Binding SuppliersList}">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="20" VerticalItemSpacing="20" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="24" StrokeThickness="0">
+                                    <VerticalStackLayout Spacing="20">
+                                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                                            <Border BackgroundColor="#D1C4E9" StrokeShape="RoundRectangle 12" HeightRequest="56" WidthRequest="56" StrokeThickness="0">
+                                                <Label Text="S" TextColor="#463366" FontAttributes="Bold" FontSize="18" HorizontalOptions="Center" VerticalOptions="Center" />
+                                            </Border>
+                                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="4">
+                                                <Label Text="{Binding CompanyName}" FontAttributes="Bold" FontSize="16" TextColor="#463366" />
+                                                <Border BackgroundColor="#DCFCE7" StrokeShape="RoundRectangle 8" Padding="8,2" HorizontalOptions="Start" StrokeThickness="0">
+                                                    <Label Text="{Binding Status}" FontSize="10" TextColor="#15803D" FontAttributes="Bold" />
+                                                </Border>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                        
+                                        <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" />
+                                        
+                                        <VerticalStackLayout Spacing="12">
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Path Data="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+                                                      Fill="#94A3B8" Aspect="Uniform" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                                <Label Text="{Binding Email}" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 8" Padding="8,2" HorizontalOptions="Start" StrokeThickness="0">
+                                                    <Label Text="{Binding Category}" FontSize="10" TextColor="#624890" FontAttributes="Bold" />
+                                                </Border>
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Path Data="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                                                      Fill="#94A3B8" Aspect="Uniform" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                                <Label Text="{Binding ContactPerson}" FontSize="13" TextColor="#64748B" />
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+                                        
+                                        <Button Text="View Details" BackgroundColor="#F3F0FA" TextColor="#624890" CornerRadius="12" FontAttributes="Bold" HeightRequest="44" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

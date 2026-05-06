@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="IT13_AviahC.Views.Customer.Components.CustomerHeaderView">
+    
+    <VerticalStackLayout BackgroundColor="White">
+        <!-- Top Bar -->
+        <Grid ColumnDefinitions="Auto,*,Auto" Padding="40,16" VerticalOptions="Center">
+            <!-- Logo -->
+            <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+                <Border BackgroundColor="#624890" StrokeShape="RoundRectangle 12" HeightRequest="32" WidthRequest="32" StrokeThickness="0">
+                    <Label Text="A" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label Text="Aviah Boutique" FontSize="18" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <!-- Search Bar -->
+            <Border Grid.Column="1" HorizontalOptions="Center" WidthRequest="400" StrokeShape="RoundRectangle 20" BackgroundColor="#F5F6F8" StrokeThickness="0" Padding="16,0">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Path Data="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" 
+                          Fill="#A0AEC0" HeightRequest="18" WidthRequest="18" VerticalOptions="Center"/>
+                    <Entry Grid.Column="1" Placeholder="Search dresses, accessories..." BorderColor="Transparent" FontSize="13" TextColor="#4A5568"/>
+                </Grid>
+            </Border>
+
+            <!-- User Profile & Actions -->
+            <HorizontalStackLayout Grid.Column="2" Spacing="24" VerticalOptions="Center">
+                <Path Data="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" 
+                      Fill="#4A5568" HeightRequest="20" WidthRequest="20" VerticalOptions="Center"/>
+                
+                <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                    <VerticalStackLayout VerticalOptions="Center">
+                        <Label Text="Sarah Johnson" FontSize="13" FontAttributes="Bold" TextColor="#2D3748"/>
+                        <Label Text="★ VIP Platinum" FontSize="11" TextColor="#624890"/>
+                    </VerticalStackLayout>
+                    <Border StrokeShape="RoundRectangle 16" HeightRequest="32" WidthRequest="32" StrokeThickness="0">
+                        <Image Source="customer_avatar_placeholder.svg" Aspect="AspectFill"/>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <Button Text="" FontFamily="MaterialIcons" FontSize="20" BackgroundColor="Transparent" TextColor="#4A5568" Clicked="OnLogoutClicked" Padding="0"/>
+            </HorizontalStackLayout>
+        </Grid>
+
+        <!-- Navigation Tabs -->
+        <Border StrokeThickness="0,0,0,1" Stroke="#E2E8F0">
+            <HorizontalStackLayout Padding="40,0" Spacing="30">
+                <Button x:Name="BoutiqueBtn" Text="Boutique" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Boutique"/>
+                <Button x:Name="OffersBtn" Text="Special Offers" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Offers"/>
+                <Button x:Name="OrdersBtn" Text="My Orders" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Orders"/>
+                <Button x:Name="TrackBtn" Text="Track Delivery" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Track"/>
+                <Button x:Name="FeedbackBtn" Text="Feedback" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Feedback"/>
+            </HorizontalStackLayout>
+        </Border>
+    </VerticalStackLayout>
+</ContentView>

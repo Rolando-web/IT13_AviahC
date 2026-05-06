@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Customer.Components"
+             x:Class="IT13_AviahC.Views.Customer.MyOrdersPage"
+             BackgroundColor="#F8FAFC"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+            <components:CustomerHeaderView ActiveTab="Orders" />
+
+            <VerticalStackLayout Padding="40,24" Spacing="24">
+                <!-- Promo Banner -->
+                <Border BackgroundColor="#805AD5" StrokeShape="RoundRectangle 16" Padding="32,24" StrokeThickness="0">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="8">
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="⭐" FontSize="20" VerticalOptions="Center"/>
+                                <Label Text="Your VIP Platinum Discount is Active!" TextColor="White" FontSize="18" FontAttributes="Bold"/>
+                            </HorizontalStackLayout>
+                            <Label Text="Enjoy 20% off on all new arrivals this season." TextColor="#E9D8FD" FontSize="14"/>
+                        </VerticalStackLayout>
+                        <Button Grid.Column="1" Text="Shop New Arrivals" BackgroundColor="White" TextColor="#6B46C1" CornerRadius="20" Padding="24,10" FontAttributes="Bold"/>
+                    </Grid>
+                </Border>
+
+                <!-- Purchase History Section -->
+                <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="32" StrokeThickness="1" Stroke="#E2E8F0">
+                    <VerticalStackLayout Spacing="20">
+                        <Label Text="Purchase History" FontSize="20" FontAttributes="Bold" TextColor="#2D3748"/>
+
+                        <CollectionView x:Name="OrdersCollection">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical" ItemSpacing="16"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="20" StrokeThickness="0">
+                                        <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                                            <!-- Icon -->
+                                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 8" HeightRequest="40" WidthRequest="40" StrokeThickness="1" Stroke="#E2E8F0">
+                                                <Path Data="M19 7h-3V6c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v1H5c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-5-1v1h-4V6h4z" 
+                                                      Fill="#718096" HorizontalOptions="Center" VerticalOptions="Center" HeightRequest="18" WidthRequest="18"/>
+                                            </Border>
+
+                                            <!-- Order Info -->
+                                            <VerticalStackLayout Grid.Column="1" Margin="20,0" VerticalOptions="Center">
+                                                <Label Text="{Binding OrderRef}" FontSize="14" FontAttributes="Bold" TextColor="#2D3748"/>
+                                                <Label Text="{Binding OrderDateAndSummary}" FontSize="12" TextColor="#718096"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Price & Status -->
+                                            <VerticalStackLayout Grid.Column="2" HorizontalOptions="End" VerticalOptions="Center">
+                                                <Label Text="{Binding FormattedTotal}" FontSize="14" FontAttributes="Bold" TextColor="#2D3748" HorizontalTextAlignment="End"/>
+                                                <Label Text="{Binding Status}" FontSize="12" TextColor="{Binding StatusColor}" HorizontalTextAlignment="End"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Actions -->
+                                            <HorizontalStackLayout Grid.Column="3" Margin="20,0,0,0" VerticalOptions="Center" Spacing="8">
+                                                <Button Text="Track" IsVisible="{Binding IsTrackable}" BackgroundColor="Transparent" TextColor="#624890" FontSize="12" FontAttributes="Bold" Padding="0"/>
+                                                <Path Data="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" Fill="#A0AEC0" HeightRequest="20" WidthRequest="20"/>
+                                            </HorizontalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

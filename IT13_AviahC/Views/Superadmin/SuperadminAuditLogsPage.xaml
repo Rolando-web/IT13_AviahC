@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Components"
+             xmlns:scomp="clr-namespace:IT13_AviahC.Views.Superadmin.Components"
+             x:Class="IT13_AviahC.Views.Superadmin.SuperadminAuditLogsPage"
+             BackgroundColor="#F3F0FA">
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Shared Sidebar -->
+        <components:SidebarView Grid.Column="0" CurrentPage="SuperadminAuditLogs" ModuleTitle="SUPER ADMIN MODULES" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <!-- Header -->
+            <scomp:SuperadminHeaderView Grid.Row="0" />
+
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="32" Spacing="24">
+                    <!-- Title Row -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="System Audit Logs" FontSize="24" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                        <HorizontalStackLayout Grid.Column="1" Spacing="12">
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="16,8" StrokeThickness="0">
+                                <HorizontalStackLayout Spacing="8">
+                                    <Path Data="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"
+                                          Fill="#624890" Aspect="Uniform" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                                    <Label Text="Filter Logs" TextColor="#624890" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Border>
+                            <Button Text="Export CSV" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="20,0" FontAttributes="Bold" FontSize="13" HeightRequest="40" />
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <!-- Main Logs Card -->
+                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="0" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="0">
+                            <!-- Tabs -->
+                            <Grid ColumnDefinitions="Auto,Auto,Auto,*" HeightRequest="60">
+                                <VerticalStackLayout Spacing="0" VerticalOptions="Center">
+                                    <Label Text="Global Logs" TextColor="#624890" FontAttributes="Bold" FontSize="15" Padding="32,0" />
+                                    <BoxView HeightRequest="3" BackgroundColor="#624890" Margin="32,8,32,0" />
+                                </VerticalStackLayout>
+                                <Label Grid.Column="1" Text="Security Events" TextColor="#94A3B8" FontAttributes="Bold" FontSize="15" Padding="24,15" VerticalOptions="Center" />
+                                <Label Grid.Column="2" Text="System Changes" TextColor="#94A3B8" FontAttributes="Bold" FontSize="15" Padding="24,15" VerticalOptions="Center" />
+                                <BoxView Grid.Column="3" HeightRequest="1" BackgroundColor="#E2E8F0" VerticalOptions="End" />
+                            </Grid>
+
+                            <VerticalStackLayout Padding="32" Spacing="24">
+                                <!-- Search -->
+                                <Border StrokeShape="RoundRectangle 20" BackgroundColor="#F8FAFC" StrokeThickness="0" Padding="16,4" HorizontalOptions="Start" WidthRequest="450">
+                                    <HorizontalStackLayout Spacing="12">
+                                        <Path Data="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                                              Fill="#94A3B8" Aspect="Uniform" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
+                                        <Entry Placeholder="Search by user, action, or IP..." TextColor="#1E293B" PlaceholderColor="#94A3B8" BackgroundColor="Transparent" FontSize="14" VerticalOptions="Center" WidthRequest="380" />
+                                    </HorizontalStackLayout>
+                                </Border>
+
+                                <!-- Table -->
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="1.5*,2*,1.5*,*,Auto" ColumnSpacing="10">
+                                    <Border Grid.ColumnSpan="5" BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" HeightRequest="48" StrokeThickness="0" Margin="0,0,0,8" />
+                                    <Label Text="Timestamp" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" Margin="24,0" />
+                                    <Label Grid.Column="1" Text="User Account" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                    <Label Grid.Column="2" Text="Action Type" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                    <Label Grid.Column="3" Text="IP Address" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                    <Label Grid.Column="4" Text="Status" FontAttributes="Bold" FontSize="13" TextColor="#64748B" VerticalOptions="Center" Margin="0,0,24,0" HorizontalTextAlignment="End" />
+
+                                    <!-- Row 1 -->
+                                    <Label Grid.Row="1" Text="2026-05-05 14:30" FontSize="13" TextColor="#64748B" VerticalOptions="Center" Margin="24,20" />
+                                    <HorizontalStackLayout Grid.Row="1" Grid.Column="1" Spacing="12" VerticalOptions="Center">
+                                        <Border BackgroundColor="#D1C4E9" StrokeShape="RoundRectangle 16" HeightRequest="32" WidthRequest="32" StrokeThickness="0">
+                                            <Label Text="JD" FontSize="11" FontAttributes="Bold" TextColor="#463366" HorizontalOptions="Center" VerticalOptions="Center" />
+                                        </Border>
+                                        <Label Text="Admin (John Doe)" FontAttributes="Bold" FontSize="14" TextColor="#1E293B" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                    <Label Grid.Row="1" Grid.Column="2" Text="User Login" FontSize="13" TextColor="#463366" VerticalOptions="Center" />
+                                    <Label Grid.Row="1" Grid.Column="3" Text="192.168.1.45" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                    <Border Grid.Row="1" Grid.Column="4" BackgroundColor="#DCFCE7" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="End" VerticalOptions="Center" StrokeThickness="0" Margin="0,0,24,0">
+                                        <Label Text="Success" FontSize="11" TextColor="#15803D" FontAttributes="Bold" />
+                                    </Border>
+
+                                    <!-- Row 2 -->
+                                    <Label Grid.Row="2" Text="2026-05-05 13:12" FontSize="13" TextColor="#64748B" VerticalOptions="Center" Margin="24,20" />
+                                    <HorizontalStackLayout Grid.Row="2" Grid.Column="1" Spacing="12" VerticalOptions="Center">
+                                        <Border BackgroundColor="#D1C4E9" StrokeShape="RoundRectangle 16" HeightRequest="32" WidthRequest="32" StrokeThickness="0">
+                                            <Label Text="SK" FontSize="11" FontAttributes="Bold" TextColor="#463366" HorizontalOptions="Center" VerticalOptions="Center" />
+                                        </Border>
+                                        <Label Text="Manager (Sarah K.)" FontAttributes="Bold" FontSize="14" TextColor="#1E293B" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                    <Label Grid.Row="2" Grid.Column="2" Text="Data Export" FontSize="13" TextColor="#463366" VerticalOptions="Center" />
+                                    <Label Grid.Row="2" Grid.Column="3" Text="203.0.113.88" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                    <Border Grid.Row="2" Grid.Column="4" BackgroundColor="#DBEAFE" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="End" VerticalOptions="Center" StrokeThickness="0" Margin="0,0,24,0">
+                                        <Label Text="Info" FontSize="11" TextColor="#1D4ED8" FontAttributes="Bold" />
+                                    </Border>
+
+                                    <!-- Row 3 -->
+                                    <Label Grid.Row="3" Text="2026-05-05 12:05" FontSize="13" TextColor="#64748B" VerticalOptions="Center" Margin="24,20" />
+                                    <HorizontalStackLayout Grid.Row="3" Grid.Column="1" Spacing="12" VerticalOptions="Center">
+                                        <Border BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 16" HeightRequest="32" WidthRequest="32" StrokeThickness="0">
+                                            <Path Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" Fill="#64748B" Aspect="Uniform" HeightRequest="16" WidthRequest="16" HorizontalOptions="Center" VerticalOptions="Center" />
+                                        </Border>
+                                        <Label Text="System" FontAttributes="Bold" FontSize="14" TextColor="#1E293B" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                    <Label Grid.Row="3" Grid.Column="2" Text="Config Change" FontSize="13" TextColor="#463366" VerticalOptions="Center" />
+                                    <Label Grid.Row="3" Grid.Column="3" Text="Internal" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                    <Border Grid.Row="3" Grid.Column="4" BackgroundColor="#FEE2E2" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="End" VerticalOptions="Center" StrokeThickness="0" Margin="0,0,24,0">
+                                        <Label Text="Warning" FontSize="11" TextColor="#B91C1C" FontAttributes="Bold" />
+                                    </Border>
+                                </Grid>
+
+                                <!-- Pagination -->
+                                <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" Margin="0,8" />
+                                <Grid ColumnDefinitions="Auto,*,Auto" Padding="12,0">
+                                    <Button Text="Previous" BackgroundColor="Transparent" TextColor="#94A3B8" FontAttributes="Bold" FontSize="13" WidthRequest="120" IsEnabled="False" />
+                                    <Label Grid.Column="1" Text="Page 1 of 42" VerticalOptions="Center" HorizontalOptions="Center" FontSize="13" TextColor="#94A3B8" />
+                                    <Button Grid.Column="2" Text="Next Page" BackgroundColor="Transparent" TextColor="#624890" FontAttributes="Bold" FontSize="13" WidthRequest="120" />
+                                </Grid>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

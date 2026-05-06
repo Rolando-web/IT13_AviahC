@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Components"
+             xmlns:scomp="clr-namespace:IT13_AviahC.Views.Superadmin.Components"
+             x:Class="IT13_AviahC.Views.Superadmin.SuperadminDashboardPage"
+             BackgroundColor="#F3F0FA">
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Shared Sidebar -->
+        <components:SidebarView Grid.Column="0" CurrentPage="SuperadminDashboard" ModuleTitle="SUPER ADMIN MODULES" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <!-- Header -->
+            <scomp:SuperadminHeaderView Grid.Row="0" />
+
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="32" Spacing="24">
+                    
+                    <!-- Welcome Section -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Welcome back, Super Admin!" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                        <Label Text="Platform Command Center - Managing MSME ecosystem" FontSize="14" TextColor="#7D6A9E" />
+                    </VerticalStackLayout>
+
+                    <!-- Stats Row -->
+                    <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="20">
+                        <!-- Total MSMEs -->
+                        <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="16">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 12" HeightRequest="48" WidthRequest="48" HorizontalOptions="Start" StrokeThickness="0">
+                                        <Path Data="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"
+                                              Fill="#624890" Aspect="Uniform" HeightRequest="24" WidthRequest="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                                    </Border>
+                                    <Border Grid.Column="1" BackgroundColor="#DCFCE7" StrokeShape="RoundRectangle 10" Padding="8,2" VerticalOptions="Start" StrokeThickness="0">
+                                        <Label Text="+8" FontSize="10" TextColor="#15803D" FontAttributes="Bold" />
+                                    </Border>
+                                </Grid>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="TOTAL MSMES" FontSize="11" TextColor="#94A3B8" FontAttributes="Bold" CharacterSpacing="1" />
+                                    <Label Text="124" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Total Users -->
+                        <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="16">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 12" HeightRequest="48" WidthRequest="48" HorizontalOptions="Start" StrokeThickness="0">
+                                        <Path Data="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"
+                                              Fill="#624890" Aspect="Uniform" HeightRequest="24" WidthRequest="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                                    </Border>
+                                    <Border Grid.Column="1" BackgroundColor="#DCFCE7" StrokeShape="RoundRectangle 10" Padding="8,2" VerticalOptions="Start" StrokeThickness="0">
+                                        <Label Text="+12%" FontSize="10" TextColor="#15803D" FontAttributes="Bold" />
+                                    </Border>
+                                </Grid>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="TOTAL USERS" FontSize="11" TextColor="#94A3B8" FontAttributes="Bold" CharacterSpacing="1" />
+                                    <Label Text="2.4k" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- System Health -->
+                        <Border Grid.Column="2" BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="16">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 12" HeightRequest="48" WidthRequest="48" HorizontalOptions="Start" StrokeThickness="0">
+                                        <Path Data="M13.5 1.5 h-3 v4.5 h3 v-4.5 z m0 18 h-3 v4.5 h3 v-4.5 z m10.5 -10.5 v-3 h-4.5 v3 h4.5 z m-18 0 v-3 h-4.5 v3 h4.5 z m13.11 -4.61 l 2.12 -2.12 -3.18 -3.18 -2.12 2.12 3.18 3.18 z m-11.72 11.72 l 2.12 -2.12 -3.18 -3.18 -2.12 2.12 3.18 3.18 z"
+                                              Fill="#624890" Aspect="Uniform" HeightRequest="24" WidthRequest="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                                    </Border>
+                                </Grid>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="SYSTEM HEALTH" FontSize="11" TextColor="#94A3B8" FontAttributes="Bold" CharacterSpacing="1" />
+                                    <Label Text="99.9%" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Total Subscriptions -->
+                        <Border Grid.Column="3" BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="16">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 12" HeightRequest="48" WidthRequest="48" HorizontalOptions="Start" StrokeThickness="0">
+                                        <Path Data="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .55-.45 1-1 1H6c-.55 0-1-.45-1-1v-1h14v1z"
+                                              Fill="#624890" Aspect="Uniform" HeightRequest="24" WidthRequest="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                                    </Border>
+                                    <Border Grid.Column="1" BackgroundColor="#DCFCE7" StrokeShape="RoundRectangle 10" Padding="8,2" VerticalOptions="Start" StrokeThickness="0">
+                                        <Label Text="+15%" FontSize="10" TextColor="#15803D" FontAttributes="Bold" />
+                                    </Border>
+                                </Grid>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="TOTAL SUBSCRIPTIONS" FontSize="11" TextColor="#94A3B8" FontAttributes="Bold" CharacterSpacing="1" />
+                                    <Label Text="₱842k" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Main Charts Section -->
+                    <Grid ColumnDefinitions="*,400" ColumnSpacing="20">
+                        <!-- Revenue Growth Chart -->
+                        <Border Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="32">
+                                <Label Text="Revenue Growth" FontSize="18" FontAttributes="Bold" TextColor="#463366" />
+                                <Grid HeightRequest="250">
+                                    <!-- Simple Line Representation -->
+                                    <Path Data="M0,150 C50,130 100,180 150,100 C200,80 250,120 300,100 C350,90 400,60 500,40" 
+                                          Stroke="#624890" StrokeThickness="3" Aspect="Fill" />
+                                    
+                                    <!-- Y-Axis labels -->
+                                    <VerticalStackLayout Spacing="45" VerticalOptions="Fill">
+                                        <Label Text="8000" FontSize="11" TextColor="#94A3B8" />
+                                        <Label Text="6000" FontSize="11" TextColor="#94A3B8" />
+                                        <Label Text="4000" FontSize="11" TextColor="#94A3B8" />
+                                        <Label Text="2000" FontSize="11" TextColor="#94A3B8" />
+                                        <Label Text="0" FontSize="11" TextColor="#94A3B8" />
+                                    </VerticalStackLayout>
+
+                                    <!-- Grid lines (visual) -->
+                                    <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" VerticalOptions="Start" Margin="40,10,0,0" />
+                                    <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" VerticalOptions="Start" Margin="40,70,0,0" />
+                                    <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" VerticalOptions="Start" Margin="40,130,0,0" />
+                                    <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" VerticalOptions="Start" Margin="40,190,0,0" />
+                                </Grid>
+                                <!-- X-Axis -->
+                                <Grid ColumnDefinitions="*,*,*,*,*,*" Padding="40,0,0,0">
+                                    <Label Grid.Column="0" Text="Jan" FontSize="11" TextColor="#94A3B8" HorizontalOptions="Center" />
+                                    <Label Grid.Column="1" Text="Feb" FontSize="11" TextColor="#94A3B8" HorizontalOptions="Center" />
+                                    <Label Grid.Column="2" Text="Mar" FontSize="11" TextColor="#94A3B8" HorizontalOptions="Center" />
+                                    <Label Grid.Column="3" Text="Apr" FontSize="11" TextColor="#94A3B8" HorizontalOptions="Center" />
+                                    <Label Grid.Column="4" Text="May" FontSize="11" TextColor="#94A3B8" HorizontalOptions="Center" />
+                                    <Label Grid.Column="5" Text="Jun" FontSize="11" TextColor="#94A3B8" HorizontalOptions="Center" />
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Tier Distribution Donut Chart -->
+                        <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="24">
+                                <Label Text="Tier Distribution" FontSize="18" FontAttributes="Bold" TextColor="#463366" />
+                                
+                                <Grid HeightRequest="200" WidthRequest="200" HorizontalOptions="Center">
+                                    <Ellipse Stroke="#F1F5F9" StrokeThickness="24" HeightRequest="180" WidthRequest="180" HorizontalOptions="Center" VerticalOptions="Center" />
+                                    
+                                    <!-- Premium (23%) -->
+                                    <Ellipse Stroke="#624890" StrokeThickness="24" StrokeDashArray="23, 77" StrokeDashOffset="0"
+                                             HeightRequest="180" WidthRequest="180" HorizontalOptions="Center" VerticalOptions="Center" Rotation="-90" />
+                                    
+                                    <!-- Standard (32%) -->
+                                    <Ellipse Stroke="#3B82F6" StrokeThickness="24" StrokeDashArray="32, 68" StrokeDashOffset="-23"
+                                             HeightRequest="180" WidthRequest="180" HorizontalOptions="Center" VerticalOptions="Center" Rotation="-90" />
+                                    
+                                    <!-- Basic (45%) -->
+                                    <Ellipse Stroke="#94A3B8" StrokeThickness="24" StrokeDashArray="45, 55" StrokeDashOffset="-55"
+                                             HeightRequest="180" WidthRequest="180" HorizontalOptions="Center" VerticalOptions="Center" Rotation="-90" />
+
+                                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                                        <Label Text="124" FontSize="28" FontAttributes="Bold" TextColor="#463366" HorizontalOptions="Center" />
+                                        <Label Text="MSMEs" FontSize="12" TextColor="#94A3B8" HorizontalOptions="Center" />
+                                    </VerticalStackLayout>
+                                </Grid>
+
+                                <VerticalStackLayout Spacing="12" Margin="0,20,0,0">
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Ellipse Fill="#94A3B8" HeightRequest="10" WidthRequest="10" VerticalOptions="Center" />
+                                            <Label Text="Basic" FontSize="13" TextColor="#64748B" />
+                                        </HorizontalStackLayout>
+                                        <Label Grid.Column="2" Text="45%" FontAttributes="Bold" TextColor="#463366" FontSize="13" />
+                                    </Grid>
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Ellipse Fill="#3B82F6" HeightRequest="10" WidthRequest="10" VerticalOptions="Center" />
+                                            <Label Text="Standard" FontSize="13" TextColor="#64748B" />
+                                        </HorizontalStackLayout>
+                                        <Label Grid.Column="2" Text="32%" FontAttributes="Bold" TextColor="#463366" FontSize="13" />
+                                    </Grid>
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Ellipse Fill="#624890" HeightRequest="10" WidthRequest="10" VerticalOptions="Center" />
+                                            <Label Text="Premium" FontSize="13" TextColor="#64748B" />
+                                        </HorizontalStackLayout>
+                                        <Label Grid.Column="2" Text="23%" FontAttributes="Bold" TextColor="#463366" FontSize="13" />
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Pending MSME Verifications Section -->
+                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="24">
+                            <Label Text="Pending MSME Verifications" FontSize="18" FontAttributes="Bold" TextColor="#463366" />
+                            
+                            <VerticalStackLayout Spacing="16">
+                                <!-- Verification 1 -->
+                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 16" Padding="20" StrokeThickness="0">
+                                    <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="16">
+                                        <Border BackgroundColor="#D1C4E9" StrokeShape="RoundRectangle 24" HeightRequest="48" WidthRequest="48" StrokeThickness="0">
+                                            <Label Text="L" FontSize="16" FontAttributes="Bold" TextColor="#463366" HorizontalOptions="Center" VerticalOptions="Center" />
+                                        </Border>
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                            <Label Text="Lumina Threads" FontAttributes="Bold" TextColor="#463366" FontSize="15" />
+                                            <Label Text="Sarah Lee • Premium Plan" FontSize="12" TextColor="#94A3B8" />
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="2" Text="Reject" TextColor="#EF4444" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" Margin="0,0,16,0" />
+                                        <Button Grid.Column="3" Text="Approve" BackgroundColor="#624890" TextColor="White" CornerRadius="8" Padding="16,0" HeightRequest="36" FontSize="13" />
+                                    </Grid>
+                                </Border>
+
+                                <!-- Verification 2 -->
+                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 16" Padding="20" StrokeThickness="0">
+                                    <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="16">
+                                        <Border BackgroundColor="#D1C4E9" StrokeShape="RoundRectangle 24" HeightRequest="48" WidthRequest="48" StrokeThickness="0">
+                                            <Label Text="U" FontSize="16" FontAttributes="Bold" TextColor="#463366" HorizontalOptions="Center" VerticalOptions="Center" />
+                                        </Border>
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                            <Label Text="Urban Stitch" FontAttributes="Bold" TextColor="#463366" FontSize="15" />
+                                            <Label Text="Mike Tan • Standard Plan" FontSize="12" TextColor="#94A3B8" />
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="2" Text="Reject" TextColor="#EF4444" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" Margin="0,0,16,0" />
+                                        <Button Grid.Column="3" Text="Approve" BackgroundColor="#624890" TextColor="White" CornerRadius="8" Padding="16,0" HeightRequest="36" FontSize="13" />
+                                    </Grid>
+                                </Border>
+
+                                <!-- Verification 3 -->
+                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 16" Padding="20" StrokeThickness="0">
+                                    <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="16">
+                                        <Border BackgroundColor="#D1C4E9" StrokeShape="RoundRectangle 24" HeightRequest="48" WidthRequest="48" StrokeThickness="0">
+                                            <Label Text="C" FontSize="16" FontAttributes="Bold" TextColor="#463366" HorizontalOptions="Center" VerticalOptions="Center" />
+                                        </Border>
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                            <Label Text="Classic Cotton" FontAttributes="Bold" TextColor="#463366" FontSize="15" />
+                                            <Label Text="Dina Ramos • Basic Plan" FontSize="12" TextColor="#94A3B8" />
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="2" Text="Reject" TextColor="#EF4444" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" Margin="0,0,16,0" />
+                                        <Button Grid.Column="3" Text="Approve" BackgroundColor="#624890" TextColor="White" CornerRadius="8" Padding="16,0" HeightRequest="36" FontSize="13" />
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

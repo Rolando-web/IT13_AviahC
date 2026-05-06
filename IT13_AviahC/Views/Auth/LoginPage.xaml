@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:IT13_AviahC.ViewModels.Superadmin"
+             x:Class="IT13_AviahC.Views.Auth.LoginPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F3F0FA">
+    <ContentPage.BindingContext>
+        <viewModels:SuperadminLoginViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid>
+        <!-- Background Decoration -->
+        <BoxView Color="#624890" HorizontalOptions="Fill" HeightRequest="400" VerticalOptions="Start" />
+        
+        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="32" Padding="20">
+            <!-- Logo Section -->
+            <VerticalStackLayout Spacing="12" HorizontalOptions="Center">
+                <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" HeightRequest="80" WidthRequest="80" StrokeThickness="0">
+                    <Label Text="A" TextColor="#624890" FontAttributes="Bold" FontSize="32" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label Text="Aviah System" FontSize="28" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <!-- Login Card -->
+            <Border BackgroundColor="White" 
+                    StrokeShape="RoundRectangle 32" 
+                    Padding="48" 
+                    StrokeThickness="0"
+                    WidthRequest="450"
+                    Shadow="{Shadow Brush=Black, Offset='0,20', Radius=40, Opacity=0.1}">
+                <VerticalStackLayout Spacing="32">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Welcome back" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                        <Label Text="Please enter your details to sign in" FontSize="14" TextColor="#7D6A9E" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="24">
+                        <!-- Email Input -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Email Address" FontSize="13" FontAttributes="Bold" TextColor="#463366" />
+                            <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 16" Padding="16,4" StrokeThickness="0">
+                                <HorizontalStackLayout Spacing="12">
+                                    <Path Data="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+                                          Fill="#94A3B8" Aspect="Uniform" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
+                                    <Entry x:Name="EmailEntry" Placeholder="admin@aviah.com" TextColor="#1E293B" PlaceholderColor="#94A3B8" BackgroundColor="Transparent" FontSize="15" HeightRequest="48" WidthRequest="300" />
+                                </HorizontalStackLayout>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Password Input -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Password" FontSize="13" FontAttributes="Bold" TextColor="#463366" />
+                            <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 16" Padding="16,4" StrokeThickness="0">
+                                <HorizontalStackLayout Spacing="12">
+                                    <Path Data="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"
+                                          Fill="#94A3B8" Aspect="Uniform" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
+                                    <Entry x:Name="PasswordEntry" Placeholder="••••••••" IsPassword="True" TextColor="#1E293B" PlaceholderColor="#94A3B8" BackgroundColor="Transparent" FontSize="15" HeightRequest="48" WidthRequest="300" />
+                                </HorizontalStackLayout>
+                            </Border>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+
+                    <Button x:Name="LoginButton" 
+                            Text="Sign In" 
+                            BackgroundColor="#624890" 
+                            TextColor="White" 
+                            CornerRadius="16" 
+                            FontAttributes="Bold" 
+                            FontSize="16" 
+                            HeightRequest="56" 
+                            Clicked="OnLoginClicked" />
+
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
+                        <Label Text="Having trouble?" FontSize="13" TextColor="#7D6A9E" />
+                        <Label Text="Contact Support" FontSize="13" TextColor="#624890" FontAttributes="Bold" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+            
+            <Label Text="© 2026 Aviah Collection. All rights reserved." FontSize="12" TextColor="#7D6A9E" HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
