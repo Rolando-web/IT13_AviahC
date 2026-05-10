@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Supplier.Components"
+             xmlns:adminComp="clr-namespace:IT13_AviahC.Views.Admin.Components"
+             x:Class="IT13_AviahC.Views.Supplier.SupplierDashboardPage"
+             BackgroundColor="#F3F0FA">
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Sidebar -->
+        <components:SupplierSidebarView Grid.Column="0" CurrentPage="SupplierDashboard" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <!-- Header -->
+            <adminComp:AdminHeaderView Grid.Row="0" />
+
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="32" Spacing="32">
+                    <!-- Welcome Row -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Welcome back, Supplier!" FontSize="32" FontAttributes="Bold" TextColor="#463366" />
+                            <Label Text="Supply Chain Overview" FontSize="14" TextColor="#64748B" />
+                        </VerticalStackLayout>
+                        <Border Grid.Column="1" BackgroundColor="#FEF3C7" StrokeShape="RoundRectangle 12" Padding="12,6" StrokeThickness="0">
+                            <HorizontalStackLayout Spacing="6">
+                                <Ellipse Fill="#D97706" HeightRequest="8" WidthRequest="8" VerticalOptions="Center" />
+                                <Label Text="Premium Tier" TextColor="#B45309" FontSize="11" FontAttributes="Bold" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Stats Overview -->
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="24">
+                        <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="16">
+                                <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 8" HeightRequest="40" WidthRequest="40" HorizontalOptions="Start" StrokeThickness="0">
+                                    <Path Data="M19,3H5C3.89,3,3,3.9,3,5v14c0,1.1,0.89,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.11,3,19,3z M19,19H5V5h14V19z M17,17H7v-2h10V17z M17,13H7v-2h10V13z M17,9H7V7h10V9z"
+                                          Fill="#624890" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="ACTIVE ORDERS" FontSize="11" FontAttributes="Bold" TextColor="#64748B" CharacterSpacing="1" />
+                                    <Label Text="5" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="16">
+                                <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 8" HeightRequest="40" WidthRequest="40" HorizontalOptions="Start" StrokeThickness="0">
+                                    <Path Data="M11.99,2C6.47,2,2,6.48,2,12s4.47,10,9.99,10C17.52,22,22,17.52,22,12S17.52,2,11.99,2z M12,20c-4.42,0-8-3.58-8-8 s3.58-8,8-8s8,3.58,8,8S16.42,20,12,20z M12.5,7H11v6l5.25,3.15l0.75-1.23L12.5,12.5V7z"
+                                          Fill="#624890" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="PRODUCTION LEAD TIME" FontSize="11" FontAttributes="Bold" TextColor="#64748B" CharacterSpacing="1" />
+                                    <Label Text="4 Days" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="2" BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="16">
+                                <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 8" HeightRequest="40" WidthRequest="40" HorizontalOptions="Start" StrokeThickness="0">
+                                    <Path Data="M21,16.5c0,0.38-0.21,0.71-0.53,0.88l-7.9,4.44C12.4,21.93,12.2,22,12,22s-0.4-0.07-0.57-0.18l-7.9-4.44 C3.21,17.21,3,16.88,3,16.5v-9c0-0.38,0.21-0.71,0.53-0.88l7.9-4.44C11.6,2.07,11.8,2,12,2s0.4,0.07,0.57,0.18l7.9,4.44 C20.79,6.79,21,7.12,21,7.5V16.5z M12,4.15L6.04,7.5L12,10.85l5.96-3.35L12,4.15z M5,15.91l6,3.38v-6.71L5,9.19V15.91z M19,15.91 v-6.71l-6,3.38v6.71L19,15.91z"
+                                          Fill="#624890" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="MATERIAL REQUESTS" FontSize="11" FontAttributes="Bold" TextColor="#64748B" CharacterSpacing="1" />
+                                    <Label Text="12" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Recent Purchase Orders -->
+                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="32" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="24">
+                            <Label Text="Recent Purchase Orders" FontSize="18" FontAttributes="Bold" TextColor="#463366" />
+                            
+                            <Grid ColumnDefinitions="1.5*,2.5*,1.5*,1.5*,1*" Padding="0,0,0,12" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="24">
+                                <!-- Headers -->
+                                <Label Grid.Row="0" Grid.Column="0" Text="PO Number" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
+                                <Label Grid.Row="0" Grid.Column="1" Text="Material" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
+                                <Label Grid.Row="0" Grid.Column="2" Text="Quantity" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
+                                <Label Grid.Row="0" Grid.Column="3" Text="Due Date" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
+                                <Label Grid.Row="0" Grid.Column="4" Text="Status" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
+                                
+                                <BoxView Grid.Row="0" Grid.ColumnSpan="5" HeightRequest="1" Color="#E2E8F0" VerticalOptions="End" Margin="0,0,0,-12" />
+
+                                <!-- Row 1 -->
+                                <Label Grid.Row="1" Grid.Column="0" Text="PO-8821" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                                <Label Grid.Row="1" Grid.Column="1" Text="Premium Silk (Violet)" TextColor="#64748B" VerticalOptions="Center" />
+                                <Label Grid.Row="1" Grid.Column="2" Text="50 Meters" TextColor="#64748B" VerticalOptions="Center" />
+                                <Label Grid.Row="1" Grid.Column="3" Text="Apr 25" TextColor="#64748B" VerticalOptions="Center" />
+                                <Border Grid.Row="1" Grid.Column="4" BackgroundColor="#DBEAFE" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="Start" VerticalOptions="Center" StrokeThickness="0">
+                                    <Label Text="In Production" TextColor="#1D4ED8" FontSize="11" FontAttributes="Bold" />
+                                </Border>
+
+                                <!-- Row 2 -->
+                                <Label Grid.Row="2" Grid.Column="0" Text="PO-8815" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                                <Label Grid.Row="2" Grid.Column="1" Text="Organic Cotton" TextColor="#64748B" VerticalOptions="Center" />
+                                <Label Grid.Row="2" Grid.Column="2" Text="120 Meters" TextColor="#64748B" VerticalOptions="Center" />
+                                <Label Grid.Row="2" Grid.Column="3" Text="Apr 28" TextColor="#64748B" VerticalOptions="Center" />
+                                <Border Grid.Row="2" Grid.Column="4" BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="Start" VerticalOptions="Center" StrokeThickness="0">
+                                    <Label Text="Pending" TextColor="#475569" FontSize="11" FontAttributes="Bold" />
+                                </Border>
+
+                                <!-- Row 3 -->
+                                <Label Grid.Row="3" Grid.Column="0" Text="PO-8798" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                                <Label Grid.Row="3" Grid.Column="1" Text="Linen Blend" TextColor="#64748B" VerticalOptions="Center" />
+                                <Label Grid.Row="3" Grid.Column="2" Text="30 Meters" TextColor="#64748B" VerticalOptions="Center" />
+                                <Label Grid.Row="3" Grid.Column="3" Text="Apr 22" TextColor="#64748B" VerticalOptions="Center" />
+                                <Border Grid.Row="3" Grid.Column="4" BackgroundColor="#DCFCE7" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="Start" VerticalOptions="Center" StrokeThickness="0">
+                                    <Label Text="Ready" TextColor="#15803D" FontSize="11" FontAttributes="Bold" />
+                                </Border>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

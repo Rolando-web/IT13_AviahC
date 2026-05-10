@@ -5,30 +5,43 @@
     <Grid ColumnDefinitions="*,Auto" Padding="24,16" BackgroundColor="White">
         <Label Text="Aviah Collection ERP/CRM"
                FontAttributes="Bold"
-               FontSize="16"
+               FontSize="18"
                TextColor="#463366"
                VerticalOptions="Center" />
 
-        <HorizontalStackLayout Grid.Column="1" Spacing="16" VerticalOptions="Center">
-            <Border BackgroundColor="#F3F0FA"
-                    StrokeShape="RoundRectangle 16"
-                    Padding="8"
-                    StrokeThickness="0">
-                <Path Data="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"
-                      Fill="#624890" Aspect="Uniform" HeightRequest="18" WidthRequest="18" />
-            </Border>
+        <HorizontalStackLayout Grid.Column="1" Spacing="24" VerticalOptions="Center">
+            <!-- Notification with Red Dot -->
+            <Grid VerticalOptions="Center">
+                <Border BackgroundColor="Transparent"
+                        StrokeThickness="0"
+                        Padding="8">
+                    <Path Data="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"
+                          Fill="#624890" Aspect="Uniform" HeightRequest="22" WidthRequest="22" />
+                </Border>
+                <Border BackgroundColor="#EF4444" 
+                        HorizontalOptions="End" 
+                        VerticalOptions="Start" 
+                        HeightRequest="8" 
+                        WidthRequest="8" 
+                        StrokeShape="RoundRectangle 4" 
+                        Margin="0,4,4,0" 
+                        StrokeThickness="0" />
+            </Grid>
 
-            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                <VerticalStackLayout Spacing="2" HorizontalOptions="End">
-                    <Label Text="Admin" FontAttributes="Bold" FontSize="12" HorizontalTextAlignment="End" TextColor="#463366"/>
-                    <Label Text="Premium Tier" FontSize="11" TextColor="#7D6A9E" HorizontalTextAlignment="End" />
+            <!-- User Profile -->
+            <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+                <VerticalStackLayout Spacing="0" VerticalOptions="Center">
+                    <Label x:Name="UserRoleLabel" Text="Admin" FontAttributes="Bold" FontSize="13" HorizontalTextAlignment="End" TextColor="#1E293B"/>
+                    <Label x:Name="UserTierLabel" Text="Premium Tier" FontSize="11" TextColor="#64748B" HorizontalTextAlignment="End" />
                 </VerticalStackLayout>
-                <Border BackgroundColor="#D1C4E9"
-                        StrokeShape="RoundRectangle 16"
-                        HeightRequest="32"
-                        WidthRequest="32"
+                <Border StrokeShape="RoundRectangle 18"
+                        HeightRequest="36"
+                        WidthRequest="36"
                         StrokeThickness="0">
-                    <Label Text="A" TextColor="#463366" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Image x:Name="ProfileImage" Source="https://ui-avatars.com/api/?name=Admin&amp;background=624890&amp;color=fff" 
+                           Aspect="AspectFill" 
+                           HeightRequest="36" 
+                           WidthRequest="36" />
                 </Border>
             </HorizontalStackLayout>
         </HorizontalStackLayout>

@@ -1,13 +1,5 @@
 namespace IT13_AviahC.Models
 {
-    public class BoutiqueItem
-    {
-        public string ItemName { get; set; } = string.Empty;
-        public decimal UnitPrice { get; set; }
-        public string FormattedPrice { get; set; } = string.Empty;
-        public string ImageUrl { get; set; } = string.Empty;
-    }
-
     public class OfferItem
     {
         public string ItemName { get; set; } = string.Empty;
@@ -16,6 +8,7 @@ namespace IT13_AviahC.Models
         public string DiscountPercent { get; set; } = string.Empty;
         public string Savings { get; set; } = string.Empty;
         public string ImageUrl { get; set; } = string.Empty;
+        public string? PromotionName { get; set; }
     }
 
     public class OrderItem

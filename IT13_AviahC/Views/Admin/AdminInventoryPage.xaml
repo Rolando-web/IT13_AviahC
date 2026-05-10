@@ -16,81 +16,40 @@
                 <VerticalStackLayout Padding="32" Spacing="24">
                     <!-- Title Row -->
                     <Grid ColumnDefinitions="*,Auto">
-                        <VerticalStackLayout Spacing="4">
-                            <Label Text="Inventory &amp; Stock Control" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
-                            <Label Text="Manage raw materials, fabrics, and finished goods" FontSize="14" TextColor="#7D6A9E" />
-                        </VerticalStackLayout>
+                        <Label Text="Inventory Management" FontSize="28" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                        
                         <HorizontalStackLayout Grid.Column="1" Spacing="12">
-                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="16,8" StrokeThickness="0">
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="20,10" StrokeThickness="1" Stroke="#E2E8F0">
                                 <HorizontalStackLayout Spacing="8">
                                     <Path Data="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"
                                           Fill="#624890" Aspect="Uniform" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
-                                    <Label Text="Filter" TextColor="#624890" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" />
+                                    <Label Text="Filter" TextColor="#624890" FontAttributes="Bold" FontSize="14" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                             </Border>
-                            <Button Text="+ Add New Item" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="20,0" FontAttributes="Bold" FontSize="13" HeightRequest="40" />
+                            <Button Text="+ Add Item" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="24,0" FontAttributes="Bold" FontSize="14" HeightRequest="44" />
                         </HorizontalStackLayout>
                     </Grid>
 
-                    <!-- Stats Row -->
-                    <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="20">
-                        <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="20" StrokeThickness="0">
-                            <HorizontalStackLayout Spacing="16">
-                                <Border BackgroundColor="#F3E8FF" StrokeShape="RoundRectangle 12" HeightRequest="48" WidthRequest="48" StrokeThickness="0">
-                                    <Path Data="M12,2L2,7l10,5,10-5L12,2z M2,17l10,5,10-5M2,12l10,5,10-5"
-                                          Fill="#9333EA" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
-                                </Border>
-                                <VerticalStackLayout VerticalOptions="Center">
-                                    <Label Text="Total Items" TextColor="#94A3B8" FontSize="12" FontAttributes="Bold" />
-                                    <Label Text="245" TextColor="#1E293B" FontSize="24" FontAttributes="Bold" />
-                                </VerticalStackLayout>
-                            </HorizontalStackLayout>
-                        </Border>
-
-                        <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="20" StrokeThickness="0">
-                            <HorizontalStackLayout Spacing="16">
-                                <Border BackgroundColor="#FEE2E2" StrokeShape="RoundRectangle 12" HeightRequest="48" WidthRequest="48" StrokeThickness="0">
-                                    <Path Data="M12,2L1,21h22L12,2z M12,6l7.53,13H4.47L12,6z M11,10v4h2v-4H11z M11,15v2h2v-2H11z"
-                                          Fill="#EF4444" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
-                                </Border>
-                                <VerticalStackLayout VerticalOptions="Center">
-                                    <Label Text="Low Stock" TextColor="#94A3B8" FontSize="12" FontAttributes="Bold" />
-                                    <Label Text="12" TextColor="#EF4444" FontSize="24" FontAttributes="Bold" />
-                                </VerticalStackLayout>
-                            </HorizontalStackLayout>
-                        </Border>
-
-                        <Border Grid.Column="2" BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="20" StrokeThickness="0">
-                            <HorizontalStackLayout Spacing="16">
-                                <Border BackgroundColor="#DCFCE7" StrokeShape="RoundRectangle 12" HeightRequest="48" WidthRequest="48" StrokeThickness="0">
-                                    <Label Text="₱" TextColor="#15803D" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
-                                </Border>
-                                <VerticalStackLayout VerticalOptions="Center">
-                                    <Label Text="Total Value" TextColor="#94A3B8" FontSize="12" FontAttributes="Bold" />
-                                    <Label Text="₱842.5k" TextColor="#1E293B" FontSize="24" FontAttributes="Bold" />
-                                </VerticalStackLayout>
-                            </HorizontalStackLayout>
-                        </Border>
-
-                        <Border Grid.Column="3" BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="20" StrokeThickness="0">
-                            <HorizontalStackLayout Spacing="16">
-                                <Border BackgroundColor="#DBEAFE" StrokeShape="RoundRectangle 12" HeightRequest="48" WidthRequest="48" StrokeThickness="0">
-                                    <Path Data="M19,4h-1V2h-2v2H8V2H6v2H5C3.89,4,3,4.9,3,6v14c0,1.1,0.89,2,2,2h14c1.1,0,2-0.9,2-2V6C21,4.9,20.11,4,19,4z M19,20H5V10h14V20z"
-                                          Fill="#2563EB" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
-                                </Border>
-                                <VerticalStackLayout VerticalOptions="Center">
-                                    <Label Text="Last Restock" TextColor="#94A3B8" FontSize="12" FontAttributes="Bold" />
-                                    <Label Text="2d ago" TextColor="#1E293B" FontSize="24" FontAttributes="Bold" />
-                                </VerticalStackLayout>
-                            </HorizontalStackLayout>
-                        </Border>
-                    </Grid>
-
-                    <!-- Main Inventory Table -->
+                    <!-- Main Inventory Card -->
                     <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="0" StrokeThickness="0">
                         <VerticalStackLayout Spacing="0">
-                            <Grid ColumnDefinitions="*,Auto" Padding="32,24">
-                                <Border StrokeShape="RoundRectangle 20" BackgroundColor="#F8FAFC" StrokeThickness="0" Padding="16,4" HorizontalOptions="Start" WidthRequest="450">
+                            
+                            <!-- Tabs -->
+                            <Grid ColumnDefinitions="Auto,*" Padding="32,0,0,0">
+                                <VerticalStackLayout Spacing="0">
+                                    <HorizontalStackLayout Padding="16,20" Spacing="8">
+                                        <Path Data="M12,2L2,7l10,5,10-5L12,2z M2,17l10,5,10-5M2,12l10,5,10-5"
+                                              Fill="#624890" Aspect="Uniform" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
+                                        <Label Text="Warehouse (Raw Materials)" TextColor="#624890" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                    <BoxView HeightRequest="3" BackgroundColor="#624890" HorizontalOptions="Fill" />
+                                </VerticalStackLayout>
+                                <BoxView Grid.Column="1" HeightRequest="1" BackgroundColor="#F1F5F9" VerticalOptions="End" />
+                            </Grid>
+
+                            <!-- Search Bar -->
+                            <Grid Padding="32,24">
+                                <Border StrokeShape="RoundRectangle 12" BackgroundColor="#F8FAFC" StrokeThickness="1" Stroke="#E2E8F0" Padding="16,8" HorizontalOptions="Start" WidthRequest="400">
                                     <HorizontalStackLayout Spacing="12">
                                         <Path Data="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
                                               Fill="#94A3B8" Aspect="Uniform" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
@@ -99,33 +58,53 @@
                                 </Border>
                             </Grid>
 
-                            <Grid ColumnDefinitions="2*,*,*,*,*,Auto" Padding="32,12" BackgroundColor="#F8FAFC" ColumnSpacing="10">
-                                <Label Text="ITEM DESCRIPTION" FontAttributes="Bold" FontSize="11" TextColor="#64748B" CharacterSpacing="1" />
-                                <Label Grid.Column="1" Text="UNIT" FontAttributes="Bold" FontSize="11" TextColor="#64748B" CharacterSpacing="1" />
-                                <Label Grid.Column="2" Text="CATEGORY" FontAttributes="Bold" FontSize="11" TextColor="#64748B" CharacterSpacing="1" />
-                                <Label Grid.Column="3" Text="STOCK LEVEL" FontAttributes="Bold" FontSize="11" TextColor="#64748B" CharacterSpacing="1" />
-                                <Label Grid.Column="4" Text="UNIT PRICE" FontAttributes="Bold" FontSize="11" TextColor="#64748B" CharacterSpacing="1" />
-                                <Label Grid.Column="5" Text="ACTIONS" FontAttributes="Bold" FontSize="11" TextColor="#64748B" CharacterSpacing="1" HorizontalTextAlignment="End" />
+                            <!-- Table Header -->
+                            <Grid ColumnDefinitions="Auto,2*,*,*,*,*,Auto" Padding="32,16" BackgroundColor="#F3F0FA" ColumnSpacing="10">
+                                <Label Text="Img" FontAttributes="Bold" FontSize="13" TextColor="#624890" WidthRequest="40" />
+                                <Label Grid.Column="1" Text="Item Name" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                <Label Grid.Column="2" Text="SKU" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                <Label Grid.Column="3" Text="Category" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                <Label Grid.Column="4" Text="Quantity" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                <Label Grid.Column="5" Text="Status" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                <Label Grid.Column="6" Text="Actions" FontAttributes="Bold" FontSize="13" TextColor="#624890" HorizontalTextAlignment="End" WidthRequest="60" />
                             </Grid>
 
+                            <!-- Table Rows -->
                             <CollectionView x:Name="InventoryCollection">
+                                <CollectionView.EmptyView>
+                                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center" Padding="40">
+                                        <Label Text="No items in inventory" FontSize="18" FontAttributes="Bold" TextColor="#64748B" HorizontalTextAlignment="Center" />
+                                        <Label Text="The inventory database is currently empty." FontSize="14" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+                                    </VerticalStackLayout>
+                                </CollectionView.EmptyView>
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid ColumnDefinitions="2*,*,*,*,*,Auto" Padding="32,16" ColumnSpacing="10">
-                                            <Label Text="{Binding ItemName}" FontAttributes="Bold" FontSize="14" TextColor="#1E293B" VerticalOptions="Center" />
-                                            <Label Grid.Column="1" Text="{Binding Unit}" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
-                                            <Border Grid.Column="2" BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 8" Padding="12,4" HorizontalOptions="Start" VerticalOptions="Center" StrokeThickness="0">
-                                                <Label Text="{Binding Category}" FontSize="11" TextColor="#624890" FontAttributes="Bold" />
-                                            </Border>
-                                            <Label Grid.Column="3" Text="{Binding StockLevel}" FontAttributes="Bold" FontSize="14" TextColor="#1E293B" VerticalOptions="Center" />
-                                            <Label Grid.Column="4" Text="{Binding UnitPrice, StringFormat='₱{0:N2}'}" FontSize="14" TextColor="#1E293B" VerticalOptions="Center" />
-                                            <HorizontalStackLayout Grid.Column="5" Spacing="16" HorizontalOptions="End" VerticalOptions="Center">
-                                                <Path Data="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
-                                                      Fill="#624890" Aspect="Uniform" HeightRequest="16" WidthRequest="16" />
-                                                <Path Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19V4M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
-                                                      Fill="#EF4444" Aspect="Uniform" HeightRequest="16" WidthRequest="16" />
-                                            </HorizontalStackLayout>
-                                        </Grid>
+                                        <VerticalStackLayout>
+                                            <Grid ColumnDefinitions="Auto,2*,*,*,*,*,Auto" Padding="32,20" ColumnSpacing="10">
+                                                <Border Grid.Column="0" HeightRequest="40" WidthRequest="40" StrokeShape="RoundRectangle 8" StrokeThickness="0">
+                                                    <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />
+                                                </Border>
+
+                                                <Label Grid.Column="1" Text="{Binding ItemName}" FontAttributes="Bold" FontSize="14" TextColor="#1E293B" VerticalOptions="Center" />
+                                                
+                                                <Label Grid.Column="2" Text="{Binding SKU}" FontSize="13" TextColor="#94A3B8" VerticalOptions="Center" FontAttributes="Bold" />
+                                                
+                                                <Label Grid.Column="3" Text="{Binding Category}" FontSize="14" TextColor="#64748B" VerticalOptions="Center" />
+                                                
+                                                <HorizontalStackLayout Grid.Column="4" Spacing="4" VerticalOptions="Center">
+                                                    <Label Text="{Binding StockLevel}" FontAttributes="Bold" FontSize="15" TextColor="#463366" />
+                                                    <Label Text="{Binding Unit}" FontSize="13" TextColor="#64748B" VerticalOptions="End" Margin="0,0,0,2" />
+                                                </HorizontalStackLayout>
+                                                
+                                                <!-- Status Pill -->
+                                                <Border Grid.Column="5" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="Start" VerticalOptions="Center" StrokeThickness="0" BackgroundColor="{Binding StatusColor}">
+                                                    <Label Text="{Binding StatusText}" FontSize="11" TextColor="{Binding StatusTextColor}" FontAttributes="Bold" />
+                                                </Border>
+
+                                                <Label Grid.Column="6" Text="Edit" TextColor="#624890" FontSize="13" TextDecorations="Underline" VerticalOptions="Center" HorizontalOptions="End" WidthRequest="60" HorizontalTextAlignment="End" />
+                                            </Grid>
+                                            <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" Margin="32,0" />
+                                        </VerticalStackLayout>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
@@ -136,3 +115,4 @@
         </Grid>
     </Grid>
 </ContentPage>
+

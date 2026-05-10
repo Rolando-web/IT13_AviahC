@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Staff.Components"
+             x:Class="IT13_AviahC.Views.Staff.StaffInventoryPage"
+             BackgroundColor="#F3F0FA"
+             Shell.NavBarIsVisible="False">
+    
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Sidebar Component -->
+        <components:StaffSidebarView Grid.Column="0" CurrentPage="StaffInventory" />
+
+        <!-- MAIN CONTENT AREA -->
+        <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*">
+            <!-- Header -->
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="32,20" BackgroundColor="White">
+                <Label Text="Aviah Collection ERP/CRM" FontAttributes="Bold" FontSize="18" TextColor="#463366" VerticalOptions="Center" />
+                <HorizontalStackLayout Grid.Column="1" Spacing="24" VerticalOptions="Center">
+                    <Grid VerticalOptions="Center">
+                        <Path Data="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" Fill="#624890" HeightRequest="20" WidthRequest="20" />
+                        <Border BackgroundColor="#EF4444" HorizontalOptions="End" VerticalOptions="Start" HeightRequest="8" WidthRequest="8" StrokeShape="RoundRectangle 4" Margin="0,2,2,0" StrokeThickness="0" />
+                    </Grid>
+                    <HorizontalStackLayout Spacing="12">
+                        <VerticalStackLayout VerticalOptions="Center">
+                            <Label Text="Staff Account" FontAttributes="Bold" FontSize="13" TextColor="#1E293B" HorizontalTextAlignment="End"/>
+                            <Label Text="Premium Tier" FontSize="11" TextColor="#64748B" HorizontalTextAlignment="End" />
+                        </VerticalStackLayout>
+                        <Border StrokeShape="RoundRectangle 18" HeightRequest="36" WidthRequest="36" StrokeThickness="0" BackgroundColor="#624890">
+                            <Label Text="S" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                    </HorizontalStackLayout>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- Title & Global Actions -->
+            <Grid Grid.Row="1" Padding="32,24" ColumnDefinitions="*,Auto">
+                <Label Text="Inventory Management" FontSize="28" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                
+                <HorizontalStackLayout Grid.Column="1" Spacing="12" VerticalOptions="Center">
+                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="20,10" StrokeThickness="1" Stroke="#E2E8F0">
+                        <HorizontalStackLayout Spacing="8">
+                            <Path Data="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z" Fill="#624890" HeightRequest="16" WidthRequest="16" VerticalOptions="Center" />
+                            <Label Text="Filter" TextColor="#624890" FontAttributes="Bold" FontSize="14" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Border>
+                    <Button Text="+ Add Item" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="24,0" HeightRequest="44" FontAttributes="Bold" Clicked="OnAddItemClicked" />
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- Main Inventory Card -->
+            <Border Grid.Row="2" BackgroundColor="White" StrokeShape="RoundRectangle 24" Margin="32" StrokeThickness="0">
+                <Grid RowDefinitions="Auto,Auto,Auto,*">
+                    <!-- Tabs -->
+                    <Grid Grid.Row="0" ColumnDefinitions="*" Padding="0">
+                        <VerticalStackLayout Spacing="0">
+                            <HorizontalStackLayout Padding="32,20" Spacing="12" HorizontalOptions="Center">
+                                <Path Data="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z" Fill="#624890" HeightRequest="20" WidthRequest="20" VerticalOptions="Center" />
+                                <Label Text="Boutique (Finished Goods)" TextColor="#624890" FontAttributes="Bold" FontSize="16" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <BoxView HeightRequest="3" BackgroundColor="#624890" HorizontalOptions="Fill" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- Search Bar -->
+                    <Grid Grid.Row="1" Padding="32,20">
+                        <Border StrokeShape="RoundRectangle 12" BackgroundColor="#F8FAFC" StrokeThickness="1" Stroke="#E2E8F0" Padding="16,8" HorizontalOptions="Start" WidthRequest="400">
+                            <HorizontalStackLayout Spacing="12">
+                                <Path Data="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" Fill="#94A3B8" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
+                                <Entry Placeholder="Search items..." BackgroundColor="Transparent" TextColor="#1E293B" FontSize="14" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Table Header -->
+                    <Grid Grid.Row="2" ColumnDefinitions="80,2*,*,*,*,*,Auto" Padding="32,15" BackgroundColor="#F3F0FA">
+                        <Label Text="Image" FontAttributes="Bold" TextColor="#624890" HorizontalTextAlignment="Center" />
+                        <Label Grid.Column="1" Text="Item Name" FontAttributes="Bold" TextColor="#624890" Margin="10,0,0,0" />
+                        <Label Grid.Column="2" Text="SKU" FontAttributes="Bold" TextColor="#624890" />
+                        <Label Grid.Column="3" Text="Category" FontAttributes="Bold" TextColor="#624890" />
+                        <Label Grid.Column="4" Text="Quantity" FontAttributes="Bold" TextColor="#624890" />
+                        <Label Grid.Column="5" Text="Price" FontAttributes="Bold" TextColor="#624890" />
+                        <Label Grid.Column="6" Text="Actions" FontAttributes="Bold" TextColor="#624890" WidthRequest="100" HorizontalTextAlignment="End" />
+                    </Grid>
+
+                    <!-- List Content -->
+                    <Grid Grid.Row="3">
+                        <CollectionView x:Name="InventoryCollection" IsVisible="False">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <VerticalStackLayout>
+                                        <Grid ColumnDefinitions="80,2*,*,*,*,*,Auto" Padding="32,15">
+                                            <Border Grid.Column="0" HeightRequest="45" WidthRequest="45" StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="#F3F0FA" HorizontalOptions="Center">
+                                                <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />
+                                            </Border>
+                                            
+                                            <Label Grid.Column="1" Text="{Binding ProductName}" FontAttributes="Bold" TextColor="#1E293B" VerticalOptions="Center" Margin="10,0,0,0" />
+                                            <Label Grid.Column="2" Text="{Binding SKU}" TextColor="#94A3B8" VerticalOptions="Center" />
+                                            <Label Grid.Column="3" Text="{Binding Category}" TextColor="#64748B" VerticalOptions="Center" />
+                                            <HorizontalStackLayout Grid.Column="4" Spacing="4" VerticalOptions="Center">
+                                                <Label Text="{Binding StockLevel}" FontAttributes="Bold" TextColor="#463366" FontSize="15" />
+                                                <Label Text="pcs" TextColor="#64748B" FontSize="13" VerticalOptions="End" Margin="0,0,0,1" />
+                                            </HorizontalStackLayout>
+                                            
+                                            <Label Grid.Column="5" Text="{Binding FormattedPrice}" TextColor="#624890" FontAttributes="Bold" VerticalOptions="Center" />
+
+                                            <HorizontalStackLayout Grid.Column="6" Spacing="15" HorizontalOptions="End" VerticalOptions="Center">
+                                                <Label Text="Edit" TextColor="#624890" FontSize="13" TextDecorations="Underline">
+                                                    <Label.GestureRecognizers><TapGestureRecognizer Tapped="OnEditItemClicked" CommandParameter="{Binding .}" /></Label.GestureRecognizers>
+                                                </Label>
+                                                <Label Text="Del" TextColor="#EF4444" FontSize="13" TextDecorations="Underline">
+                                                    <Label.GestureRecognizers><TapGestureRecognizer Tapped="OnDeleteItemClicked" CommandParameter="{Binding .}" /></Label.GestureRecognizers>
+                                                </Label>
+                                            </HorizontalStackLayout>
+                                        </Grid>
+                                        <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" Margin="32,0" />
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <VerticalStackLayout x:Name="EmptyStateView" VerticalOptions="Center" HorizontalOptions="Center" Padding="40" IsVisible="True">
+                            <Label Text="The Inventory is Currently Empty." FontSize="20" FontAttributes="Bold" TextColor="#64748B" HorizontalTextAlignment="Center" />
+                            <Label Text="Please click the '+ Add Item' button to populate your catalog." FontSize="14" TextColor="#94A3B8" HorizontalTextAlignment="Center" Margin="0,5,0,0" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- MINIMALIST MODAL WITH IMAGE UPLOAD -->
+        <Grid x:Name="ItemModal" Grid.ColumnSpan="2" BackgroundColor="#80000000" IsVisible="False">
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="500" Padding="40" StrokeThickness="0">
+                <VerticalStackLayout Spacing="25">
+                    <Label x:Name="ModalTitle" Text="Add New Product" FontSize="22" FontAttributes="Bold" TextColor="#463366" HorizontalOptions="Center" />
+                    
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="20">
+                        <!-- Image Upload/Preview Area -->
+                        <VerticalStackLayout Spacing="8">
+                            <Border StrokeShape="RoundRectangle 12" HeightRequest="120" WidthRequest="120" BackgroundColor="#F3F0FA" StrokeThickness="0">
+                                <Grid>
+                                    <Label Text="📸" FontSize="30" HorizontalOptions="Center" VerticalOptions="Center" />
+                                    <Image x:Name="ItemImagePreview" Aspect="AspectFill" />
+                                </Grid>
+                                <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnUploadImageClicked" /></Border.GestureRecognizers>
+                            </Border>
+                            <Label Text="Upload Photo" FontSize="12" TextColor="#624890" HorizontalOptions="Center" TextDecorations="Underline">
+                                <Label.GestureRecognizers><TapGestureRecognizer Tapped="OnUploadImageClicked" /></Label.GestureRecognizers>
+                            </Label>
+                        </VerticalStackLayout>
+
+                        <!-- Form Fields -->
+                        <VerticalStackLayout Grid.Column="1" Spacing="15">
+                            <VerticalStackLayout Spacing="2">
+                                <Entry x:Name="ItemNameEntry" Placeholder="Product Name" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
+                                <BoxView HeightRequest="1" BackgroundColor="#3ABEF9" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Spacing="2">
+                                <Entry x:Name="SKUEntry" Placeholder="SKU (Primary Key)" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
+                                <BoxView HeightRequest="1" BackgroundColor="#3ABEF9" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Spacing="2">
+                                <Picker x:Name="CategoryPicker" Title="Select Category" FontSize="14" TextColor="#1E293B">
+                                    <Picker.ItemsSource>
+                                        <x:Array Type="{x:Type x:String}">
+                                            <x:String>Dresses</x:String>
+                                            <x:String>Tops</x:String>
+                                            <x:String>Bottoms</x:String>
+                                            <x:String>Accessories</x:String>
+                                        </x:Array>
+                                    </Picker.ItemsSource>
+                                </Picker>
+                                <BoxView HeightRequest="1" BackgroundColor="#3ABEF9" />
+                            </VerticalStackLayout>
+
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                                <VerticalStackLayout Spacing="2">
+                                    <Entry x:Name="QuantityEntry" Placeholder="Quantity" Keyboard="Numeric" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
+                                    <BoxView HeightRequest="1" BackgroundColor="#3ABEF9" />
+                                </VerticalStackLayout>
+                                <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                    <Entry x:Name="PriceEntry" Placeholder="Price" Keyboard="Numeric" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
+                                    <BoxView HeightRequest="1" BackgroundColor="#3ABEF9" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <VerticalStackLayout Spacing="2">
+                                <Picker x:Name="PromotionPicker" Title="Apply Promotion (Optional)" FontSize="14" TextColor="#1E293B" ItemDisplayBinding="{Binding PromotionName}" />
+                                <BoxView HeightRequest="1" BackgroundColor="#3ABEF9" />
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- Action Buttons -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="20" Margin="0,10,0,0">
+                        <Label Text="Cancel" TextColor="#64748B" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Label.GestureRecognizers><TapGestureRecognizer Tapped="OnCloseModalClicked"/></Label.GestureRecognizers>
+                        </Label>
+                        <Button Grid.Column="1" Text="Save" BackgroundColor="#624890" TextColor="White" CornerRadius="12" HeightRequest="50" FontSize="16" FontAttributes="Bold" Clicked="OnSaveItemClicked" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

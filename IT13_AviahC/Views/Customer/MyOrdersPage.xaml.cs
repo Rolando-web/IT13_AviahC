@@ -1,61 +1,102 @@
+using System.Data;
 using IT13_AviahC.Models;
+using IT13_AviahC.Services;
 
 namespace IT13_AviahC.Views.Customer
 {
     public partial class MyOrdersPage : ContentPage
     {
+        private readonly DatabaseService _databaseService;
+
         public MyOrdersPage()
         {
             InitializeComponent();
+            _databaseService = new DatabaseService();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            LoadOrders();
+            _ = LoadOrdersSafe();
         }
 
-        private void LoadOrders()
+        private async Task LoadOrdersSafe()
         {
             try
             {
-                var orders = new List<OrderItem>
-                {
-                    new OrderItem 
-                    { 
-                        OrderRef = "ORD-983", 
-                        OrderDateAndSummary = "Today • Lavender Blouse, Trousers", 
-                        FormattedTotal = "$185.00", 
-                        Status = "In Transit", 
-                        StatusColor = "#3182CE", 
-                        IsTrackable = true 
-                    },
-                    new OrderItem 
-                    { 
-                        OrderRef = "ORD-842", 
-                        OrderDateAndSummary = "Oct 12, 2025 • Silk Scarf (Lilac)", 
-                        FormattedTotal = "$35.00", 
-                        Status = "Delivered", 
-                        StatusColor = "#38A169", 
-                        IsTrackable = false 
-                    },
-                    new OrderItem 
-                    { 
-                        OrderRef = "ORD-710", 
-                        OrderDateAndSummary = "Sep 05, 2025 • Violet Summer Dress", 
-                        FormattedTotal = "$120.00", 
-                        Status = "Delivered", 
-                        StatusColor = "#38A169", 
-                        IsTrackable = false 
-                    }
-                };
+                string userEmail = UserSession.UserEmail ?? "Customer@aviah.com";
+                DataTable dt = await _databaseService.GetCustomerOrdersAsync(userEmail);
+                var orders = new List<OrderItem>();
 
-                OrdersCollection.ItemsSource = orders;
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        string status = row["Status"]?.ToString() ?? "Pending";
+                        DateTime orderDate = row["OrderDate"] != DBNull.Value ? Convert.ToDateTime(row["OrderDate"]) : DateTime.Now;
+                        decimal amount = row["TotalAmount"] != DBNull.Value ? Convert.ToDecimal(row["TotalAmount"]) : 0m;
+
+                        orders.Add(new OrderItem
+                        {
+                            OrderRef = row["OrderRef"]?.ToString() ?? "N/A",
+                            OrderDateAndSummary = $"{orderDate:MMM dd, yyyy} • {row["ItemSummary"]}",
+                            FormattedTotal = $"₱{amount:N2}",
+                            Status = status,
+                            StatusColor = GetStatusColor(status),
+                            IsTrackable = status.ToLower() != "completed" && status.ToLower() != "cancelled"
+                        });
+                    }
+                }
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    if (orders.Count > 0)
+                    {
+                        OrdersCollection.IsVisible = true;
+                        EmptyOrdersView.IsVisible = false;
+                    }
+                    else
+                    {
+                        OrdersCollection.IsVisible = false;
+                        EmptyOrdersView.IsVisible = true;
+                    }
+
+                    BindableLayout.SetItemsSource(OrdersCollection, orders);
+                });
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error loading orders: {ex.Message}");
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    OrdersCollection.IsVisible = false;
+                    EmptyOrdersView.IsVisible = true;
+                });
             }
+        }
+
+        private string GetStatusColor(string status)
+        {
+            return status.ToLower() switch
+            {
+                "pending" => "#805AD5",
+                "paid" => "#3182CE",
+                "shipped" => "#3182CE",
+                "delivering" => "#DD6B20",
+                "completed" => "#38A169",
+                "cancelled" => "#E53E3E",
+                _ => "#718096"
+            };
+        }
+
+        private async void OnTrackClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//CustomerPortal/CustomerTrack");
+        }
+
+        private async void OnShopClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//CustomerPortal/CustomerBoutique");
         }
     }
 }

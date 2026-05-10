@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.DeliveryStaff.Components"
+             xmlns:adminComp="clr-namespace:IT13_AviahC.Views.Admin.Components"
+             x:Class="IT13_AviahC.Views.DeliveryStaff.DeliveryStaffDashboardPage"
+             BackgroundColor="#F3F0FA">
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Sidebar -->
+        <components:DeliveryStaffSidebarView Grid.Column="0" CurrentPage="DeliveryStaffDashboard" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <!-- Header -->
+            <adminComp:AdminHeaderView Grid.Row="0" />
+
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="32" Spacing="32">
+                    <!-- Welcome Row -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Welcome back, Delivery Staff!" FontSize="32" FontAttributes="Bold" TextColor="#463366" />
+                            <Label Text="Logistics &amp; Route Management" FontSize="14" TextColor="#64748B" />
+                        </VerticalStackLayout>
+                        <Border Grid.Column="1" BackgroundColor="#FEF3C7" StrokeShape="RoundRectangle 12" Padding="12,6" StrokeThickness="0">
+                            <HorizontalStackLayout Spacing="6">
+                                <Ellipse Fill="#D97706" HeightRequest="8" WidthRequest="8" VerticalOptions="Center" />
+                                <Label Text="Premium Tier" TextColor="#B45309" FontSize="11" FontAttributes="Bold" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Stats Overview -->
+                    <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="24">
+                        <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="16">
+                                <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 8" HeightRequest="40" WidthRequest="40" HorizontalOptions="Start" StrokeThickness="0">
+                                    <Path Data="M20,8h-3V4H3C1.9,4,1,4.9,1,6v11h2c0,1.66,1.34,3,3,3s3-1.34,3-3h6c0,1.66,1.34,3,3,3s3-1.34,3-3h2v-5l-3-4z M6,18.5C5.17,18.5,4.5,17.83,4.5,17s0.67-1.5,1.5-1.5s1.5,0.67,1.5,1.5S6.83,18.5,6,18.5z M19.5,9.5l1.96,2.5H17V9.5H19.5z M18,18.5c-0.83,0-1.5-0.67-1.5-1.5s0.67-1.5,1.5-1.5s1.5,0.67,1.5,1.5S18.83,18.5,18,18.5z"
+                                          Fill="#624890" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="TO DELIVER" FontSize="11" FontAttributes="Bold" TextColor="#64748B" CharacterSpacing="1" />
+                                    <Label Text="8" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="16">
+                                <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 8" HeightRequest="40" WidthRequest="40" HorizontalOptions="Start" StrokeThickness="0">
+                                    <Path Data="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M10,17l-5-5l1.41-1.41L10,14.17l7.59-7.59L19,8L10,17z"
+                                          Fill="#624890" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="COMPLETED" FontSize="11" FontAttributes="Bold" TextColor="#64748B" CharacterSpacing="1" />
+                                    <Label Text="5" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="2" BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="16">
+                                <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 8" HeightRequest="40" WidthRequest="40" HorizontalOptions="Start" StrokeThickness="0">
+                                    <Path Data="M11.99,2C6.47,2,2,6.48,2,12s4.47,10,9.99,10C17.52,22,22,17.52,22,12S17.52,2,11.99,2z M12,20c-4.42,0-8-3.58-8-8 s3.58-8,8-8s8,3.58,8,8S16.42,20,12,20z M12.5,7H11v6l5.25,3.15l0.75-1.23L12.5,12.5V7z"
+                                          Fill="#624890" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="PENDING" FontSize="11" FontAttributes="Bold" TextColor="#64748B" CharacterSpacing="1" />
+                                    <Label Text="3" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="3" BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="24" StrokeThickness="0">
+                            <VerticalStackLayout Spacing="16">
+                                <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 8" HeightRequest="40" WidthRequest="40" HorizontalOptions="Start" StrokeThickness="0">
+                                    <Path Data="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M13,17h-2v-2h2V17z M13,13h-2V7h2V13z"
+                                          Fill="#624890" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="DELAYED" FontSize="11" FontAttributes="Bold" TextColor="#64748B" CharacterSpacing="1" />
+                                    <Label Text="0" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Assigned Deliveries -->
+                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="32" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="24">
+                            <Label Text="Assigned Deliveries" FontSize="18" FontAttributes="Bold" TextColor="#463366" />
+                            
+                            <VerticalStackLayout Spacing="16">
+                                <!-- Card 1 -->
+                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="24" StrokeThickness="0">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Spacing="8">
+                                            <Label Text="ORD-1290" FontSize="14" FontAttributes="Bold" TextColor="#463366" />
+                                            <Label Text="Maria S." FontSize="13" TextColor="#1E293B" />
+                                            <Label Text="Makati City" FontSize="12" TextColor="#64748B" />
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1" Spacing="8" HorizontalOptions="End" VerticalOptions="Center">
+                                            <Border BackgroundColor="#DBEAFE" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="End" StrokeThickness="0">
+                                                <Label Text="In Transit" TextColor="#1D4ED8" FontSize="11" FontAttributes="Bold" />
+                                            </Border>
+                                            <Label Text="ETA 15m" FontSize="12" FontAttributes="Bold" TextColor="#463366" HorizontalTextAlignment="End" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Card 2 -->
+                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="24" StrokeThickness="0">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Spacing="8">
+                                            <Label Text="ORD-1285" FontSize="14" FontAttributes="Bold" TextColor="#463366" />
+                                            <Label Text="Juan D." FontSize="13" TextColor="#1E293B" />
+                                            <Label Text="Quezon City" FontSize="12" TextColor="#64748B" />
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1" Spacing="8" HorizontalOptions="End" VerticalOptions="Center">
+                                            <Border BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="End" StrokeThickness="0">
+                                                <Label Text="Pending" TextColor="#475569" FontSize="11" FontAttributes="Bold" />
+                                            </Border>
+                                            <Label Text="Starts 2:00 PM" FontSize="12" FontAttributes="Bold" TextColor="#463366" HorizontalTextAlignment="End" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Card 3 -->
+                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="24" StrokeThickness="0">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Spacing="8">
+                                            <Label Text="ORD-1282" FontSize="14" FontAttributes="Bold" TextColor="#463366" />
+                                            <Label Text="Anna R." FontSize="13" TextColor="#1E293B" />
+                                            <Label Text="Pasig City" FontSize="12" TextColor="#64748B" />
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1" Spacing="8" HorizontalOptions="End" VerticalOptions="Center">
+                                            <Border BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="End" StrokeThickness="0">
+                                                <Label Text="Pending" TextColor="#475569" FontSize="11" FontAttributes="Bold" />
+                                            </Border>
+                                            <Label Text="Starts 4:00 PM" FontSize="12" FontAttributes="Bold" TextColor="#463366" HorizontalTextAlignment="End" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="IT13_AviahC.Views.Staff.Components.StaffSidebarView">
+    <Grid RowDefinitions="Auto,*,Auto" WidthRequest="260" BackgroundColor="#624890" Padding="0,32">
+        <!-- Logo -->
+        <HorizontalStackLayout Grid.Row="0" Spacing="12" Padding="24,0,24,32">
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" HeightRequest="32" WidthRequest="32" StrokeThickness="0">
+                <Label Text="A" TextColor="#624890" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
+            </Border>
+            <Label Text="Aviah System" TextColor="White" FontSize="20" FontAttributes="Bold" VerticalOptions="Center" />
+        </HorizontalStackLayout>
+
+        <!-- Nav Items -->
+        <VerticalStackLayout Grid.Row="1" Spacing="4">
+            <Label Text="STAFF MODULES" TextColor="#B0A4D4" FontSize="11" FontAttributes="Bold" Margin="24,0,24,12" CharacterSpacing="1" />
+            
+            <Grid Padding="24,12" ColumnDefinitions="Auto,*" BackgroundColor="{Binding DashboardBg}">
+                <Path Data="M3,13h8V3H3V13z M3,21h8v-6H3V21z M13,21h8V11h-8V21z M13,3v6h8V3H13V3z" Fill="{Binding DashboardColor}" Aspect="Uniform" HeightRequest="18" WidthRequest="18" />
+                <Label Grid.Column="1" Text="Dashboard" TextColor="{Binding DashboardColor}" FontSize="15" Margin="12,0" VerticalOptions="Center" FontAttributes="Bold" />
+                <Grid.GestureRecognizers><TapGestureRecognizer Tapped="OnDashboardClicked" /></Grid.GestureRecognizers>
+            </Grid>
+
+            <Grid Padding="24,12" ColumnDefinitions="Auto,*" BackgroundColor="{Binding InventoryBg}">
+                <Path Data="M12,2L2,7l10,5,10-5L12,2z M2,17l10,5,10-5M2,12l10,5,10-5" Fill="{Binding InventoryColor}" Aspect="Uniform" HeightRequest="18" WidthRequest="18" />
+                <Label Grid.Column="1" Text="Inventory" TextColor="{Binding InventoryColor}" FontSize="15" Margin="12,0" VerticalOptions="Center" />
+                <Grid.GestureRecognizers><TapGestureRecognizer Tapped="OnInventoryClicked" /></Grid.GestureRecognizers>
+            </Grid>
+
+            <Grid Padding="24,12" ColumnDefinitions="Auto,*" BackgroundColor="{Binding ProductionBg}">
+                <Path Data="M19.66,3L12,10.66L4.34,3L3,4.34L10.66,12L3,19.66L4.34,21L12,13.34L19.66,21L21,19.66L13.34,12L21,4.34L19.66,3Z" Fill="{Binding ProductionColor}" Aspect="Uniform" HeightRequest="18" WidthRequest="18" />
+                <Label Grid.Column="1" Text="Production" TextColor="{Binding ProductionColor}" FontSize="15" Margin="12,0" VerticalOptions="Center" />
+                <Grid.GestureRecognizers><TapGestureRecognizer Tapped="OnProductionClicked" /></Grid.GestureRecognizers>
+            </Grid>
+
+            <Grid Padding="24,12" ColumnDefinitions="Auto,*" BackgroundColor="{Binding SalesBg}">
+                <Path Data="M7,18c-1.1,0-1.99,0.9-1.99,2S5.9,22,7,22s2-0.9,2-2S8.1,18,7,18z M1,2v2h2l3.6,7.59L5.25,13c-0.15,0.28-0.25,0.61-0.25,0.95c0,1.1,0.9,2,2,2h12v-2H7.42c-0.14,0-0.25-0.11-0.25-0.25l0.03-0.12L8.1,13h7.45c0.75,0,1.41-0.41,1.75-1.03l3.58-6.49C21,5.21,20.79,5,20.5,5H5.21L4.27,3H1V2z M17,18c-1.1,0-1.99,0.9-1.99,2s0.89,2,1.99,2s2-0.9,2-2S18.1,18,17,18z" Fill="{Binding SalesColor}" Aspect="Uniform" HeightRequest="18" WidthRequest="18" />
+                <Label Grid.Column="1" Text="Sales" TextColor="{Binding SalesColor}" FontSize="15" Margin="12,0" VerticalOptions="Center" />
+                <Grid.GestureRecognizers><TapGestureRecognizer Tapped="OnSalesClicked" /></Grid.GestureRecognizers>
+            </Grid>
+        </VerticalStackLayout>
+
+        <!-- Footer / Logout -->
+        <Grid Grid.Row="2" Padding="24,0" ColumnDefinitions="Auto,*" VerticalOptions="End">
+            <Path Data="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" Fill="#D1C4E9" Aspect="Uniform" HeightRequest="18" WidthRequest="18" />
+            <Label Grid.Column="1" Text="Logout" TextColor="#D1C4E9" FontSize="15" Margin="12,0" VerticalOptions="Center" />
+            <Grid.GestureRecognizers><TapGestureRecognizer Tapped="OnLogoutClicked" /></Grid.GestureRecognizers>
+        </Grid>
+    </Grid>
+</ContentView>

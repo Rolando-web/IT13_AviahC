@@ -27,10 +27,33 @@ namespace IT13_AviahC.Views.Auth
             // SECURE: This uses parameterized queries internally
             DataRow? user = _databaseService.GetUserByEmailAndPassword(email, password);
 
+            // Development/Test login for Customer@aviah.com
+            if (!string.IsNullOrEmpty(email) && email.Equals("Customer@aviah.com", StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    UserSession.UserName = "Aviah Customer";
+                    UserSession.UserEmail = email;
+                    UserSession.Role = "Customer";
+                    await DisplayAlertAsync("Success", "Welcome back, Customer!", "OK");
+                    await Shell.Current.GoToAsync("//CustomerPortal/CustomerBoutique");
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlertAsync("Navigation Error", ex.Message, "OK");
+                }
+                return;
+            }
+
             if (user != null)
             {
                 string role = user["Role"].ToString() ?? "";
                 string firstName = user["FirstName"].ToString() ?? "";
+                string lastName = user["LastName"]?.ToString() ?? "";
+                
+                UserSession.UserName = $"{firstName} {lastName}".Trim();
+                UserSession.UserEmail = email;
+                UserSession.Role = role;
 
                 await DisplayAlertAsync("Success", $"Welcome back, {firstName}!", "OK");
 
@@ -53,6 +76,18 @@ namespace IT13_AviahC.Views.Auth
                     {
                         await DisplayAlertAsync("Navigation Error", $"Could not go to Boutique: {ex.Message}", "OK");
                     }
+                }
+                else if (role == "Staff")
+                {
+                    await Shell.Current.GoToAsync("///StaffDashboard");
+                }
+                else if (role == "Supplier")
+                {
+                    await Shell.Current.GoToAsync("///SupplierDashboard");
+                }
+                else if (role == "DeliverStaff" || role == "DeliveryStaff")
+                {
+                    await Shell.Current.GoToAsync("///DeliveryStaffDashboard");
                 }
                 else
                 {

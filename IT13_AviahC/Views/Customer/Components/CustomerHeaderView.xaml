@@ -19,7 +19,7 @@
                 <Grid ColumnDefinitions="Auto,*">
                     <Path Data="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" 
                           Fill="#A0AEC0" HeightRequest="18" WidthRequest="18" VerticalOptions="Center"/>
-                    <Entry Grid.Column="1" Placeholder="Search dresses, accessories..." BorderColor="Transparent" FontSize="13" TextColor="#4A5568"/>
+                    <Entry Grid.Column="1" Placeholder="Search dresses, accessories..." FontSize="13" TextColor="#4A5568" BackgroundColor="Transparent"/>
                 </Grid>
             </Border>
 
@@ -30,26 +30,44 @@
                 
                 <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
                     <VerticalStackLayout VerticalOptions="Center">
-                        <Label Text="Sarah Johnson" FontSize="13" FontAttributes="Bold" TextColor="#2D3748"/>
-                        <Label Text="★ VIP Platinum" FontSize="11" TextColor="#624890"/>
+                        <Label x:Name="CustomerNameLabel" Text="Customer" FontSize="13" FontAttributes="Bold" TextColor="#2D3748"/>
                     </VerticalStackLayout>
-                    <Border StrokeShape="RoundRectangle 16" HeightRequest="32" WidthRequest="32" StrokeThickness="0">
-                        <Image Source="customer_avatar_placeholder.svg" Aspect="AspectFill"/>
+                    <Border BackgroundColor="#624890" StrokeShape="RoundRectangle 16" HeightRequest="32" WidthRequest="32" StrokeThickness="0">
+                        <Label Text="A" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" FontSize="14" />
                     </Border>
                 </HorizontalStackLayout>
 
-                <Button Text="" FontFamily="MaterialIcons" FontSize="20" BackgroundColor="Transparent" TextColor="#4A5568" Clicked="OnLogoutClicked" Padding="0"/>
+                <Button Text="Logout" FontSize="12" BackgroundColor="#FEE2E2" TextColor="#EF4444" Clicked="OnLogoutClicked" CornerRadius="8" Padding="12,4"/>
             </HorizontalStackLayout>
         </Grid>
 
         <!-- Navigation Tabs -->
         <Border StrokeThickness="0,0,0,1" Stroke="#E2E8F0">
-            <HorizontalStackLayout Padding="40,0" Spacing="30">
-                <Button x:Name="BoutiqueBtn" Text="Boutique" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Boutique"/>
-                <Button x:Name="OffersBtn" Text="Special Offers" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Offers"/>
-                <Button x:Name="OrdersBtn" Text="My Orders" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Orders"/>
-                <Button x:Name="TrackBtn" Text="Track Delivery" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Track"/>
-                <Button x:Name="FeedbackBtn" Text="Feedback" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Feedback"/>
+            <HorizontalStackLayout Padding="40,0" Spacing="40">
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Path x:Name="BoutiqueIcon" Data="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" Fill="#624890" HeightRequest="18" WidthRequest="18" VerticalOptions="Center"/>
+                    <Button x:Name="BoutiqueBtn" Text="Boutique" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Boutique"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Path x:Name="OffersIcon" Data="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.05-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z" Fill="#64748B" HeightRequest="18" WidthRequest="18" VerticalOptions="Center"/>
+                    <Button x:Name="OffersBtn" Text="Special Offers" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Offers"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Path x:Name="OrdersIcon" Data="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" Fill="#64748B" HeightRequest="18" WidthRequest="18" VerticalOptions="Center"/>
+                    <Button x:Name="OrdersBtn" Text="My Orders" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Orders"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Path x:Name="TrackIcon" Data="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13-1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm1.91-4.5H17V9.5h2.5l1.41 1.5z" Fill="#64748B" HeightRequest="18" WidthRequest="18" VerticalOptions="Center"/>
+                    <Button x:Name="TrackBtn" Text="Track Delivery" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Track"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Path x:Name="FeedbackIcon" Data="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z" Fill="#64748B" HeightRequest="18" WidthRequest="18" VerticalOptions="Center"/>
+                    <Button x:Name="FeedbackBtn" Text="Feedback" Style="{StaticResource NavButtonStyle}" Clicked="OnNavClicked" CommandParameter="Feedback"/>
+                </HorizontalStackLayout>
             </HorizontalStackLayout>
         </Border>
     </VerticalStackLayout>

@@ -1,41 +1,115 @@
 using IT13_AviahC.Models;
+using System.Data;
 
 namespace IT13_AviahC.Views.Customer
 {
     public partial class BoutiquePage : ContentPage
     {
+        private readonly Services.DatabaseService _databaseService;
+
         public BoutiquePage()
         {
             InitializeComponent();
+            _databaseService = new Services.DatabaseService();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            LoadBoutiqueItems();
+            _ = LoadBoutiqueItemsSafe();
         }
 
-        private void LoadBoutiqueItems()
+        private async Task LoadBoutiqueItemsSafe()
         {
             try
             {
-                var items = new List<BoutiqueItem>
-                {
-                    new BoutiqueItem { ItemName = "Violet Summer Dress", UnitPrice = 120.00m, FormattedPrice = "$120.00", ImageUrl = "dress.png" },
-                    new BoutiqueItem { ItemName = "Lavender Blouse", UnitPrice = 65.00m, FormattedPrice = "$65.00", ImageUrl = "shirt.png" },
-                    new BoutiqueItem { ItemName = "Plum Formal Trousers", UnitPrice = 85.00m, FormattedPrice = "$85.00", ImageUrl = "pants.png" },
-                    new BoutiqueItem { ItemName = "Silk Scarf (Lilac)", UnitPrice = 35.00m, FormattedPrice = "$35.00", ImageUrl = "hoodie.png" },
-                    new BoutiqueItem { ItemName = "Purple Cardigan", UnitPrice = 55.00m, FormattedPrice = "$55.00", ImageUrl = "longsleeve.png" },
-                    new BoutiqueItem { ItemName = "Amethyst Earrings", UnitPrice = 45.00m, FormattedPrice = "$45.00", ImageUrl = "shirt.png" },
-                    new BoutiqueItem { ItemName = "Lilac Midi Skirt", UnitPrice = 70.00m, FormattedPrice = "$70.00", ImageUrl = "pants.png" },
-                    new BoutiqueItem { ItemName = "Violet Handbag", UnitPrice = 95.00m, FormattedPrice = "$95.00", ImageUrl = "hoodie.png" }
-                };
+                DataTable dt = await _databaseService.GetAllInventoryAsync();
+                var items = new List<Product>();
 
-                ItemsCollection.ItemsSource = items;
+                if (dt != null)
+                {
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        string status = row["Status"]?.ToString() ?? "In Stock";
+                        string category = row["Category"]?.ToString() ?? "General";
+                        string productName = row["ProductName"]?.ToString() ?? "Unknown Item";
+                        string? imageUrl = row["ImageUrl"]?.ToString();
+                        
+                        if (string.IsNullOrEmpty(imageUrl))
+                        {
+                            imageUrl = $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(productName)}&background=random&size=128";
+                        }
+
+                        items.Add(new Product
+                        {
+                            Id = row["Id"] != DBNull.Value ? Convert.ToInt32(row["Id"]) : 0,
+                            ProductName = productName,
+                            UnitPrice = row["Price"] != DBNull.Value ? Convert.ToDecimal(row["Price"]) : 0m,
+                            ImageUrl = imageUrl,
+                            Category = category,
+                            StatusText = row["PromotionName"]?.ToString() ?? status,
+                            PromoId = row["PromoId"] != DBNull.Value ? Convert.ToInt32(row["PromoId"]) : (int?)null,
+                            PromotionName = row["PromotionName"]?.ToString(),
+                            DiscountValue = row["DiscountValue"]?.ToString()
+                        });
+                    }
+                }
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    if (items.Count > 0)
+                    {
+                        ItemsCollection.IsVisible = true;
+                        EmptyBoutiqueView.IsVisible = false;
+                    }
+                    else
+                    {
+                        ItemsCollection.IsVisible = false;
+                        EmptyBoutiqueView.IsVisible = true;
+                    }
+                    BindableLayout.SetItemsSource(ItemsCollection, items);
+                });
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error loading boutique: {ex.Message}");
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    ItemsCollection.IsVisible = false;
+                    EmptyBoutiqueView.IsVisible = true;
+                });
+            }
+        }
+
+        private async void OnOrderClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (sender is Button button && button.CommandParameter is Product product)
+                {
+                    bool confirm = await DisplayAlertAsync("Confirm Order", $"Would you like to order {product.ProductName} for {product.FormattedPrice}?", "Yes", "No");
+                    
+                    if (confirm)
+                    {
+                        string userEmail = Services.UserSession.UserEmail ?? "customer@aviah.com";
+                        int result = await _databaseService.PlaceOrderAsync(userEmail, product.ProductName ?? "Item", product.UnitPrice);
+                        
+                        if (result > 0)
+                        {
+                            await DisplayAlertAsync("Success", "Your order has been placed successfully!", "OK");
+                            await Shell.Current.GoToAsync("//CustomerPortal/CustomerOrders");
+                        }
+                        else
+                        {
+                            await DisplayAlertAsync("Error", "Failed to place order. Please try again.", "OK");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Order Error: {ex.Message}");
+                await DisplayAlertAsync("Error", "Something went wrong while placing your order. Please try again.", "OK");
             }
         }
     }

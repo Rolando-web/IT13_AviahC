@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Customer.Components"
+             x:Class="IT13_AviahC.Views.Customer.UserFeedbackPage"
+             BackgroundColor="#F8FAFC"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+            <!-- Header -->
+            <components:CustomerHeaderView ActiveTab="Feedback" />
+
+            <VerticalStackLayout Padding="40" Spacing="32">
+                <!-- Promo Banner -->
+                <Border BackgroundColor="#8B5CF6" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="20">
+                        <VerticalStackLayout Spacing="8" VerticalOptions="Center">
+                            <HorizontalStackLayout Spacing="12">
+                                <Label Text="💬" FontSize="20" VerticalOptions="Center"/>
+                                <Label Text="We Value Your Feedback" TextColor="White" FontSize="22" FontAttributes="Bold" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <Label Text="Your thoughts help us improve and serve you better." TextColor="#E9D5FF" FontSize="14" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- Feedback Form Card -->
+                <Border BackgroundColor="White" 
+                        StrokeShape="RoundRectangle 24" 
+                        Padding="48" 
+                        StrokeThickness="1" 
+                        Stroke="#E2E8F0" 
+                        HorizontalOptions="Center" 
+                        MaximumWidthRequest="600">
+                    <VerticalStackLayout Spacing="32">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Share Your Experience" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                            <Label Text="As a valued member, your feedback goes directly to our design team!" FontSize="14" TextColor="#64748B" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="24">
+                            <!-- Subject -->
+                            <VerticalStackLayout Spacing="8">
+                                <Label Text="Subject" FontSize="14" FontAttributes="Bold" TextColor="#1E293B" />
+                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="16,4" StrokeThickness="1" Stroke="#E2E8F0">
+                                    <Entry x:Name="SubjectEntry" Placeholder="e.g. Product Quality, Delivery Speed..." TextColor="#1E293B" FontSize="15" HeightRequest="48" BackgroundColor="Transparent" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!-- Message -->
+                            <VerticalStackLayout Spacing="8">
+                                <Label Text="Message" FontSize="14" FontAttributes="Bold" TextColor="#1E293B" />
+                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="16" StrokeThickness="1" Stroke="#E2E8F0">
+                                    <Editor x:Name="MessageEditor" Placeholder="Tell us what you think..." TextColor="#1E293B" FontSize="15" HeightRequest="150" BackgroundColor="Transparent" AutoSize="None" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!-- Submit Button (replaced TapGestureRecognizer with real Button to fix freezing) -->
+                            <Button x:Name="SubmitButton"
+                                    Text="✉  Submit Feedback" 
+                                    BackgroundColor="#624890" 
+                                    TextColor="White" 
+                                    FontAttributes="Bold" 
+                                    FontSize="16" 
+                                    HeightRequest="56" 
+                                    CornerRadius="12" 
+                                    HorizontalOptions="Fill"
+                                    Clicked="OnSubmitFeedbackClicked"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

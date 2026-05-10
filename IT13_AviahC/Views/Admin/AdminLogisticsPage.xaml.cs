@@ -100,13 +100,18 @@ namespace IT13_AviahC.Views.Admin
             }
         }
 
+        private string _selectedDeliveryId = string.Empty;
+        private string _selectedOrderRef = string.Empty;
+
         private void OnUpdateStatusClicked(object? sender, EventArgs e)
         {
             var button = sender as Button;
             var delivery = button?.CommandParameter as DeliveryItem;
             if (delivery != null)
             {
-                ModalTitle.Text = $"Update Order Status: {delivery.DeliveryID}";
+                _selectedDeliveryId = delivery.DeliveryID;
+                _selectedOrderRef = delivery.DetailsText.Split('•')[0].Replace("Ref:", "").Trim();
+                ModalTitle.Text = $"Update Order Status: {_selectedDeliveryId}";
                 ModalOverlay.IsVisible = true;
             }
         }
@@ -114,19 +119,40 @@ namespace IT13_AviahC.Views.Admin
         private void OnCloseModalClicked(object? sender, EventArgs e)
         {
             ModalOverlay.IsVisible = false;
+            _selectedDeliveryId = string.Empty;
+            _selectedOrderRef = string.Empty;
         }
 
         private async void OnConfirmUpdateClicked(object? sender, EventArgs e)
         {
-            if (StatusPicker.SelectedItem == null)
+            if (StatusPicker.SelectedItem == null || string.IsNullOrEmpty(_selectedDeliveryId))
             {
                 await DisplayAlertAsync("Selection Required", "Please select a status update.", "OK");
                 return;
             }
 
-            // Here you would normally update the database
+            string newStatus = StatusPicker.SelectedItem.ToString() ?? "Pending";
+            string driverName = DriverPicker.SelectedItem?.ToString() ?? "Unassigned";
+
+            // Update Deliveries Table
+            string updateDeliveryQuery = "UPDATE Deliveries SET Status = @Status, DriverName = @DriverName WHERE DeliveryID = @DeliveryID";
+            await _dbService.ExecuteNonQueryAsync(updateDeliveryQuery, new Dictionary<string, object> {
+                { "@Status", newStatus },
+                { "@DriverName", driverName },
+                { "@DeliveryID", _selectedDeliveryId }
+            });
+
+            // Update Orders Table to keep them in sync
+            string updateOrderQuery = "UPDATE Orders SET Status = @Status WHERE OrderRef = @OrderRef";
+            await _dbService.ExecuteNonQueryAsync(updateOrderQuery, new Dictionary<string, object> {
+                { "@Status", newStatus },
+                { "@OrderRef", _selectedOrderRef }
+            });
+
             await DisplayAlertAsync("Success", "Delivery status has been updated successfully.", "OK");
             ModalOverlay.IsVisible = false;
+            _selectedDeliveryId = string.Empty;
+            _selectedOrderRef = string.Empty;
             LoadDeliveries(); // Refresh list
         }
     }

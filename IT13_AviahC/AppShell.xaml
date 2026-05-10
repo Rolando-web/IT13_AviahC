@@ -6,6 +6,9 @@
        xmlns:superadmin="clr-namespace:IT13_AviahC.Views.Superadmin"
        xmlns:admin="clr-namespace:IT13_AviahC.Views.Admin"
        xmlns:customer="clr-namespace:IT13_AviahC.Views.Customer"
+       xmlns:staff="clr-namespace:IT13_AviahC.Views.Staff"
+       xmlns:supplier="clr-namespace:IT13_AviahC.Views.Supplier"
+       xmlns:deliveryStaff="clr-namespace:IT13_AviahC.Views.DeliveryStaff"
        Shell.NavBarIsVisible="False"
        Shell.TabBarIsVisible="False"
        Shell.FlyoutBehavior="Disabled"
@@ -38,10 +41,32 @@
         <ShellContent Title="Admin Subscription" ContentTemplate="{DataTemplate admin:AdminSubscriptionPage}" Route="AdminSubscription" />
     </FlyoutItem>
 
+    <!-- Staff Module -->
+    <FlyoutItem Title="Staff" Route="Staff" FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent Title="Staff Dashboard" ContentTemplate="{DataTemplate staff:StaffDashboardPage}" Route="StaffDashboard" />
+        <ShellContent Title="Staff Inventory" ContentTemplate="{DataTemplate staff:StaffInventoryPage}" Route="StaffInventory" />
+        <ShellContent Title="Staff Production" ContentTemplate="{DataTemplate staff:StaffProductionPage}" Route="StaffProduction" />
+        <ShellContent Title="Staff Sales" ContentTemplate="{DataTemplate staff:StaffSalesPage}" Route="StaffSales" />
+    </FlyoutItem>
+
+    <!-- Supplier Module -->
+    <FlyoutItem Title="Supplier" Route="Supplier" FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent Title="Supplier Dashboard" ContentTemplate="{DataTemplate supplier:SupplierDashboardPage}" Route="SupplierDashboard" />
+        <ShellContent Title="Supplier Inventory" ContentTemplate="{DataTemplate supplier:SupplierInventoryPage}" Route="SupplierInventory" />
+    </FlyoutItem>
+
+    <!-- Delivery Staff Module -->
+    <FlyoutItem Title="Delivery Staff" Route="DeliveryStaff" FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent Title="Delivery Staff Dashboard" ContentTemplate="{DataTemplate deliveryStaff:DeliveryStaffDashboardPage}" Route="DeliveryStaffDashboard" />
+        <ShellContent Title="Delivery Staff Logistics" ContentTemplate="{DataTemplate deliveryStaff:DeliveryStaffLogisticsPage}" Route="DeliveryStaffLogistics" />
+    </FlyoutItem>
+
     <!-- Customer Module -->
-    <FlyoutItem Title="Customer Portal" Route="CustomerPortal" FlyoutItem.IsVisible="False">
+    <FlyoutItem Title="Customer Portal" Route="CustomerPortal" IsVisible="True">
         <ShellContent Title="Boutique" ContentTemplate="{DataTemplate customer:BoutiquePage}" Route="CustomerBoutique" />
         <ShellContent Title="Special Offers" ContentTemplate="{DataTemplate customer:SpecialOffersPage}" Route="CustomerOffers" />
         <ShellContent Title="My Orders" ContentTemplate="{DataTemplate customer:MyOrdersPage}" Route="CustomerOrders" />
+        <ShellContent Title="Track Delivery" ContentTemplate="{DataTemplate customer:TrackDeliveryPage}" Route="CustomerTrack" />
+        <ShellContent Title="Feedback" ContentTemplate="{DataTemplate customer:UserFeedbackPage}" Route="UserFeedback" />
     </FlyoutItem>
 </Shell>

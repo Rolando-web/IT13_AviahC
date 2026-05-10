@@ -10,124 +10,77 @@
         <VerticalStackLayout Spacing="0">
             <components:CustomerHeaderView ActiveTab="Offers" />
 
-            <VerticalStackLayout Padding="40,24" Spacing="24">
+            <VerticalStackLayout Padding="40" Spacing="32">
+
                 <!-- Promo Banner -->
-                <Border BackgroundColor="#805AD5" StrokeShape="RoundRectangle 16" Padding="32,24" StrokeThickness="0">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <VerticalStackLayout Spacing="8">
-                            <HorizontalStackLayout Spacing="8">
-                                <Label Text="⭐" FontSize="20" VerticalOptions="Center"/>
-                                <Label Text="Your VIP Platinum Discount is Active!" TextColor="White" FontSize="18" FontAttributes="Bold"/>
+                <Border BackgroundColor="#DC2626" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="20">
+                        <VerticalStackLayout Spacing="8" VerticalOptions="Center">
+                            <HorizontalStackLayout Spacing="12">
+                                <Label Text="🔥" FontSize="20" VerticalOptions="Center"/>
+                                <Label Text="Hot Deals &amp; Special Offers" TextColor="White" FontSize="22" FontAttributes="Bold" VerticalOptions="Center"/>
                             </HorizontalStackLayout>
-                            <Label Text="Enjoy 20% off on all new arrivals this season." TextColor="#E9D8FD" FontSize="14"/>
+                            <Label Text="Limited-time discounts on our best-selling items. Don't miss out!" TextColor="#FEE2E2" FontSize="14" />
                         </VerticalStackLayout>
-                        <Button Grid.Column="1" Text="Shop New Arrivals" BackgroundColor="White" TextColor="#6B46C1" CornerRadius="20" Padding="24,10" FontAttributes="Bold"/>
+                        <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="20,10" StrokeThickness="0" VerticalOptions="Center">
+                            <Label Text="Shop All Deals" TextColor="#DC2626" FontAttributes="Bold" FontSize="14"/>
+                        </Border>
                     </Grid>
                 </Border>
 
-                <!-- Featured Offers -->
-                <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
-                    <Border BackgroundColor="#FF2D87" StrokeShape="RoundRectangle 16" Padding="24" StrokeThickness="0">
-                        <VerticalStackLayout Spacing="10">
-                            <HorizontalStackLayout Spacing="4">
-                                <Label Text="%" TextColor="White" FontSize="14" VerticalOptions="Center"/>
-                                <Label Text="LIMITED TIME" TextColor="White" FontSize="12" FontAttributes="Bold" VerticalOptions="Center"/>
-                            </HorizontalStackLayout>
-                            <Label Text="Flash Sale!" TextColor="White" FontSize="28" FontAttributes="Bold"/>
-                            <Label Text="Up to 25% off on selected items" TextColor="#FFB3D1" FontSize="14"/>
-                            <Label Text="Ends in: 2d 14h 32m" TextColor="White" FontSize="12" Margin="0,10,0,0"/>
-                        </VerticalStackLayout>
-                    </Border>
+                <!-- Section Header -->
+                <Label Text="Discounted Items" FontSize="22" FontAttributes="Bold" TextColor="#1E293B"/>
 
-                    <Border Grid.Column="1" BackgroundColor="#FF7A00" StrokeShape="RoundRectangle 16" Padding="24" StrokeThickness="0">
-                        <VerticalStackLayout Spacing="10">
-                            <HorizontalStackLayout Spacing="4">
-                                <Label Text="⭐" TextColor="White" FontSize="14" VerticalOptions="Center"/>
-                                <Label Text="VIP EXCLUSIVE" TextColor="White" FontSize="12" FontAttributes="Bold" VerticalOptions="Center"/>
-                            </HorizontalStackLayout>
-                            <Label Text="Your VIP 20% Off" TextColor="White" FontSize="28" FontAttributes="Bold"/>
-                            <Label Text="Auto-applied on all purchases" TextColor="#FFD8B3" FontSize="14"/>
-                            <Label Text="Valid until: Apr 30, 2026" TextColor="White" FontSize="12" Margin="0,10,0,0"/>
-                        </VerticalStackLayout>
+                <!-- Empty State -->
+                <VerticalStackLayout x:Name="EmptyPromotionsView" Spacing="16" Padding="60" HorizontalOptions="Center" IsVisible="False">
+                    <Border BackgroundColor="#FEF2F2" StrokeShape="RoundRectangle 50" HeightRequest="100" WidthRequest="100" StrokeThickness="0" HorizontalOptions="Center">
+                        <Label Text="🏷️" FontSize="40" HorizontalOptions="Center" VerticalOptions="Center"/>
                     </Border>
-                </Grid>
+                    <Label Text="No Active Promotions" FontSize="20" FontAttributes="Bold" TextColor="#1E293B" HorizontalTextAlignment="Center" />
+                    <Label Text="Check back later for exclusive deals and seasonal sales!" FontSize="14" TextColor="#64748B" HorizontalTextAlignment="Center" MaxWidthRequest="350"/>
+                </VerticalStackLayout>
 
-                <!-- Discounted Items -->
-                <Label Text="Discounted Items" FontSize="20" FontAttributes="Bold" TextColor="#2D3748" Margin="0,8,0,0"/>
-                <CollectionView x:Name="OffersCollection">
-                    <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Vertical" Span="4" HorizontalItemSpacing="20" VerticalItemSpacing="20"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
+                <!-- Offers Grid -->
+                <FlexLayout x:Name="OffersCollection" Wrap="Wrap" JustifyContent="Start" AlignContent="Start">
+                    <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#E2E8F0">
-                                <VerticalStackLayout Spacing="12">
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" StrokeThickness="1" Stroke="#E2E8F0" WidthRequest="240" Margin="0,0,20,20">
+                                <VerticalStackLayout>
+                                    <!-- Image with Discount Badge -->
                                     <Grid>
-                                        <Image Source="{Binding ImageUrl}" Aspect="AspectFill" HeightRequest="200" WidthRequest="200"/>
-                                        <HorizontalStackLayout Spacing="4" Margin="10" VerticalOptions="Start">
-                                            <Border BackgroundColor="#FF2D87" StrokeShape="RoundRectangle 4" Padding="6,2" StrokeThickness="0">
-                                                <Label Text="{Binding DiscountPercent}" TextColor="White" FontSize="10" FontAttributes="Bold"/>
+                                        <Border BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 16,16,0,0" HeightRequest="200" StrokeThickness="0">
+                                            <Image Source="{Binding ImageUrl}" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                                        </Border>
+                                        <!-- Badges -->
+                                        <HorizontalStackLayout Spacing="6" Margin="12" VerticalOptions="Start" HorizontalOptions="Start">
+                                            <Border BackgroundColor="#DC2626" StrokeShape="RoundRectangle 6" Padding="8,4" StrokeThickness="0">
+                                                <Label Text="{Binding DiscountPercent}" TextColor="White" FontSize="11" FontAttributes="Bold"/>
                                             </Border>
-                                            <Border BackgroundColor="#624890" StrokeShape="RoundRectangle 4" Padding="6,2" StrokeThickness="0">
-                                                <Label Text="Flash Sale" TextColor="White" FontSize="10" FontAttributes="Bold"/>
+                                            <Border BackgroundColor="#7C3AED" StrokeShape="RoundRectangle 6" Padding="8,4" StrokeThickness="0">
+                                                <Label Text="{Binding PromotionName}" TextColor="White" FontSize="11" FontAttributes="Bold"/>
                                             </Border>
                                         </HorizontalStackLayout>
                                     </Grid>
-                                    <VerticalStackLayout Padding="16,0,16,16" Spacing="4">
-                                        <Label Text="{Binding ItemName}" FontSize="14" FontAttributes="Bold" TextColor="#2D3748"/>
-                                        <HorizontalStackLayout Spacing="8">
-                                            <Label Text="{Binding PromoPrice}" FontSize="14" TextColor="#6B46C1" FontAttributes="Bold"/>
-                                            <Label Text="{Binding OriginalPrice}" FontSize="12" TextColor="#A0AEC0" TextDecorations="Strikethrough"/>
+
+                                    <!-- Info -->
+                                    <VerticalStackLayout Padding="16" Spacing="8">
+                                        <Label Text="{Binding ItemName}" FontSize="15" FontAttributes="Bold" TextColor="#1E293B" MaxLines="1" LineBreakMode="TailTruncation"/>
+                                        
+                                        <HorizontalStackLayout Spacing="10">
+                                            <Label Text="{Binding PromoPrice}" FontSize="16" TextColor="#DC2626" FontAttributes="Bold"/>
+                                            <Label Text="{Binding OriginalPrice}" FontSize="13" TextColor="#94A3B8" TextDecorations="Strikethrough" VerticalOptions="Center"/>
                                         </HorizontalStackLayout>
-                                        <Grid ColumnDefinitions="*,Auto" Margin="0,4,0,0">
-                                            <Label Text="{Binding Savings}" FontSize="11" TextColor="#38A169" FontAttributes="Bold"/>
-                                            <Border Grid.Column="1" BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 8" Padding="6" StrokeThickness="0">
-                                                <Path Data="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" 
-                                                      Fill="#624890" HeightRequest="14" WidthRequest="14"/>
-                                            </Border>
-                                        </Grid>
+                                        
+                                        <Border BackgroundColor="#FEF2F2" StrokeShape="RoundRectangle 8" Padding="10,6" StrokeThickness="0">
+                                            <Label Text="{Binding Savings}" FontSize="12" TextColor="#DC2626" FontAttributes="Bold"/>
+                                        </Border>
                                     </VerticalStackLayout>
                                 </VerticalStackLayout>
                             </Border>
                         </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
 
-                <!-- Bundle Deals -->
-                <Label Text="Bundle Deals" FontSize="20" FontAttributes="Bold" TextColor="#2D3748" Margin="0,8,0,0"/>
-                <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
-                    <Border BackgroundColor="#FAF5FF" StrokeShape="RoundRectangle 16" Padding="24" StrokeThickness="1" Stroke="#E9D8FD">
-                        <VerticalStackLayout Spacing="12">
-                            <HorizontalStackLayout Spacing="6">
-                                <Path Data="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.05-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z" 
-                                      Fill="#9F7AEA" HeightRequest="14" WidthRequest="14" VerticalOptions="Center"/>
-                                <Label Text="SPECIAL BUNDLE" TextColor="#9F7AEA" FontSize="11" FontAttributes="Bold" VerticalOptions="Center"/>
-                            </HorizontalStackLayout>
-                            <Label Text="Buy 3 Get 1 Free" FontSize="20" FontAttributes="Bold" TextColor="#2D3748"/>
-                            <Label Text="Purchase any 3 items from our collection and get the lowest-priced item for free!" TextColor="#718096" FontSize="12"/>
-                            <HorizontalStackLayout Spacing="16" Margin="0,10,0,0">
-                                <Button Text="Shop Now" BackgroundColor="#805AD5" TextColor="White" CornerRadius="8" Padding="20,8" FontSize="13" FontAttributes="Bold"/>
-                                <Label Text="Valid on Standard items" TextColor="#A0AEC0" FontSize="11" VerticalOptions="Center"/>
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
-                    </Border>
-
-                    <Border Grid.Column="1" BackgroundColor="#EBF8FF" StrokeShape="RoundRectangle 16" Padding="24" StrokeThickness="1" Stroke="#BEE3F8">
-                        <VerticalStackLayout Spacing="12">
-                            <HorizontalStackLayout Spacing="6">
-                                <Path Data="M19.8 18.4L14 10.67V6.5l1.35-1.69c.26-.33.03-.81-.39-.81H9.04c-.42 0-.65.48-.39.81L10 6.5v4.17L4.2 18.4c-.49.66-.02 1.6.8 1.6h14c.82 0 1.29-.94.8-1.6z" 
-                                      Fill="#3182CE" HeightRequest="14" WidthRequest="14" VerticalOptions="Center"/>
-                                <Label Text="COMBO OFFER" TextColor="#3182CE" FontSize="11" FontAttributes="Bold" VerticalOptions="Center"/>
-                            </HorizontalStackLayout>
-                            <Label Text="Complete the Look - Save 30%" FontSize="20" FontAttributes="Bold" TextColor="#2D3748"/>
-                            <Label Text="Buy a dress + accessories together and get an additional 30% off the total!" TextColor="#718096" FontSize="12"/>
-                            <HorizontalStackLayout Spacing="16" Margin="0,10,0,0">
-                                <Button Text="Explore Combos" BackgroundColor="#3182CE" TextColor="White" CornerRadius="8" Padding="20,8" FontSize="13" FontAttributes="Bold"/>
-                                <Label Text="Limited time only" TextColor="#A0AEC0" FontSize="11" VerticalOptions="Center"/>
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
-                    </Border>
-                </Grid>
             </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>

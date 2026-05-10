@@ -11,24 +11,82 @@
             <!-- Header -->
             <components:CustomerHeaderView ActiveTab="Boutique" />
 
-            <VerticalStackLayout Padding="20" Spacing="20">
-                <Label Text="Welcome to Aviah Boutique" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
-                
-                <CollectionView x:Name="ItemsCollection" Margin="0,20">
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
+            <VerticalStackLayout Padding="40" Spacing="32">
+
+                <!-- Promo Banner -->
+                <Border BackgroundColor="#8B5CF6" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="20">
+                        <VerticalStackLayout Spacing="8" VerticalOptions="Center">
+                            <HorizontalStackLayout Spacing="12">
+                                <Label Text="★" TextColor="#FBBF24" FontSize="20" VerticalOptions="Center"/>
+                                <Label Text="Aviah Collection Boutique" TextColor="White" FontSize="22" FontAttributes="Bold" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <Label Text="Explore our curated collection of premium fashion items." TextColor="#E9D5FF" FontSize="14" />
+                        </VerticalStackLayout>
+                        <Button Grid.Column="1" Text="View Offers" BackgroundColor="White" TextColor="#624890" CornerRadius="20" Padding="24,10" FontAttributes="Bold" VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Section Header -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Featured Items" FontSize="22" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="View All" TextColor="#624890" FontAttributes="Bold" FontSize="14" VerticalOptions="Center" />
+                </Grid>
+
+                <!-- Empty State -->
+                <VerticalStackLayout x:Name="EmptyBoutiqueView" Spacing="16" Padding="60" HorizontalOptions="Center" IsVisible="False">
+                    <Border BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 50" HeightRequest="100" WidthRequest="100" StrokeThickness="0" HorizontalOptions="Center">
+                        <Path Data="M19 7h-3V6c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v1H5c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-5-1v1h-4V6h4z" 
+                              Fill="#94A3B8" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <Label Text="No Products Available" FontSize="20" FontAttributes="Bold" TextColor="#1E293B" HorizontalTextAlignment="Center" />
+                    <Label Text="Check back soon — new arrivals are on the way!" FontSize="14" TextColor="#64748B" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+
+                <!-- Products Grid -->
+                <FlexLayout x:Name="ItemsCollection" Wrap="Wrap" JustifyContent="Start" AlignContent="Start">
+                    <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <Frame HasShadow="True" Padding="15" Margin="5">
-                                <HorizontalStackLayout Spacing="20">
-                                    <Label Text="{Binding ItemName}" FontSize="18" VerticalOptions="Center" WidthRequest="200" />
-                                    <Label Text="{Binding FormattedPrice}" FontSize="18" TextColor="#624890" FontAttributes="Bold" VerticalOptions="Center" />
-                                </HorizontalStackLayout>
-                            </Frame>
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="0" StrokeThickness="1" Stroke="#E2E8F0" WidthRequest="240" Margin="0,0,20,20">
+                                <VerticalStackLayout>
+                                    <!-- Image -->
+                                    <Border BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 16,16,0,0" HeightRequest="200" StrokeThickness="0">
+                                        <Image Source="{Binding ImageUrl}" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill" />
+                                    </Border>
+                                    
+                                    <!-- Info -->
+                                    <VerticalStackLayout Padding="16" Spacing="8">
+                                        <Label Text="{Binding ProductName}" FontSize="15" FontAttributes="Bold" TextColor="#1E293B" MaxLines="1" LineBreakMode="TailTruncation" />
+                                        
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Label Text="{Binding DiscountedPriceText}" FontSize="15" FontAttributes="Bold" TextColor="#624890" VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                        
+                                        <HorizontalStackLayout Spacing="6">
+                                            <Border BackgroundColor="#F0FDF4" StrokeShape="RoundRectangle 6" Padding="8,4" StrokeThickness="0">
+                                                <Label Text="{Binding StatusText}" FontSize="10" TextColor="#10B981" FontAttributes="Bold"/>
+                                            </Border>
+                                            <Border BackgroundColor="#F5F3FF" StrokeShape="RoundRectangle 6" Padding="8,4" StrokeThickness="0">
+                                                <Label Text="{Binding Category}" FontSize="10" TextColor="#7C3AED" FontAttributes="Bold"/>
+                                            </Border>
+                                        </HorizontalStackLayout>
+
+                                        <Button Text="Order Now" 
+                                                FontSize="13" 
+                                                HeightRequest="44" 
+                                                CornerRadius="10" 
+                                                BackgroundColor="#624890" 
+                                                TextColor="White"
+                                                FontAttributes="Bold"
+                                                Margin="0,4,0,0"
+                                                Clicked="OnOrderClicked"
+                                                CommandParameter="{Binding .}"/>
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
+                            </Border>
                         </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
             </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
