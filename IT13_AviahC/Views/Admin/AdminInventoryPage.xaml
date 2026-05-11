@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:IT13_AviahC.Views.Admin.Components"
+             xmlns:modals="clr-namespace:IT13_AviahC.Views.Modals"
              x:Class="IT13_AviahC.Views.Admin.AdminInventoryPage"
              BackgroundColor="#F3F0FA">
     <Grid ColumnDefinitions="Auto,*">
@@ -26,7 +27,7 @@
                                     <Label Text="Filter" TextColor="#624890" FontAttributes="Bold" FontSize="14" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                             </Border>
-                            <Button Text="+ Add Item" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="24,0" FontAttributes="Bold" FontSize="14" HeightRequest="44" />
+                            <Button Text="+ Add Item" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="24,0" FontAttributes="Bold" FontSize="14" HeightRequest="44" Clicked="OnAddItemClicked" />
                         </HorizontalStackLayout>
                     </Grid>
 
@@ -66,7 +67,7 @@
                                 <Label Grid.Column="3" Text="Category" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
                                 <Label Grid.Column="4" Text="Quantity" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
                                 <Label Grid.Column="5" Text="Status" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
-                                <Label Grid.Column="6" Text="Actions" FontAttributes="Bold" FontSize="13" TextColor="#624890" HorizontalTextAlignment="End" WidthRequest="60" />
+                                <Label Grid.Column="6" Text="Actions" FontAttributes="Bold" FontSize="13" TextColor="#624890" HorizontalTextAlignment="End" WidthRequest="110" />
                             </Grid>
 
                             <!-- Table Rows -->
@@ -85,7 +86,7 @@
                                                     <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />
                                                 </Border>
 
-                                                <Label Grid.Column="1" Text="{Binding ItemName}" FontAttributes="Bold" FontSize="14" TextColor="#1E293B" VerticalOptions="Center" />
+                                                <Label Grid.Column="1" Text="{Binding ItemName}" FontAttributes="Bold" FontSize="14" TextColor="#463366" VerticalOptions="Center" />
                                                 
                                                 <Label Grid.Column="2" Text="{Binding SKU}" FontSize="13" TextColor="#94A3B8" VerticalOptions="Center" FontAttributes="Bold" />
                                                 
@@ -95,13 +96,30 @@
                                                     <Label Text="{Binding StockLevel}" FontAttributes="Bold" FontSize="15" TextColor="#463366" />
                                                     <Label Text="{Binding Unit}" FontSize="13" TextColor="#64748B" VerticalOptions="End" Margin="0,0,0,2" />
                                                 </HorizontalStackLayout>
-                                                
-                                                <!-- Status Pill -->
+                                                                                                <!-- Status Pill -->
                                                 <Border Grid.Column="5" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="Start" VerticalOptions="Center" StrokeThickness="0" BackgroundColor="{Binding StatusColor}">
                                                     <Label Text="{Binding StatusText}" FontSize="11" TextColor="{Binding StatusTextColor}" FontAttributes="Bold" />
                                                 </Border>
 
-                                                <Label Grid.Column="6" Text="Edit" TextColor="#624890" FontSize="13" TextDecorations="Underline" VerticalOptions="Center" HorizontalOptions="End" WidthRequest="60" HorizontalTextAlignment="End" />
+                                                <!-- Edit + Delete actions -->
+                                                <HorizontalStackLayout Grid.Column="6" Spacing="12"
+                                                                       HorizontalOptions="End" VerticalOptions="Center"
+                                                                       WidthRequest="110">
+                                                    <Label Text="Edit" TextColor="#624890" FontSize="13"
+                                                           TextDecorations="Underline" VerticalOptions="Center">
+                                                        <Label.GestureRecognizers>
+                                                            <TapGestureRecognizer Tapped="OnEditItemClicked"
+                                                                                  CommandParameter="{Binding .}" />
+                                                        </Label.GestureRecognizers>
+                                                    </Label>
+                                                    <Label Text="Del" TextColor="#EF4444" FontSize="13"
+                                                           TextDecorations="Underline" VerticalOptions="Center">
+                                                        <Label.GestureRecognizers>
+                                                            <TapGestureRecognizer Tapped="OnDeleteItemClicked"
+                                                                                  CommandParameter="{Binding .}" />
+                                                        </Label.GestureRecognizers>
+                                                    </Label>
+                                                </HorizontalStackLayout>
                                             </Grid>
                                             <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" Margin="32,0" />
                                         </VerticalStackLayout>
@@ -113,6 +131,7 @@
                 </VerticalStackLayout>
             </ScrollView>
         </Grid>
+        <modals:AdminInventoryModal x:Name="ItemModalView" Grid.ColumnSpan="2" IsVisible="False" />
     </Grid>
 </ContentPage>
 

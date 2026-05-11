@@ -16,7 +16,8 @@ namespace IT13_AviahC.Views.Customer
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _ = LoadTrackingDataSafe();
+            // Start loading data after the page has appeared
+            Task.Run(async () => await LoadTrackingDataSafe());
         }
 
         private async Task LoadTrackingDataSafe()
@@ -26,62 +27,98 @@ namespace IT13_AviahC.Views.Customer
                 string userEmail = UserSession.UserEmail ?? "Customer@aviah.com";
                 DataTable dt = await _databaseService.GetActiveOrdersAsync(userEmail);
 
+                // Use the MainThread to update UI
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    if (dt != null && dt.Rows.Count > 0)
+                    try
                     {
-                        DataRow order = dt.Rows[0];
-                        
-                        // Show tracking content, hide empty state
-                        TrackingContent.IsVisible = true;
-                        EmptyStateView.IsVisible = false;
-
-                        // Update Labels
-                        OrderRefLabel.Text = $"#{order["OrderRef"]}";
-                        OrderDateLabel.Text = order["OrderDate"] != DBNull.Value ? Convert.ToDateTime(order["OrderDate"]).ToString("MM/dd/yyyy HH:mm") : "--";
-                        CustomerNameLabel.Text = UserSession.UserName ?? "Valued Customer";
-                        OrderItemsLabel.Text = order["ItemSummary"]?.ToString() ?? "Order Items";
-                        OrderAmountLabel.Text = order["TotalAmount"] != DBNull.Value ? $"₱{Convert.ToDecimal(order["TotalAmount"]):N2}" : "₱0.00";
-
-                        // Map Delivery Info
-                        string driverName = order.Table.Columns.Contains("DriverName") && order["DriverName"] != DBNull.Value ? order["DriverName"].ToString() : "Awaiting Driver";
-                        DriverLabel.Text = $"Driver: {driverName}";
-                        
-                        if (order.Table.Columns.Contains("ETA") && order["ETA"] != DBNull.Value)
+                        if (dt != null && dt.Rows.Count > 0)
                         {
-                            string etaString = order["ETA"].ToString();
-                            if (DateTime.TryParse(etaString, out DateTime etaDate))
+                            DataRow order = dt.Rows[0];
+                            
+                            // 1. Basic Visibility
+                            TrackingContent.IsVisible = true;
+                            EmptyStateView.IsVisible = false;
+
+                            // 2. Map Labels with exhaustive null checks
+                            if (OrderRefLabel != null)
+                                OrderRefLabel.Text = order.Table.Columns.Contains("OrderRef") ? $"#{order["OrderRef"]}" : "#N/A";
+                            
+                            if (OrderDateLabel != null)
                             {
-                                ETALabel.Text = $"ETA: {etaDate.ToString("MMM dd, yyyy HH:mm")}";
+                                if (order.Table.Columns.Contains("OrderDate") && order["OrderDate"] != DBNull.Value)
+                                {
+                                    try { OrderDateLabel.Text = Convert.ToDateTime(order["OrderDate"]).ToString("MMM dd, yyyy HH:mm"); }
+                                    catch { OrderDateLabel.Text = "--"; }
+                                }
+                                else { OrderDateLabel.Text = "--"; }
                             }
-                            else
+
+                            if (CustomerNameLabel != null)
+                                CustomerNameLabel.Text = UserSession.UserName ?? "Valued Customer";
+
+                            if (OrderItemsLabel != null)
+                                OrderItemsLabel.Text = order.Table.Columns.Contains("ItemSummary") ? order["ItemSummary"]?.ToString() ?? "Order Items" : "Order Items";
+                            
+                            if (OrderAmountLabel != null)
                             {
-                                ETALabel.Text = $"ETA: {etaString}";
+                                if (order.Table.Columns.Contains("TotalAmount") && order["TotalAmount"] != DBNull.Value)
+                                {
+                                    try { OrderAmountLabel.Text = $"₱{Convert.ToDecimal(order["TotalAmount"]):N2}"; }
+                                    catch { OrderAmountLabel.Text = "₱0.00"; }
+                                }
+                                else { OrderAmountLabel.Text = "₱0.00"; }
                             }
+
+                            // 3. Delivery Info
+                            string driverName = "Awaiting Driver";
+                            if (order.Table.Columns.Contains("DriverName") && order["DriverName"] != DBNull.Value)
+                            {
+                                driverName = order["DriverName"]?.ToString() ?? "Awaiting Driver";
+                            }
+                            if (DriverLabel != null) DriverLabel.Text = $"Driver: {driverName}";
+                            
+                            if (ETALabel != null)
+                            {
+                                if (order.Table.Columns.Contains("ETA") && order["ETA"] != DBNull.Value)
+                                {
+                                    ETALabel.Text = $"ETA: {order["ETA"]}";
+                                }
+                                else
+                                {
+                                    ETALabel.Text = "ETA: Pending";
+                                }
+                            }
+
+                            if (CurrentLocationLabel != null)
+                            {
+                                if (order.Table.Columns.Contains("CurrentLocation") && order["CurrentLocation"] != DBNull.Value)
+                                {
+                                    string loc = order["CurrentLocation"]?.ToString() ?? string.Empty;
+                                    CurrentLocationLabel.Text = string.IsNullOrEmpty(loc) ? "Processing at Facility..." : loc;
+                                }
+                                else
+                                {
+                                    CurrentLocationLabel.Text = "Preparing items for shipment...";
+                                }
+                            }
+
+                            string status = "Pending";
+                            if (order.Table.Columns.Contains("Status") && order["Status"] != DBNull.Value)
+                            {
+                                status = order["Status"]?.ToString() ?? "Pending";
+                            }
+                            UpdateStatusUI(status);
                         }
                         else
                         {
-                            ETALabel.Text = "ETA: Pending";
+                            TrackingContent.IsVisible = false;
+                            EmptyStateView.IsVisible = true;
                         }
-
-                        if (order.Table.Columns.Contains("CurrentLocation") && order["CurrentLocation"] != DBNull.Value)
-                        {
-                            string loc = order["CurrentLocation"].ToString();
-                            CurrentLocationLabel.Text = string.IsNullOrEmpty(loc) ? "Processing at Facility..." : loc;
-                        }
-                        else
-                        {
-                            CurrentLocationLabel.Text = "Preparing items for shipment...";
-                        }
-
-                        string status = order["Status"]?.ToString() ?? "Pending";
-                        UpdateStatusUI(status);
                     }
-                    else
+                    catch (Exception innerEx)
                     {
-                        // Hide tracking content, show empty state
-                        TrackingContent.IsVisible = false;
-                        EmptyStateView.IsVisible = true;
+                        System.Diagnostics.Debug.WriteLine($"UI Mapping Error: {innerEx.Message}");
                     }
                 });
             }
@@ -90,63 +127,82 @@ namespace IT13_AviahC.Views.Customer
                 System.Diagnostics.Debug.WriteLine($"Error loading tracking: {ex.Message}");
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    TrackingContent.IsVisible = false;
-                    EmptyStateView.IsVisible = true;
+                    if (TrackingContent != null) TrackingContent.IsVisible = false;
+                    if (EmptyStateView != null) EmptyStateView.IsVisible = true;
                 });
             }
         }
 
         private void UpdateStatusUI(string status)
         {
-            // Reset colors
-            Step1Border.BackgroundColor = Color.Parse("#F1F5F9");
-            Step2Border.BackgroundColor = Color.Parse("#F1F5F9");
-            Step3Border.BackgroundColor = Color.Parse("#F1F5F9");
-            Step4Border.BackgroundColor = Color.Parse("#F1F5F9");
-            Step5Border.BackgroundColor = Color.Parse("#F1F5F9");
-
-            // Simplified status mapping
-            switch (status.ToLower())
+            try
             {
-                case "pending":
-                    Step1Border.BackgroundColor = Color.Parse("#10B981");
+                // Safety check for UI elements
+                if (Step1Border == null || CurrentStatusLabel == null || StatusDetailLabel == null) return;
+
+                // Reset colors using standard MAUI Color.FromUint or from hex string
+                var gray = Color.FromArgb("#F1F5F9");
+                var green = Color.FromArgb("#10B981");
+                var red = Color.FromArgb("#EF4444");
+
+                Step1Border.BackgroundColor = gray;
+                if (Step2Border != null) Step2Border.BackgroundColor = gray;
+                if (Step3Border != null) Step3Border.BackgroundColor = gray;
+                if (Step4Border != null) Step4Border.BackgroundColor = gray;
+                if (Step5Border != null) Step5Border.BackgroundColor = gray;
+
+                string statusLower = (status ?? "Pending").ToLower();
+
+                if (statusLower.Contains("placed") || statusLower == "pending")
+                {
+                    Step1Border.BackgroundColor = green;
                     CurrentStatusLabel.Text = "Order Placed";
                     StatusDetailLabel.Text = "Your order has been received and is waiting for validation.";
-                    break;
-                case "paid":
-                case "confirmed":
-                    Step1Border.BackgroundColor = Color.Parse("#10B981");
-                    Step2Border.BackgroundColor = Color.Parse("#10B981");
+                }
+                else if (statusLower == "paid" || statusLower == "confirmed")
+                {
+                    Step1Border.BackgroundColor = green;
+                    if (Step2Border != null) Step2Border.BackgroundColor = green;
                     CurrentStatusLabel.Text = "Order Paid & Confirmed";
                     StatusDetailLabel.Text = "Payment received. We are preparing your items for shipment.";
-                    break;
-                case "shipped":
-                case "in transit":
-                    Step1Border.BackgroundColor = Color.Parse("#10B981");
-                    Step2Border.BackgroundColor = Color.Parse("#10B981");
-                    Step3Border.BackgroundColor = Color.Parse("#10B981");
+                }
+                else if (statusLower == "shipped" || statusLower.Contains("transit"))
+                {
+                    Step1Border.BackgroundColor = green;
+                    if (Step2Border != null) Step2Border.BackgroundColor = green;
+                    if (Step3Border != null) Step3Border.BackgroundColor = green;
                     CurrentStatusLabel.Text = "In Transit";
                     StatusDetailLabel.Text = "Your parcel has been shipped and is on its way to you.";
-                    break;
-                case "out for delivery":
-                case "delivering":
-                    Step1Border.BackgroundColor = Color.Parse("#10B981");
-                    Step2Border.BackgroundColor = Color.Parse("#10B981");
-                    Step3Border.BackgroundColor = Color.Parse("#10B981");
-                    Step4Border.BackgroundColor = Color.Parse("#EF4444");
+                }
+                else if (statusLower.Contains("delivery") || statusLower == "delivering")
+                {
+                    Step1Border.BackgroundColor = green;
+                    if (Step2Border != null) Step2Border.BackgroundColor = green;
+                    if (Step3Border != null) Step3Border.BackgroundColor = green;
+                    if (Step4Border != null) Step4Border.BackgroundColor = red;
                     CurrentStatusLabel.Text = "Out for Delivery";
                     StatusDetailLabel.Text = "Your parcel is with our delivery partner and will arrive today.";
-                    break;
-                case "arrived":
-                case "delivered":
-                    Step1Border.BackgroundColor = Color.Parse("#10B981");
-                    Step2Border.BackgroundColor = Color.Parse("#10B981");
-                    Step3Border.BackgroundColor = Color.Parse("#10B981");
-                    Step4Border.BackgroundColor = Color.Parse("#10B981");
-                    Step5Border.BackgroundColor = Color.Parse("#10B981");
+                }
+                else if (statusLower == "arrived" || statusLower == "delivered" || statusLower == "completed")
+                {
+                    Step1Border.BackgroundColor = green;
+                    if (Step2Border != null) Step2Border.BackgroundColor = green;
+                    if (Step3Border != null) Step3Border.BackgroundColor = green;
+                    if (Step4Border != null) Step4Border.BackgroundColor = green;
+                    if (Step5Border != null) Step5Border.BackgroundColor = green;
                     CurrentStatusLabel.Text = "Arrived";
                     StatusDetailLabel.Text = "Your parcel has arrived at your location!";
-                    break;
+                }
+                else
+                {
+                    Step1Border.BackgroundColor = green;
+                    CurrentStatusLabel.Text = status;
+                    StatusDetailLabel.Text = "We are currently processing your order status.";
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"UpdateStatusUI Error: {ex.Message}");
             }
         }
     }

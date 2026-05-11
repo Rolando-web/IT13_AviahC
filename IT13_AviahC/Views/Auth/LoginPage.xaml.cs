@@ -36,7 +36,7 @@ namespace IT13_AviahC.Views.Auth
                     UserSession.UserEmail = email;
                     UserSession.Role = "Customer";
                     await DisplayAlertAsync("Success", "Welcome back, Customer!", "OK");
-                    await Shell.Current.GoToAsync("//CustomerPortal/CustomerBoutique");
+                    await Shell.Current.GoToAsync("///CustomerBoutique");
                 }
                 catch (Exception ex)
                 {
@@ -70,7 +70,7 @@ namespace IT13_AviahC.Views.Auth
                 {
                     try
                     {
-                        await Shell.Current.GoToAsync("//CustomerPortal/CustomerBoutique");
+                        await Shell.Current.GoToAsync("///CustomerBoutique");
                     }
                     catch (Exception ex)
                     {

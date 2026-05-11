@@ -39,7 +39,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="ACTIVE ORDERS" FontSize="11" FontAttributes="Bold" TextColor="#64748B" CharacterSpacing="1" />
-                                    <Label Text="5" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                                    <Label x:Name="ActiveOrdersLabel" Text="0" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Border>
@@ -52,7 +52,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="PRODUCTION LEAD TIME" FontSize="11" FontAttributes="Bold" TextColor="#64748B" CharacterSpacing="1" />
-                                    <Label Text="4 Days" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                                    <Label x:Name="LeadTimeLabel" Text="-- Days" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Border>
@@ -65,7 +65,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="MATERIAL REQUESTS" FontSize="11" FontAttributes="Bold" TextColor="#64748B" CharacterSpacing="1" />
-                                    <Label Text="12" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                                    <Label x:Name="MaterialRequestsLabel" Text="0" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Border>
@@ -76,43 +76,30 @@
                         <VerticalStackLayout Spacing="24">
                             <Label Text="Recent Purchase Orders" FontSize="18" FontAttributes="Bold" TextColor="#463366" />
                             
-                            <Grid ColumnDefinitions="1.5*,2.5*,1.5*,1.5*,1*" Padding="0,0,0,12" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="24">
-                                <!-- Headers -->
-                                <Label Grid.Row="0" Grid.Column="0" Text="PO Number" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
-                                <Label Grid.Row="0" Grid.Column="1" Text="Material" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
-                                <Label Grid.Row="0" Grid.Column="2" Text="Quantity" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
-                                <Label Grid.Row="0" Grid.Column="3" Text="Due Date" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
-                                <Label Grid.Row="0" Grid.Column="4" Text="Status" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
-                                
-                                <BoxView Grid.Row="0" Grid.ColumnSpan="5" HeightRequest="1" Color="#E2E8F0" VerticalOptions="End" Margin="0,0,0,-12" />
-
-                                <!-- Row 1 -->
-                                <Label Grid.Row="1" Grid.Column="0" Text="PO-8821" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
-                                <Label Grid.Row="1" Grid.Column="1" Text="Premium Silk (Violet)" TextColor="#64748B" VerticalOptions="Center" />
-                                <Label Grid.Row="1" Grid.Column="2" Text="50 Meters" TextColor="#64748B" VerticalOptions="Center" />
-                                <Label Grid.Row="1" Grid.Column="3" Text="Apr 25" TextColor="#64748B" VerticalOptions="Center" />
-                                <Border Grid.Row="1" Grid.Column="4" BackgroundColor="#DBEAFE" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="Start" VerticalOptions="Center" StrokeThickness="0">
-                                    <Label Text="In Production" TextColor="#1D4ED8" FontSize="11" FontAttributes="Bold" />
-                                </Border>
-
-                                <!-- Row 2 -->
-                                <Label Grid.Row="2" Grid.Column="0" Text="PO-8815" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
-                                <Label Grid.Row="2" Grid.Column="1" Text="Organic Cotton" TextColor="#64748B" VerticalOptions="Center" />
-                                <Label Grid.Row="2" Grid.Column="2" Text="120 Meters" TextColor="#64748B" VerticalOptions="Center" />
-                                <Label Grid.Row="2" Grid.Column="3" Text="Apr 28" TextColor="#64748B" VerticalOptions="Center" />
-                                <Border Grid.Row="2" Grid.Column="4" BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="Start" VerticalOptions="Center" StrokeThickness="0">
-                                    <Label Text="Pending" TextColor="#475569" FontSize="11" FontAttributes="Bold" />
-                                </Border>
-
-                                <!-- Row 3 -->
-                                <Label Grid.Row="3" Grid.Column="0" Text="PO-8798" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
-                                <Label Grid.Row="3" Grid.Column="1" Text="Linen Blend" TextColor="#64748B" VerticalOptions="Center" />
-                                <Label Grid.Row="3" Grid.Column="2" Text="30 Meters" TextColor="#64748B" VerticalOptions="Center" />
-                                <Label Grid.Row="3" Grid.Column="3" Text="Apr 22" TextColor="#64748B" VerticalOptions="Center" />
-                                <Border Grid.Row="3" Grid.Column="4" BackgroundColor="#DCFCE7" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="Start" VerticalOptions="Center" StrokeThickness="0">
-                                    <Label Text="Ready" TextColor="#15803D" FontSize="11" FontAttributes="Bold" />
-                                </Border>
-                            </Grid>
+                            <CollectionView x:Name="RecentOrdersCollection">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="1.5*,2.5*,1.5*,1.5*,1*" Padding="0,12" RowSpacing="0">
+                                            <Label Text="{Binding PONumber}" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                                            <Label Grid.Column="1" Text="{Binding MaterialName}" TextColor="#64748B" VerticalOptions="Center" />
+                                            <Label Grid.Column="2" Text="{Binding QuantityText}" TextColor="#64748B" VerticalOptions="Center" />
+                                            <Label Grid.Column="3" Text="{Binding DueDateText}" TextColor="#64748B" VerticalOptions="Center" />
+                                            <Border Grid.Column="4" BackgroundColor="{Binding StatusBg}" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="Start" VerticalOptions="Center" StrokeThickness="0">
+                                                <Label Text="{Binding Status}" TextColor="{Binding StatusColor}" FontSize="11" FontAttributes="Bold" />
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                                <CollectionView.Header>
+                                    <Grid ColumnDefinitions="1.5*,2.5*,1.5*,1.5*,1*" Padding="0,0,0,12">
+                                        <Label Text="PO Number" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
+                                        <Label Grid.Column="1" Text="Material" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
+                                        <Label Grid.Column="2" Text="Quantity" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
+                                        <Label Grid.Column="3" Text="Due Date" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
+                                        <Label Grid.Column="4" Text="Status" FontSize="12" FontAttributes="Bold" TextColor="#624890" />
+                                    </Grid>
+                                </CollectionView.Header>
+                            </CollectionView>
                         </VerticalStackLayout>
                     </Border>
                 </VerticalStackLayout>

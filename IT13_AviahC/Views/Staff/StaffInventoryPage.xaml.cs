@@ -10,7 +10,8 @@ public partial class StaffInventoryPage : ContentPage
 {
     private readonly DatabaseService _dbService;
     private int _editingItemId = -1;
-    private string _selectedImagePath = "";
+    private string _selectedImagePath = string.Empty;
+    private List<Promotion> _promotions = new();
     public ObservableCollection<Product> InventoryItems { get; set; } = new ObservableCollection<Product>();
 
     public StaffInventoryPage()
@@ -18,6 +19,9 @@ public partial class StaffInventoryPage : ContentPage
         InitializeComponent();
         _dbService = new DatabaseService();
         InventoryCollection.ItemsSource = InventoryItems;
+        ItemModalView.CloseRequested += OnCloseModalRequested;
+        ItemModalView.SaveRequested += OnSaveItemRequested;
+        ItemModalView.UploadImageRequested += OnUploadImageRequested;
         LoadPromotions();
     }
 
@@ -36,7 +40,8 @@ public partial class StaffInventoryPage : ContentPage
                     PromoCode = row["PromoCode"]?.ToString()
                 });
             }
-            PromotionPicker.ItemsSource = promoList;
+            _promotions = promoList;
+            ItemModalView.SetPromotions(_promotions);
         }
         catch { }
     }
@@ -56,71 +61,54 @@ public partial class StaffInventoryPage : ContentPage
 
             if (dt != null && dt.Rows.Count > 0)
             {
-                EmptyStateView.IsVisible = false;
-                InventoryCollection.IsVisible = true;
+                MainThread.BeginInvokeOnMainThread(() => {
+                    EmptyStateView.IsVisible = false;
+                    InventoryCollection.IsVisible = true;
+                });
 
                 foreach (DataRow row in dt.Rows)
                 {
                     string img = row["ImageUrl"]?.ToString() ?? "";
-                    InventoryItems.Add(new Product
+                    var item = new Product
                     {
-                        Id = Convert.ToInt32(row["Id"] ?? 0),
+                        Id = Convert.ToInt32(row["ProductID"] ?? 0),
                         ProductName = row["ProductName"]?.ToString() ?? "Unknown",
-                        SKU = row["SKU"]?.ToString() ?? "N/A",
+                        SKU = row.Table.Columns.Contains("SKU") ? row["SKU"]?.ToString() : "N/A",
                         Category = row["Category"]?.ToString() ?? "General",
-                        StockLevel = Convert.ToInt32(row["StockLevel"] ?? 0),
+                        StockLevel = row["StockQuantity"] != DBNull.Value ? Convert.ToInt32(row["StockQuantity"]) : 0,
                         UnitPrice = row["Price"] != DBNull.Value ? Convert.ToDecimal(row["Price"]) : 0m,
-                        StatusText = row["Status"]?.ToString() ?? "In Stock",
-                        ImageUrl = string.IsNullOrEmpty(img) ? "package_icon.png" : img,
-                        PromoId = row["PromoId"] != DBNull.Value ? Convert.ToInt32(row["PromoId"]) : (int?)null,
-                        PromotionName = row["PromotionName"]?.ToString()
-                    });
+                        StatusText = row.Table.Columns.Contains("Status") ? row["Status"]?.ToString() : "In Stock",
+                        ImageUrl = string.IsNullOrEmpty(img) ? "package_icon.png" : img
+                    };
+
+                    MainThread.BeginInvokeOnMainThread(() => InventoryItems.Add(item));
                 }
             }
             else
             {
-                InventoryCollection.IsVisible = false;
-                EmptyStateView.IsVisible = true;
-            }
-        }
-        catch { }
-    }
-
-    private async void OnUploadImageClicked(object sender, EventArgs e)
-    {
-        try
-        {
-            var result = await FilePicker.Default.PickAsync(new PickOptions
-            {
-                PickerTitle = "Select Product Image",
-                FileTypes = FilePickerFileType.Images
-            });
-
-            if (result != null)
-            {
-                _selectedImagePath = result.FullPath;
-                ItemImagePreview.Source = ImageSource.FromFile(_selectedImagePath);
+                MainThread.BeginInvokeOnMainThread(() => {
+                    InventoryCollection.IsVisible = false;
+                    EmptyStateView.IsVisible = true;
+                });
             }
         }
         catch (Exception ex)
         {
-            await DisplayAlertAsync("Error", "Could not pick image: " + ex.Message, "OK");
+            System.Diagnostics.Debug.WriteLine($"Inventory Load Error: {ex.Message}");
         }
+    }
+
+    private async void OnUploadImageClicked(object sender, EventArgs e)
+    {
+        await PickImageAsync();
     }
 
     private void OnAddItemClicked(object sender, EventArgs e)
     {
         _editingItemId = -1;
-        _selectedImagePath = "";
-        ItemImagePreview.Source = null;
-        ModalTitle.Text = "Add New Product";
-        ItemNameEntry.Text = "";
-        SKUEntry.Text = "";
-        CategoryPicker.SelectedIndex = -1;
-        QuantityEntry.Text = "";
-        PriceEntry.Text = "";
-        PromotionPicker.SelectedItem = null;
-        ItemModal.IsVisible = true;
+        _selectedImagePath = string.Empty;
+        ItemModalView.ShowForNew();
+        ItemModalView.IsVisible = true;
     }
 
     private void OnEditItemClicked(object sender, EventArgs e)
@@ -129,25 +117,10 @@ public partial class StaffInventoryPage : ContentPage
         {
             _editingItemId = item.Id;
             _selectedImagePath = item.ImageUrl;
-            ItemImagePreview.Source = string.IsNullOrEmpty(_selectedImagePath) ? null : ImageSource.FromFile(_selectedImagePath);
-            
-            ModalTitle.Text = "Edit Product";
-            ItemNameEntry.Text = item.ProductName;
-            SKUEntry.Text = item.SKU;
-            CategoryPicker.SelectedItem = item.Category;
-            QuantityEntry.Text = item.StockLevel.ToString();
-            PriceEntry.Text = item.UnitPrice.ToString();
+            ItemModalView.ShowForEdit(item, _promotions);
+            ItemModalView.UpdateImagePreview(_selectedImagePath);
 
-            if (item.PromoId.HasValue && PromotionPicker.ItemsSource is List<Promotion> promos)
-            {
-                PromotionPicker.SelectedItem = promos.FirstOrDefault(p => p.PromoID == item.PromoId);
-            }
-            else
-            {
-                PromotionPicker.SelectedItem = null;
-            }
-
-            ItemModal.IsVisible = true;
+            ItemModalView.IsVisible = true;
         }
     }
 
@@ -158,22 +131,24 @@ public partial class StaffInventoryPage : ContentPage
             bool confirm = await DisplayAlertAsync("Delete", "Delete this product?", "Yes", "No");
             if (confirm)
             {
-                await _dbService.ExecuteNonQueryAsync("DELETE FROM Products WHERE Id = @Id", new Dictionary<string, object> { { "@Id", item.Id } });
+                await _dbService.ExecuteNonQueryAsync("DELETE FROM Products WHERE ProductID = @Id", new Dictionary<string, object> { { "@Id", item.Id } });
                 LoadInventory();
             }
         }
     }
 
-    private async void OnSaveItemClicked(object sender, EventArgs e)
+    private void OnCloseModalRequested(object? sender, EventArgs e) => ItemModalView.IsVisible = false;
+
+    private async void OnSaveItemRequested(object? sender, EventArgs e)
     {
-        string name = ItemNameEntry.Text;
-        string sku = SKUEntry.Text;
-        string category = CategoryPicker.SelectedItem?.ToString() ?? "General";
-        int stock = int.TryParse(QuantityEntry.Text, out int s) ? s : 0;
-        decimal price = decimal.TryParse(PriceEntry.Text, out decimal p) ? p : 0m;
-        int? promoId = (PromotionPicker.SelectedItem as Promotion)?.PromoID;
-        
-        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(sku))
+        string name = ItemModalView.ProductName ?? string.Empty;
+        string sku = ItemModalView.SKU ?? string.Empty;
+        string category = ItemModalView.Category;
+        int stock = ItemModalView.StockLevel;
+        decimal price = ItemModalView.UnitPrice;
+        int? promoId = ItemModalView.PromoId;
+
+        if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(sku))
         {
             await DisplayAlertAsync("Validation", "Name and SKU are required.", "OK");
             return;
@@ -188,9 +163,34 @@ public partial class StaffInventoryPage : ContentPage
             await Task.Run(() => _dbService.UpdateInventory(_editingItemId, name, sku, category, stock, "pcs", price, promoId.HasValue ? "On Sale" : "In Stock", _selectedImagePath, promoId));
         }
 
-        ItemModal.IsVisible = false;
+        ItemModalView.IsVisible = false;
         LoadInventory();
     }
 
-    private void OnCloseModalClicked(object sender, EventArgs e) => ItemModal.IsVisible = false;
+    private async void OnUploadImageRequested(object? sender, EventArgs e)
+    {
+        await PickImageAsync();
+    }
+
+    private async Task PickImageAsync()
+    {
+        try
+        {
+            var result = await FilePicker.Default.PickAsync(new PickOptions
+            {
+                PickerTitle = "Select Product Image",
+                FileTypes = FilePickerFileType.Images
+            });
+
+            if (result != null)
+            {
+                _selectedImagePath = result.FullPath;
+                ItemModalView.UpdateImagePreview(_selectedImagePath);
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync("Error", "Could not pick image: " + ex.Message, "OK");
+        }
+    }
 }

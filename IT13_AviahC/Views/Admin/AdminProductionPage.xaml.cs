@@ -1,65 +1,117 @@
+using System.Collections.ObjectModel;
 using System.Data;
+using IT13_AviahC.Models;
 using IT13_AviahC.Services;
 
-namespace IT13_AviahC.Views.Admin
+namespace IT13_AviahC.Views.Admin;
+
+public partial class AdminProductionPage : ContentPage
 {
-    public partial class AdminProductionPage : ContentPage
+    private readonly DatabaseService _dbService;
+    public ObservableCollection<ProductionBatch> ProductionBatches { get; } = new();
+    public List<Product> AvailableProducts { get; set; } = new();
+
+    public AdminProductionPage()
     {
-        private readonly DatabaseService _dbService;
+        InitializeComponent();
+        _dbService = new DatabaseService();
+        ProductionCollection.ItemsSource = ProductionBatches;
+    }
 
-        public AdminProductionPage()
-        {
-            InitializeComponent();
-            _dbService = new DatabaseService();
-        }
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _ = LoadDataAsync();
+    }
 
-        protected override void OnAppearing()
+    private async Task LoadDataAsync()
+    {
+        try
         {
-            base.OnAppearing();
-            LoadProduction();
-        }
-
-        private async void LoadProduction()
-        {
-            try
+            // Load Batches
+            DataTable dt = await _dbService.GetAllProductionBatchesAsync();
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                DataTable dt = _dbService.GetAllProduction();
-                var batches = new List<object>();
-
+                ProductionBatches.Clear();
                 foreach (DataRow row in dt.Rows)
                 {
-                    string status = row["Status"]?.ToString() ?? string.Empty;
-                    bool isCompleted = status == "Completed";
-                    
-                    string statusColorDark = isCompleted ? "#15803D" : "#624890";
-                    string statusColorLight = isCompleted ? "#DCFCE7" : "#F3F0FA";
-                    string iconData = isCompleted ? "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" : "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z";
-                    
-                    double progress = Convert.ToDouble(row["Progress"]);
-                    double progressWidth = (progress / 100.0) * 180.0;
-
-                    batches.Add(new
+                    ProductionBatches.Add(new ProductionBatch
                     {
-                        BatchID = row["BatchID"]?.ToString() ?? string.Empty,
-                        ProductName = row["ProductName"]?.ToString() ?? string.Empty,
-                        Status = status,
-                        StatusColorDark = statusColorDark,
-                        StatusColorLight = statusColorLight,
-                        IconData = iconData,
-                        DateText = isCompleted ? $"Completed {row["EndDate"]}" : $"Started {row["StartDate"]}",
-                        TargetText = $"Target: {row["TargetQuantity"]} pcs",
-                        ProgressText = $"Progress: {progress}%",
-                        ProgressWidth = progressWidth,
-                        IsActive = !isCompleted
+                        BatchID = row["BatchID"].ToString() ?? "",
+                        ProductID = Convert.ToInt32(row["ProductID"]),
+                        ProductName = row["ProductName"].ToString() ?? "",
+                        TargetQuantity = Convert.ToInt32(row["TargetQuantity"]),
+                        ProducedQuantity = Convert.ToInt32(row["ProducedQuantity"]),
+                        Defects = Convert.ToInt32(row["Defects"]),
+                        Status = row["Status"].ToString() ?? "Planned",
+                        StartDate = Convert.ToDateTime(row["StartDate"])
                     });
                 }
 
-                ProductionCollection.ItemsSource = batches;
-            }
-            catch (Exception ex)
+                // Update Goals Summary (Dummy calculation for now based on actual data)
+                int totalTarget = ProductionBatches.Sum(b => b.TargetQuantity);
+                int totalProduced = ProductionBatches.Sum(b => b.ProducedQuantity);
+                GoalText.Text = $"{totalProduced:N0} / {totalTarget:N0}";
+                GoalPercent.Text = totalTarget > 0 ? $"{(int)((double)totalProduced / totalTarget * 100)}%" : "0%";
+                GoalProgress.WidthRequest = totalTarget > 0 ? Math.Min(180, (double)totalProduced / totalTarget * 180) : 0;
+            });
+
+            // Load Products for the Picker
+            DataTable prodDt = await _dbService.GetAllInventoryAsync();
+            var products = new List<Product>();
+            foreach (DataRow row in prodDt.Rows)
             {
-                await DisplayAlertAsync("Error", "Failed to load production: " + ex.Message, "OK");
+                products.Add(new Product { Id = Convert.ToInt32(row["ProductID"]), ProductName = row["ProductName"].ToString() });
+            }
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                BatchPicker.ItemsSource = products;
+            });
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Production Load Error: {ex.Message}");
+        }
+    }
+
+    private async void OnSaveProductionRecord(object sender, EventArgs e)
+    {
+        try
+        {
+            if (BatchPicker.SelectedItem is not ProductionBatch selectedBatch)
+            {
+                await DisplayAlert("Validation", "Please select an active batch.", "OK");
+                return;
+            }
+
+            if (!int.TryParse(QuantityEntry.Text, out int qty) || qty <= 0)
+            {
+                await DisplayAlert("Validation", "Enter a valid quantity produced.", "OK");
+                return;
+            }
+
+            int defects = int.TryParse(DefectsEntry.Text, out int d) ? d : 0;
+
+            int result = await _dbService.UpdateProductionOutputAsync(selectedBatch.BatchID, qty, defects);
+            if (result > 0)
+            {
+                await DisplayAlert("Success", $"Recorded {qty} units for {selectedBatch.BatchID}.", "OK");
+                QuantityEntry.Text = "";
+                DefectsEntry.Text = "";
+                await LoadDataAsync();
             }
         }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "OK");
+        }
+    }
+
+    private async void OnNewBatchClicked(object sender, EventArgs e)
+    {
+        string batchId = "PB-" + new Random().Next(1000, 9999);
+        // In a real app, you'd show a modal here to pick product and qty
+        // For now, let's just use the "Daily Record" fields as a proxy or simple alert
+        await DisplayAlert("New Batch", $"Use the 'Daily Record' section to manage production for {batchId}.", "OK");
     }
 }

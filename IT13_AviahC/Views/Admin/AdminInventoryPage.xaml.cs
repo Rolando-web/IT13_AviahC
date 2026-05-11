@@ -1,25 +1,53 @@
 using System.Data;
 using System.Collections.ObjectModel;
 using IT13_AviahC.Services;
-using IT13_AviahC.Models;
 using Microsoft.Maui.Controls;
 
 namespace IT13_AviahC.Views.Admin;
 
+public class WarehouseDisplayItem
+{
+    public string MaterialID { get; set; } = string.Empty;
+    public string SKU => MaterialID; // For backward compatibility with UI bindings
+    public string ItemName { get; set; } = string.Empty;
+    public string Category { get; set; } = string.Empty;
+    public int StockLevel { get; set; }
+    public string Unit { get; set; } = "pcs";
+    public string StatusText { get; set; } = "In Stock";
+    public string ImageUrl { get; set; } = string.Empty;
+
+    public string StatusColor => StatusText switch
+    {
+        "In Stock" => "#DCFCE7",
+        "Low Stock" => "#FEF3C7",
+        "Critical" => "#FEE2E2",
+        _ => "#F1F5F9"
+    };
+
+    public string StatusTextColor => StatusText switch
+    {
+        "In Stock" => "#15803D",
+        "Low Stock" => "#D97706",
+        "Critical" => "#DC2626",
+        _ => "#64748B"
+    };
+}
+
 public partial class AdminInventoryPage : ContentPage
 {
     private readonly DatabaseService _dbService;
-    public ObservableCollection<Product> InventoryItems { get; set; } = new ObservableCollection<Product>();
+    private string? _editingMaterialId;
+    private string _selectedImagePath = string.Empty;
+    public ObservableCollection<WarehouseDisplayItem> InventoryItems { get; } = new();
 
     public AdminInventoryPage()
     {
         InitializeComponent();
         _dbService = new DatabaseService();
-        
-        if (InventoryCollection != null)
-        {
-            InventoryCollection.ItemsSource = InventoryItems;
-        }
+        InventoryCollection.ItemsSource = InventoryItems;
+        ItemModalView.CloseRequested += OnCloseModalRequested;
+        ItemModalView.SaveRequested += OnSaveItemRequested;
+        ItemModalView.UploadImageRequested += OnUploadImageRequested;
     }
 
     protected override void OnAppearing()
@@ -32,99 +60,110 @@ public partial class AdminInventoryPage : ContentPage
     {
         try
         {
-            if (_dbService == null) return;
-
-            DataTable dt = await _dbService.GetAllInventoryAsync();
-            if (dt == null || dt.Rows == null) return;
-
+            DataTable dt = await _dbService.GetAllWarehouseItemsAsync();
             InventoryItems.Clear();
-            int index = 1;
 
-            foreach (DataRow row in dt.Rows)
+            if (dt != null)
             {
-                if (row == null) continue;
-
-                int id = 0;
-                if (dt.Columns.Contains("Id") && row["Id"] != DBNull.Value)
-                    id = Convert.ToInt32(row["Id"]);
-
-                int stock = 0;
-                if (dt.Columns.Contains("StockLevel") && row["StockLevel"] != DBNull.Value)
-                    stock = Convert.ToInt32(row["StockLevel"]);
-
-                string statusText = "In Stock";
-                if (dt.Columns.Contains("Status"))
-                    statusText = row["Status"]?.ToString() ?? "In Stock";
-
-                string statusColor = "#DCFCE7";
-                string statusTextColor = "#15803D";
-
-                if (statusText == "Critical" || stock <= 10)
+                foreach (DataRow row in dt.Rows)
                 {
-                    statusText = "Critical";
-                    statusColor = "#FEE2E2";
-                    statusTextColor = "#DC2626";
+                    string name = row["ItemName"]?.ToString() ?? "Unknown";
+                    string img = row["ImageUrl"]?.ToString() ?? "";
+                    
+                    InventoryItems.Add(new WarehouseDisplayItem
+                    {
+                        MaterialID = row["MaterialID"]?.ToString() ?? "N/A",
+                        ItemName = name,
+                        Category = row["Category"]?.ToString() ?? "General",
+                        StockLevel = row["Quantity"] != DBNull.Value ? Convert.ToInt32(row["Quantity"]) : 0,
+                        Unit = row["Unit"]?.ToString() ?? "pcs",
+                        StatusText = row["Status"]?.ToString() ?? "In Stock",
+                        ImageUrl = string.IsNullOrEmpty(img) ? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(name)}&background=random&size=128" : img
+                    });
                 }
-                else if (statusText == "Low Stock" || stock <= 100)
-                {
-                    statusText = "Low Stock";
-                    statusColor = "#FEF3C7";
-                    statusTextColor = "#D97706";
-                }
-
-                string itemName = "Unknown Item";
-                if (dt.Columns.Contains("ProductName"))
-                    itemName = row["ProductName"]?.ToString() ?? "Unknown Item";
-                else if (dt.Columns.Contains("ItemName"))
-                    itemName = row["ItemName"]?.ToString() ?? "Unknown Item";
-
-                string imageUrl = "";
-                if (dt.Columns.Contains("ImageUrl"))
-                    imageUrl = row["ImageUrl"]?.ToString() ?? "";
-                
-                if (string.IsNullOrEmpty(imageUrl))
-                {
-                    imageUrl = $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(itemName)}&background=random&size=128";
-                }
-
-                string sku = $"RM-{index:D3}";
-                if (dt.Columns.Contains("SKU"))
-                    sku = row["SKU"]?.ToString() ?? $"RM-{index:D3}";
-
-                string category = "General";
-                if (dt.Columns.Contains("Category"))
-                    category = row["Category"]?.ToString() ?? "General";
-
-                string unit = "pcs";
-                if (dt.Columns.Contains("Unit"))
-                    unit = row["Unit"]?.ToString() ?? "pcs";
-
-                decimal price = 0m;
-                if (dt.Columns.Contains("Price") && row["Price"] != DBNull.Value)
-                    price = Convert.ToDecimal(row["Price"]);
-                else if (dt.Columns.Contains("UnitPrice") && row["UnitPrice"] != DBNull.Value)
-                    price = Convert.ToDecimal(row["UnitPrice"]);
-
-                InventoryItems.Add(new Product
-                {
-                    Id = id,
-                    ProductName = itemName,
-                    SKU = sku,
-                    Category = category,
-                    StockLevel = stock,
-                    Unit = unit,
-                    UnitPrice = price,
-                    StatusText = statusText,
-                    StatusColor = statusColor,
-                    StatusTextColor = statusTextColor,
-                    ImageUrl = imageUrl
-                });
-                index++;
             }
         }
         catch (Exception ex)
         {
             await DisplayAlertAsync("Error", "Failed to load inventory: " + ex.Message, "OK");
+        }
+    }
+
+    private void OnAddItemClicked(object sender, EventArgs e)
+    {
+        _editingMaterialId = null;
+        _selectedImagePath = string.Empty;
+        ItemModalView.ShowForNew();
+        ItemModalView.IsVisible = true;
+    }
+
+    private void OnEditItemClicked(object sender, EventArgs e)
+    {
+        if (sender is Label label && label.GestureRecognizers.Count > 0 && label.GestureRecognizers[0] is TapGestureRecognizer tap && tap.CommandParameter is WarehouseDisplayItem item)
+        {
+            _editingMaterialId = item.MaterialID;
+            _selectedImagePath = item.ImageUrl;
+            ItemModalView.ShowForEdit(item.ItemName, item.MaterialID, item.Category, item.StockLevel, item.Unit, item.StatusText, _selectedImagePath);
+            ItemModalView.IsVisible = true;
+        }
+    }
+
+    private async void OnDeleteItemClicked(object sender, EventArgs e)
+    {
+        if (sender is Label lbl && lbl.GestureRecognizers.Count > 0 && lbl.GestureRecognizers[0] is TapGestureRecognizer tap && tap.CommandParameter is WarehouseDisplayItem item)
+        {
+            bool confirm = await DisplayAlertAsync("Delete", $"Remove '{item.ItemName}' ({item.MaterialID})?", "Yes", "No");
+            if (confirm)
+            {
+                int result = await _dbService.DeleteWarehouseItemAsync(item.MaterialID);
+                if (result > 0)
+                {
+                    await DisplayAlertAsync("Success", "Item removed.", "OK");
+                    LoadInventory();
+                }
+            }
+        }
+    }
+
+    private void OnCloseModalRequested(object? sender, EventArgs e) => ItemModalView.IsVisible = false;
+
+    private async void OnSaveItemRequested(object? sender, EventArgs e)
+    {
+        string sku = ItemModalView.SKU ?? string.Empty;
+        string name = ItemModalView.ItemName ?? string.Empty;
+        string category = ItemModalView.Category;
+        int qty = ItemModalView.Quantity;
+        string unit = ItemModalView.Unit;
+        string status = ItemModalView.Status;
+
+        int result;
+        if (string.IsNullOrEmpty(_editingMaterialId))
+        {
+            result = _dbService.AddWarehouseItem(sku, name, category, qty, unit, status, _selectedImagePath);
+        }
+        else
+        {
+            result = _dbService.UpdateWarehouseItem(_editingMaterialId, sku, name, category, qty, unit, status, _selectedImagePath);
+        }
+
+        if (result > 0)
+        {
+            ItemModalView.IsVisible = false;
+            LoadInventory();
+        }
+        else
+        {
+            await DisplayAlertAsync("Error", "Could not save item.", "OK");
+        }
+    }
+
+    private async void OnUploadImageRequested(object? sender, EventArgs e)
+    {
+        var result = await FilePicker.Default.PickAsync(new PickOptions { PickerTitle = "Select Image", FileTypes = FilePickerFileType.Images });
+        if (result != null)
+        {
+            _selectedImagePath = result.FullPath;
+            ItemModalView.UpdateImagePreview(_selectedImagePath);
         }
     }
 }

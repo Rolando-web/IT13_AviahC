@@ -10,10 +10,23 @@ namespace IT13_AviahC.Services
     {
         public DataTable GetAllInventory()
         {
+            // Join with Promotions if possible, otherwise return product data.
+            // Using COALESCE/CASE to provide a virtual SKU and Status since they aren't in the DB table yet.
             string query = @"
-                SELECT p.*, pr.PromoCode, pr.DiscountValue, pr.PromotionName 
+                SELECT p.ProductID,
+                       p.ProductName,
+                       p.Category,
+                       p.StockQuantity,
+                       p.Price,
+                       p.ImageUrl,
+                       p.Description,
+                       'PROD-' + CAST(p.ProductID AS VARCHAR) AS SKU,
+                       CASE 
+                           WHEN p.StockQuantity <= 0 THEN 'Out of Stock'
+                           WHEN p.StockQuantity <= 10 THEN 'Low Stock'
+                           ELSE 'In Stock'
+                       END AS Status
                 FROM Products p 
-                LEFT JOIN Promotions pr ON p.PromoId = pr.PromoID 
                 ORDER BY p.ProductName";
             return ExecuteQuery(query);
         }
@@ -21,55 +34,130 @@ namespace IT13_AviahC.Services
         public async Task<DataTable> GetAllInventoryAsync()
         {
             string query = @"
-                SELECT p.*, pr.PromoCode, pr.DiscountValue, pr.PromotionName 
+                SELECT p.ProductID,
+                       p.ProductName,
+                       p.Category,
+                       p.StockQuantity,
+                       p.Price,
+                       p.ImageUrl,
+                       p.Description,
+                       'PROD-' + CAST(p.ProductID AS VARCHAR) AS SKU,
+                       CASE 
+                           WHEN p.StockQuantity <= 0 THEN 'Out of Stock'
+                           WHEN p.StockQuantity <= 10 THEN 'Low Stock'
+                           ELSE 'In Stock'
+                       END AS Status
                 FROM Products p 
-                LEFT JOIN Promotions pr ON p.PromoId = pr.PromoID 
                 ORDER BY p.ProductName";
             return await ExecuteQueryAsync(query);
         }
 
         public int AddInventory(string productName, string sku, string category, int stock, string unit, decimal price, string status, string imageUrl, int? promoId = null)
         {
-            string query = "INSERT INTO Products (ProductName, SKU, Category, StockLevel, Unit, Price, Status, ImageUrl, PromoId) VALUES (@ProductName, @SKU, @Category, @Stock, @Unit, @Price, @Status, @ImageUrl, @PromoId)";
+            string query = "INSERT INTO Products (ProductName, Category, StockQuantity, Price, ImageUrl, Description) VALUES (@ProductName, @Category, @Stock, @Price, @ImageUrl, @Description)";
             var parameters = new Dictionary<string, object>
             {
                 { "@ProductName", productName },
-                { "@SKU", sku },
                 { "@Category", category },
                 { "@Stock", stock },
-                { "@Unit", unit },
                 { "@Price", price },
-                { "@Status", status },
                 { "@ImageUrl", imageUrl },
-                { "@PromoId", (object?)promoId ?? DBNull.Value }
+                { "@Description", string.Empty }
             };
             return ExecuteNonQuery(query, parameters);
         }
 
         public int UpdateInventory(int id, string productName, string sku, string category, int stock, string unit, decimal price, string status, string imageUrl, int? promoId = null)
         {
-            string query = "UPDATE Products SET ProductName = @ProductName, SKU = @SKU, Category = @Category, StockLevel = @Stock, Unit = @Unit, Price = @Price, Status = @Status, ImageUrl = @ImageUrl, PromoId = @PromoId WHERE Id = @Id";
+            string query = "UPDATE Products SET ProductName = @ProductName, Category = @Category, StockQuantity = @Stock, Price = @Price, ImageUrl = @ImageUrl WHERE ProductID = @Id";
             var parameters = new Dictionary<string, object>
             {
                 { "@Id", id },
                 { "@ProductName", productName },
-                { "@SKU", sku },
                 { "@Category", category },
                 { "@Stock", stock },
-                { "@Unit", unit },
                 { "@Price", price },
-                { "@Status", status },
-                { "@ImageUrl", imageUrl },
-                { "@PromoId", (object?)promoId ?? DBNull.Value }
+                { "@ImageUrl", imageUrl }
             };
             return ExecuteNonQuery(query, parameters);
         }
 
         public int DeleteInventory(int id)
         {
-            string query = "DELETE FROM Products WHERE Id = @Id";
+            string query = "DELETE FROM Products WHERE ProductID = @Id";
             var parameters = new Dictionary<string, object> { { "@Id", id } };
             return ExecuteNonQuery(query, parameters);
+        }
+
+        public async Task<DataTable> GetAllWarehouseItemsAsync()
+        {
+            string query = @"
+                SELECT MaterialID,
+                       ItemName,
+                       Category,
+                       Quantity,
+                       Unit,
+                       Status,
+                       ImageUrl
+                FROM RawMaterials
+                ORDER BY ItemName";
+            return await ExecuteQueryAsync(query);
+        }
+
+        public int AddWarehouseItem(string materialId, string itemName, string category, int quantity, string unit, string status, string imageUrl)
+        {
+            string query = @"
+                INSERT INTO RawMaterials (MaterialID, ItemName, Category, Quantity, Unit, Status, ImageUrl)
+                VALUES (@MaterialID, @ItemName, @Category, @Quantity, @Unit, @Status, @ImageUrl)";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@MaterialID", materialId },
+                { "@ItemName", itemName },
+                { "@Category", category },
+                { "@Quantity", quantity },
+                { "@Unit", unit },
+                { "@Status", status },
+                { "@ImageUrl", imageUrl }
+            };
+            return ExecuteNonQuery(query, parameters);
+        }
+
+        public int UpdateWarehouseItem(string materialId, string newMaterialId, string itemName, string category, int quantity, string unit, string status, string imageUrl)
+        {
+            string query = @"
+                UPDATE RawMaterials
+                SET MaterialID = @NewMaterialID,
+                    ItemName = @ItemName,
+                    Category = @Category,
+                    Quantity = @Quantity,
+                    Unit = @Unit,
+                    Status = @Status,
+                    ImageUrl = @ImageUrl
+                WHERE MaterialID = @MaterialID";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@MaterialID", materialId },
+                { "@NewMaterialID", newMaterialId },
+                { "@ItemName", itemName },
+                { "@Category", category },
+                { "@Quantity", quantity },
+                { "@Unit", unit },
+                { "@Status", status },
+                { "@ImageUrl", imageUrl }
+            };
+            return ExecuteNonQuery(query, parameters);
+        }
+
+        public async Task<int> DeleteWarehouseItemAsync(string materialId)
+        {
+            // Remove FK-dependent PurchaseOrders first to avoid constraint violation
+            await ExecuteNonQueryAsync(
+                "DELETE FROM PurchaseOrders WHERE MaterialID = @MaterialID",
+                new Dictionary<string, object> { { "@MaterialID", materialId } });
+
+            return await ExecuteNonQueryAsync(
+                "DELETE FROM RawMaterials WHERE MaterialID = @MaterialID",
+                new Dictionary<string, object> { { "@MaterialID", materialId } });
         }
     }
 }

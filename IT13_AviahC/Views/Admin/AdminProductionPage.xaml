@@ -28,7 +28,7 @@
                                     <Label Text="Filter" TextColor="#624890" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                             </Border>
-                            <Button Text="+ New Batch" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="20,0" FontAttributes="Bold" FontSize="13" HeightRequest="40" />
+                            <Button Text="+ New Batch" Clicked="OnNewBatchClicked" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="20,0" FontAttributes="Bold" FontSize="13" HeightRequest="40" />
                         </HorizontalStackLayout>
                     </Grid>
 
@@ -82,22 +82,22 @@
                                     <VerticalStackLayout Spacing="8">
                                         <Label Text="Batch ID" FontSize="13" FontAttributes="Bold" TextColor="#463366" />
                                         <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="4" StrokeThickness="0">
-                                            <Picker Title="Select Active Batch" TextColor="#1E293B" FontSize="14" />
+                                            <Picker x:Name="BatchPicker" ItemDisplayBinding="{Binding BatchID}" Title="Select Active Batch" TextColor="#1E293B" FontSize="14" />
                                         </Border>
                                     </VerticalStackLayout>
                                     <VerticalStackLayout Spacing="8">
                                         <Label Text="Quantity Produced" FontSize="13" FontAttributes="Bold" TextColor="#463366" />
                                         <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="12" StrokeThickness="0">
-                                            <Entry Placeholder="0" Keyboard="Numeric" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
+                                            <Entry x:Name="QuantityEntry" Placeholder="0" Keyboard="Numeric" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
                                         </Border>
                                     </VerticalStackLayout>
                                     <VerticalStackLayout Spacing="8">
                                         <Label Text="Defects / Rejects" FontSize="13" FontAttributes="Bold" TextColor="#463366" />
                                         <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="12" StrokeThickness="0">
-                                            <Entry Placeholder="0" Keyboard="Numeric" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
+                                            <Entry x:Name="DefectsEntry" Placeholder="0" Keyboard="Numeric" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
                                         </Border>
                                     </VerticalStackLayout>
-                                    <Button Text="Save Production Record" BackgroundColor="#624890" TextColor="White" CornerRadius="12" FontAttributes="Bold" HeightRequest="48" Margin="0,8,0,0" />
+                                    <Button Text="Save Production Record" Clicked="OnSaveProductionRecord" BackgroundColor="#624890" TextColor="White" CornerRadius="12" FontAttributes="Bold" HeightRequest="48" Margin="0,8,0,0" />
                                 </VerticalStackLayout>
                             </Border>
 
@@ -107,13 +107,13 @@
                                     <Label Text="Weekly Goal" TextColor="White" FontAttributes="Bold" FontSize="14" />
                                     <Grid ColumnDefinitions="*,Auto">
                                         <VerticalStackLayout Spacing="4">
-                                            <Label Text="1,240 / 2,000" TextColor="White" FontSize="20" FontAttributes="Bold" />
+                                            <Label x:Name="GoalText" Text="0 / 0" TextColor="White" FontSize="20" FontAttributes="Bold" />
                                             <Label Text="Units Produced" TextColor="#D1C4E9" FontSize="12" />
                                         </VerticalStackLayout>
-                                        <Label Grid.Column="1" Text="62%" TextColor="White" FontSize="24" FontAttributes="Bold" VerticalOptions="Center" />
+                                        <Label x:Name="GoalPercent" Grid.Column="1" Text="0%" TextColor="White" FontSize="24" FontAttributes="Bold" VerticalOptions="Center" />
                                     </Grid>
                                     <Border BackgroundColor="#7D6A9E" StrokeShape="RoundRectangle 8" HeightRequest="8" StrokeThickness="0">
-                                        <BoxView BackgroundColor="White" HeightRequest="8" WidthRequest="180" HorizontalOptions="Start" />
+                                        <BoxView x:Name="GoalProgress" BackgroundColor="White" HeightRequest="8" WidthRequest="0" HorizontalOptions="Start" />
                                     </Border>
                                 </VerticalStackLayout>
                             </Border>

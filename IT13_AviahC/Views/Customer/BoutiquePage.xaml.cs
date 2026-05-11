@@ -42,15 +42,13 @@ namespace IT13_AviahC.Views.Customer
 
                         items.Add(new Product
                         {
-                            Id = row["Id"] != DBNull.Value ? Convert.ToInt32(row["Id"]) : 0,
+                            Id = row["ProductID"] != DBNull.Value ? Convert.ToInt32(row["ProductID"]) : 0,
                             ProductName = productName,
                             UnitPrice = row["Price"] != DBNull.Value ? Convert.ToDecimal(row["Price"]) : 0m,
                             ImageUrl = imageUrl,
                             Category = category,
-                            StatusText = row["PromotionName"]?.ToString() ?? status,
-                            PromoId = row["PromoId"] != DBNull.Value ? Convert.ToInt32(row["PromoId"]) : (int?)null,
-                            PromotionName = row["PromotionName"]?.ToString(),
-                            DiscountValue = row["DiscountValue"]?.ToString()
+                            StatusText = status,
+                            PromoId = row.Table.Columns.Contains("PromoId") && row["PromoId"] != DBNull.Value ? Convert.ToInt32(row["PromoId"]) : (int?)null
                         });
                     }
                 }
@@ -67,7 +65,7 @@ namespace IT13_AviahC.Views.Customer
                         ItemsCollection.IsVisible = false;
                         EmptyBoutiqueView.IsVisible = true;
                     }
-                    BindableLayout.SetItemsSource(ItemsCollection, items);
+                    ItemsCollection.ItemsSource = items;
                 });
             }
             catch (Exception ex)
@@ -97,7 +95,7 @@ namespace IT13_AviahC.Views.Customer
                         if (result > 0)
                         {
                             await DisplayAlertAsync("Success", "Your order has been placed successfully!", "OK");
-                            await Shell.Current.GoToAsync("//CustomerPortal/CustomerOrders");
+                            await Shell.Current.GoToAsync("///CustomerOrders");
                         }
                         else
                         {

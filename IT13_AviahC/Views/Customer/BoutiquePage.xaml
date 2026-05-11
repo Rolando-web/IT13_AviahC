@@ -2,15 +2,16 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:IT13_AviahC.Views.Customer.Components"
+             xmlns:models="clr-namespace:IT13_AviahC.Models"
              x:Class="IT13_AviahC.Views.Customer.BoutiquePage"
              BackgroundColor="#F8FAFC"
              Shell.NavBarIsVisible="False">
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="0">
-            <!-- Header -->
-            <components:CustomerHeaderView ActiveTab="Boutique" />
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <components:CustomerHeaderView Grid.Row="0" ActiveTab="Boutique" />
 
+        <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="40" Spacing="32">
 
                 <!-- Promo Banner -->
@@ -43,24 +44,25 @@
                     <Label Text="Check back soon — new arrivals are on the way!" FontSize="14" TextColor="#64748B" HorizontalTextAlignment="Center" />
                 </VerticalStackLayout>
 
-                <!-- Products Grid -->
-                <FlexLayout x:Name="ItemsCollection" Wrap="Wrap" JustifyContent="Start" AlignContent="Start">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="0" StrokeThickness="1" Stroke="#E2E8F0" WidthRequest="240" Margin="0,0,20,20">
+                <!-- Products Collection -->
+                <CollectionView x:Name="ItemsCollection" IsVisible="True">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="3" VerticalItemSpacing="20" HorizontalItemSpacing="20" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Product">
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="0" StrokeThickness="1" Stroke="#E2E8F0" HeightRequest="400">
                                 <VerticalStackLayout>
-                                    <!-- Image -->
+                                    <!-- Image Area -->
                                     <Border BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 16,16,0,0" HeightRequest="200" StrokeThickness="0">
                                         <Image Source="{Binding ImageUrl}" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill" />
                                     </Border>
                                     
-                                    <!-- Info -->
+                                    <!-- Content Area -->
                                     <VerticalStackLayout Padding="16" Spacing="8">
                                         <Label Text="{Binding ProductName}" FontSize="15" FontAttributes="Bold" TextColor="#1E293B" MaxLines="1" LineBreakMode="TailTruncation" />
                                         
-                                        <HorizontalStackLayout Spacing="8">
-                                            <Label Text="{Binding DiscountedPriceText}" FontSize="15" FontAttributes="Bold" TextColor="#624890" VerticalOptions="Center" />
-                                        </HorizontalStackLayout>
+                                        <Label Text="{Binding FormattedPrice}" FontSize="15" FontAttributes="Bold" TextColor="#624890" />
                                         
                                         <HorizontalStackLayout Spacing="6">
                                             <Border BackgroundColor="#F0FDF4" StrokeShape="RoundRectangle 6" Padding="8,4" StrokeThickness="0">
@@ -85,9 +87,9 @@
                                 </VerticalStackLayout>
                             </Border>
                         </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </FlexLayout>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </VerticalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+    </Grid>
 </ContentPage>

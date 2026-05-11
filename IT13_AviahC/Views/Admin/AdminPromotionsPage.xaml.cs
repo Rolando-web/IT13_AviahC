@@ -78,13 +78,13 @@ namespace IT13_AviahC.Views.Admin
             string name = PromoNameEntry.Text;
             string discount = PromoDiscountEntry.Text;
             string target = PromoTargetEntry.Text;
-            DateTime start = PromoStartDate.Date;
-            DateTime end = PromoEndDate.Date;
+            DateTime start = PromoStartDate.Date ?? DateTime.Now;
+            DateTime end = PromoEndDate.Date ?? DateTime.Now.AddMonths(1);
             string status = PromoStatusPicker.SelectedItem?.ToString() ?? "Active";
 
             if (string.IsNullOrWhiteSpace(code) || string.IsNullOrWhiteSpace(name))
             {
-                await DisplayAlert("Validation Error", "Promo Code and Name are required.", "OK");
+                await DisplayAlertAsync("Validation Error", "Promo Code and Name are required.", "OK");
                 return;
             }
 
@@ -106,13 +106,13 @@ namespace IT13_AviahC.Views.Admin
             int rows = await _dbService.ExecuteNonQueryAsync(query, parameters);
             if (rows > 0)
             {
-                await DisplayAlert("Success", "Promotion created successfully.", "OK");
+                await DisplayAlertAsync("Success", "Promotion created successfully.", "OK");
                 PromoModal.IsVisible = false;
                 LoadPromotions(); // Refresh table
             }
             else
             {
-                await DisplayAlert("Error", "Failed to create promotion.", "OK");
+                await DisplayAlertAsync("Error", "Failed to create promotion.", "OK");
             }
         }
     }

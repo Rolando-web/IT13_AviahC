@@ -5,20 +5,22 @@ namespace IT13_AviahC.Views.Admin
 {
     public class DeliveryItem
     {
-        public string DeliveryID { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
-        public string StatusColorDark { get; set; } = "#624890";
+        public string DeliveryID       { get; set; } = string.Empty;
+        public string Status           { get; set; } = string.Empty;
+        public string StatusColorDark  { get; set; } = "#624890";
         public string StatusColorLight { get; set; } = "#F3F0FA";
-        public string DetailsText { get; set; } = string.Empty;
-        public string ETA { get; set; } = "TBD";
-        public string DriverName { get; set; } = "Unassigned";
-        public string CurrentLocation { get; set; } = "Unknown";
-        public string Destination { get; set; } = "Not set";
+        public string DetailsText      { get; set; } = string.Empty;
+        public string ETA              { get; set; } = "TBD";
+        public string DriverName       { get; set; } = "Unassigned";
+        public string CurrentLocation  { get; set; } = "Unknown";
+        public string Destination      { get; set; } = "Not set";
     }
 
     public partial class AdminLogisticsPage : ContentPage
     {
         private readonly DatabaseService _dbService;
+        private string _selectedDeliveryId  = string.Empty;
+        private string _selectedOrderRef    = string.Empty;
 
         public AdminLogisticsPage()
         {
@@ -32,65 +34,70 @@ namespace IT13_AviahC.Views.Admin
             LoadDeliveries();
         }
 
+        // ─── LOAD ─────────────────────────────────────────────────────────────
         private async void LoadDeliveries()
         {
             try
             {
-                // Run database query on a background thread to prevent UI freezing/crashing
-                DataTable dt = await Task.Run(() => _dbService.GetAllDeliveries());
-                
-                var deliveries = new List<DeliveryItem>();
-                var pendingDeliveries = new List<string>();
+                // Use new async method from DatabaseService.Deliveries.cs
+                DataTable dt = await _dbService.GetAllDeliveriesAsync();
+
+                var deliveries      = new List<DeliveryItem>();
+                var pendingOptions  = new List<string>();
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    string status = row["Status"]?.ToString() ?? "Pending";
-                    string deliveryId = row["DeliveryID"]?.ToString() ?? "N/A";
-                    string orderRef = row["OrderRef"]?.ToString() ?? "N/A";
-                    string customerName = row["CustomerName"]?.ToString() ?? "Unknown";
+                    string status     = row["Status"]?.ToString()      ?? "Pending";
+                    string deliveryId = row["DeliveryID"]?.ToString()  ?? "N/A";
+                    string orderRef   = row["OrderRef"]?.ToString()     ?? "N/A";
+                    string customer   = row["CustomerName"]?.ToString() ?? "Unknown";
 
-                    string statusColorDark = "#624890";
-                    string statusColorLight = "#F3F0FA";
+                    string dark  = "#624890";
+                    string light = "#F3F0FA";
 
-                    if (status == "Delivered")
+                    switch (status)
                     {
-                        statusColorDark = "#15803D";
-                        statusColorLight = "#DCFCE7";
-                    }
-                    else if (status == "In Transit")
-                    {
-                        statusColorDark = "#1D4ED8";
-                        statusColorLight = "#DBEAFE";
-                    }
-                    else if (status == "Pending")
-                    {
-                        statusColorDark = "#D97706";
-                        statusColorLight = "#FFEDD5";
-                        pendingDeliveries.Add($"{deliveryId} (Pending)");
+                        case "Delivered":
+                            dark  = "#15803D"; light = "#DCFCE7"; break;
+                        case "In Transit":
+                        case "Out for Delivery":
+                            dark  = "#1D4ED8"; light = "#DBEAFE"; break;
+                        case "Pending":
+                            dark  = "#D97706"; light = "#FEF3C7";
+                            pendingOptions.Add($"{deliveryId} — {orderRef}");
+                            break;
+                        case "Failed":
+                            dark  = "#DC2626"; light = "#FEE2E2"; break;
                     }
 
                     deliveries.Add(new DeliveryItem
                     {
-                        DeliveryID = deliveryId,
-                        Status = status,
-                        StatusColorDark = statusColorDark,
-                        StatusColorLight = statusColorLight,
-                        DetailsText = $"Ref: {orderRef} • {customerName}",
-                        ETA = row["ETA"]?.ToString() ?? "TBD",
-                        DriverName = row["DriverName"]?.ToString() ?? "Unassigned",
-                        CurrentLocation = row["CurrentLocation"]?.ToString() ?? "Unknown",
-                        Destination = row["Destination"]?.ToString() ?? "Not set"
+                        DeliveryID       = deliveryId,
+                        Status           = status,
+                        StatusColorDark  = dark,
+                        StatusColorLight = light,
+                        DetailsText      = $"Ref: {orderRef} • {customer}",
+                        ETA              = row["ETA"]?.ToString()              ?? "TBD",
+                        DriverName       = row["DriverName"]?.ToString()       ?? "Unassigned",
+                        CurrentLocation  = row["CurrentLocation"]?.ToString()  ?? "Unknown",
+                        Destination      = row["Destination"]?.ToString()      ?? "Not set"
                     });
                 }
 
-                // Update UI on the main thread
-                MainThread.BeginInvokeOnMainThread(() => 
+                // Load real drivers from DB
+                DataTable driversDt = await _dbService.GetAllDriversAsync();
+                var driverList = new List<string>();
+                foreach (DataRow r in driversDt.Rows)
+                    driverList.Add(r["FullName"]?.ToString() ?? "Unknown");
+
+                if (driverList.Count == 0)
+                    driverList = new List<string> { "No drivers registered" };
+
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
                     DeliveriesCollection.ItemsSource = deliveries;
-                    DeliveryPicker.ItemsSource = pendingDeliveries;
-                    
-                    // Sample drivers for the picker
-                    DriverPicker.ItemsSource = new List<string> { "John Doe (Van 1)", "Jane Smith (Van 2)", "Mike Ross (Bike 1)" };
+                    DeliveryPicker.ItemsSource       = pendingOptions;
+                    DriverPicker.ItemsSource         = driverList;
                 });
             }
             catch (Exception ex)
@@ -100,60 +107,65 @@ namespace IT13_AviahC.Views.Admin
             }
         }
 
-        private string _selectedDeliveryId = string.Empty;
-        private string _selectedOrderRef = string.Empty;
-
+        // ─── OPEN UPDATE MODAL ────────────────────────────────────────────────
         private void OnUpdateStatusClicked(object? sender, EventArgs e)
         {
-            var button = sender as Button;
+            var button   = sender as Button;
             var delivery = button?.CommandParameter as DeliveryItem;
-            if (delivery != null)
-            {
-                _selectedDeliveryId = delivery.DeliveryID;
-                _selectedOrderRef = delivery.DetailsText.Split('•')[0].Replace("Ref:", "").Trim();
-                ModalTitle.Text = $"Update Order Status: {_selectedDeliveryId}";
-                ModalOverlay.IsVisible = true;
-            }
+            if (delivery == null) return;
+
+            _selectedDeliveryId = delivery.DeliveryID;
+            // Extract OrderRef from DetailsText "Ref: ORD-xxx • Customer"
+            _selectedOrderRef = delivery.DetailsText.Contains("•")
+                ? delivery.DetailsText.Split('•')[0].Replace("Ref:", "").Trim()
+                : string.Empty;
+
+            ModalTitle.Text        = $"Update: {_selectedDeliveryId}";
+            DetailsEntry.Text      = delivery.CurrentLocation;
+            ModalOverlay.IsVisible = true;
         }
 
         private void OnCloseModalClicked(object? sender, EventArgs e)
         {
-            ModalOverlay.IsVisible = false;
-            _selectedDeliveryId = string.Empty;
-            _selectedOrderRef = string.Empty;
+            ModalOverlay.IsVisible  = false;
+            _selectedDeliveryId     = string.Empty;
+            _selectedOrderRef       = string.Empty;
         }
 
+        // ─── CONFIRM UPDATE ───────────────────────────────────────────────────
         private async void OnConfirmUpdateClicked(object? sender, EventArgs e)
         {
             if (StatusPicker.SelectedItem == null || string.IsNullOrEmpty(_selectedDeliveryId))
             {
-                await DisplayAlertAsync("Selection Required", "Please select a status update.", "OK");
+                await DisplayAlertAsync("Required", "Please select a status.", "OK");
                 return;
             }
 
-            string newStatus = StatusPicker.SelectedItem.ToString() ?? "Pending";
-            string driverName = DriverPicker.SelectedItem?.ToString() ?? "Unassigned";
+            string newStatus     = StatusPicker.SelectedItem.ToString()!;
+            string location      = DetailsEntry.Text?.Trim() ?? string.Empty;
+            string driverName    = DriverPicker.SelectedItem?.ToString() ?? "Unassigned";
 
-            // Update Deliveries Table
-            string updateDeliveryQuery = "UPDATE Deliveries SET Status = @Status, DriverName = @DriverName WHERE DeliveryID = @DeliveryID";
-            await _dbService.ExecuteNonQueryAsync(updateDeliveryQuery, new Dictionary<string, object> {
-                { "@Status", newStatus },
-                { "@DriverName", driverName },
-                { "@DeliveryID", _selectedDeliveryId }
-            });
+            // Use the unified UpdateDeliveryAsync which also syncs Orders.Status
+            int result = await _dbService.UpdateDeliveryAsync(
+                _selectedDeliveryId, newStatus, location,
+                destination: string.Empty,   // keep existing destination
+                eta: string.Empty,           // keep existing ETA
+                driverName: driverName);
 
-            // Update Orders Table to keep them in sync
-            string updateOrderQuery = "UPDATE Orders SET Status = @Status WHERE OrderRef = @OrderRef";
-            await _dbService.ExecuteNonQueryAsync(updateOrderQuery, new Dictionary<string, object> {
-                { "@Status", newStatus },
-                { "@OrderRef", _selectedOrderRef }
-            });
+            if (result > 0)
+            {
+                await DisplayAlertAsync("Updated",
+                    $"{_selectedDeliveryId} → '{newStatus}'.\nCustomer tracking has been updated.", "OK");
+            }
+            else
+            {
+                await DisplayAlertAsync("Failed", "Could not update delivery status.", "OK");
+            }
 
-            await DisplayAlertAsync("Success", "Delivery status has been updated successfully.", "OK");
-            ModalOverlay.IsVisible = false;
-            _selectedDeliveryId = string.Empty;
-            _selectedOrderRef = string.Empty;
-            LoadDeliveries(); // Refresh list
+            ModalOverlay.IsVisible  = false;
+            _selectedDeliveryId     = string.Empty;
+            _selectedOrderRef       = string.Empty;
+            LoadDeliveries();
         }
     }
 }

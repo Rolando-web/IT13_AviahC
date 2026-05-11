@@ -4,8 +4,9 @@ namespace IT13_AviahC.Views.Customer.Components
 {
     public partial class CustomerHeaderView : ContentView
     {
-        // Static navigation guard shared across ALL header instances to prevent re-entrant navigation
+        // Static navigation guard with a "reset" mechanism
         private static bool _isNavigating = false;
+        private static DateTime _lastNavTime = DateTime.MinValue;
 
         public static readonly BindableProperty ActiveTabProperty =
             BindableProperty.Create(nameof(ActiveTab), typeof(string), typeof(CustomerHeaderView), "Boutique", propertyChanged: OnActiveTabChanged);
@@ -29,14 +30,16 @@ namespace IT13_AviahC.Views.Customer.Components
         {
             InitializeComponent();
             CustomerName = Services.UserSession.UserName ?? "Customer";
-            this.Loaded += (s, e) => UpdateVisualStates();
+            this.Loaded += (s, e) => {
+                MainThread.BeginInvokeOnMainThread(() => UpdateVisualStates());
+            };
         }
 
         private static void OnActiveTabChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is CustomerHeaderView view)
             {
-                view.UpdateVisualStates();
+                MainThread.BeginInvokeOnMainThread(() => view.UpdateVisualStates());
             }
         }
 
@@ -52,17 +55,23 @@ namespace IT13_AviahC.Views.Customer.Components
         {
             try
             {
-                if (BoutiqueBtn != null) VisualStateManager.GoToState(BoutiqueBtn, ActiveTab == "Boutique" ? "Selected" : "Normal");
+                // Safety null checks for all components
+                if (BoutiqueBtn == null) return; 
+
+                VisualStateManager.GoToState(BoutiqueBtn, ActiveTab == "Boutique" ? "Selected" : "Normal");
                 if (OffersBtn != null) VisualStateManager.GoToState(OffersBtn, ActiveTab == "Offers" ? "Selected" : "Normal");
                 if (OrdersBtn != null) VisualStateManager.GoToState(OrdersBtn, ActiveTab == "Orders" ? "Selected" : "Normal");
                 if (TrackBtn != null) VisualStateManager.GoToState(TrackBtn, ActiveTab == "Track" ? "Selected" : "Normal");
                 if (FeedbackBtn != null) VisualStateManager.GoToState(FeedbackBtn, ActiveTab == "Feedback" ? "Selected" : "Normal");
 
-                if (BoutiqueIcon != null) BoutiqueIcon.Fill = new SolidColorBrush(ActiveTab == "Boutique" ? Color.Parse("#624890") : Color.Parse("#64748B"));
-                if (OffersIcon != null) OffersIcon.Fill = new SolidColorBrush(ActiveTab == "Offers" ? Color.Parse("#624890") : Color.Parse("#64748B"));
-                if (OrdersIcon != null) OrdersIcon.Fill = new SolidColorBrush(ActiveTab == "Orders" ? Color.Parse("#624890") : Color.Parse("#64748B"));
-                if (TrackIcon != null) TrackIcon.Fill = new SolidColorBrush(ActiveTab == "Track" ? Color.Parse("#624890") : Color.Parse("#64748B"));
-                if (FeedbackIcon != null) FeedbackIcon.Fill = new SolidColorBrush(ActiveTab == "Feedback" ? Color.Parse("#624890") : Color.Parse("#64748B"));
+                Color primary = Color.FromArgb("#624890");
+                Color muted = Color.FromArgb("#64748B");
+
+                if (BoutiqueIcon != null) BoutiqueIcon.Fill = new SolidColorBrush(ActiveTab == "Boutique" ? primary : muted);
+                if (OffersIcon != null) OffersIcon.Fill = new SolidColorBrush(ActiveTab == "Offers" ? primary : muted);
+                if (OrdersIcon != null) OrdersIcon.Fill = new SolidColorBrush(ActiveTab == "Orders" ? primary : muted);
+                if (TrackIcon != null) TrackIcon.Fill = new SolidColorBrush(ActiveTab == "Track" ? primary : muted);
+                if (FeedbackIcon != null) FeedbackIcon.Fill = new SolidColorBrush(ActiveTab == "Feedback" ? primary : muted);
             }
             catch (Exception ex)
             {
@@ -72,12 +81,16 @@ namespace IT13_AviahC.Views.Customer.Components
 
         private async void OnNavClicked(object sender, EventArgs e)
         {
-            // If already navigating globally, ignore the click entirely
+            // Reset navigation lock if it's been more than 5 seconds (safety against silent hangs)
+            if (_isNavigating && (DateTime.Now - _lastNavTime).TotalSeconds > 5)
+            {
+                _isNavigating = false;
+            }
+
             if (_isNavigating) return;
 
             if (sender is Button button && button.CommandParameter is string route)
             {
-                // Don't navigate if we're already on this tab
                 if (route == ActiveTab) return;
 
                 string? shellRoute = route switch
@@ -93,20 +106,23 @@ namespace IT13_AviahC.Views.Customer.Components
                 if (shellRoute != null)
                 {
                     _isNavigating = true;
+                    _lastNavTime = DateTime.Now;
                     try
                     {
+                        // Use absolute path for more reliable navigation in complex Shell structures
                         await Shell.Current.GoToAsync(shellRoute);
                     }
                     catch (Exception ex)
                     {
                         System.Diagnostics.Debug.WriteLine($"Navigation Error: {ex.Message}");
+                        _isNavigating = false;
                     }
                     finally
                     {
-                        // Use Dispatcher to reset the flag after the UI settles
-                        _ = Task.Run(async () =>
-                        {
-                            await Task.Delay(300);
+                        // The destination page will have its own header instance, 
+                        // but we reset the global lock after a delay to allow UI to settle
+                        _ = Task.Run(async () => {
+                            await Task.Delay(1000);
                             _isNavigating = false;
                         });
                     }
@@ -126,6 +142,7 @@ namespace IT13_AviahC.Views.Customer.Components
                     if (answer)
                     {
                         _isNavigating = true;
+                        _lastNavTime = DateTime.Now;
                         try
                         {
                             Services.UserSession.UserName = null;
@@ -135,11 +152,8 @@ namespace IT13_AviahC.Views.Customer.Components
                         }
                         finally
                         {
-                            _ = Task.Run(async () =>
-                            {
-                                await Task.Delay(300);
-                                _isNavigating = false;
-                            });
+                            await Task.Delay(500);
+                            _isNavigating = false;
                         }
                     }
                 }

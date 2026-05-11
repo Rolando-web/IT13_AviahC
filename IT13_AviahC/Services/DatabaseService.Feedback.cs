@@ -11,14 +11,13 @@ namespace IT13_AviahC.Services
         public async Task<int> SubmitFeedbackAsync(string userEmail, string subject, string message)
         {
             string query = @"
-                INSERT INTO Feedback (UserEmail, Subject, Message, SubmittedAt)
-                VALUES (@UserEmail, @Subject, @Message, GETDATE())";
+                INSERT INTO Feedback (UserId, Comments, DateSubmitted)
+                VALUES ((SELECT TOP 1 Id FROM Users WHERE Email = @Email), @Comments, GETDATE())";
             
             var parameters = new Dictionary<string, object>
             {
-                { "@UserEmail", userEmail },
-                { "@Subject", subject },
-                { "@Message", message }
+                { "@Email", userEmail },
+                { "@Comments", $"{subject}: {message}" }
             };
             
             return await ExecuteNonQueryAsync(query, parameters);

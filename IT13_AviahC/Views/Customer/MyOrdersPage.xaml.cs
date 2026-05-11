@@ -61,7 +61,7 @@ namespace IT13_AviahC.Views.Customer
                         EmptyOrdersView.IsVisible = true;
                     }
 
-                    BindableLayout.SetItemsSource(OrdersCollection, orders);
+                    OrdersCollection.ItemsSource = orders;
                 });
             }
             catch (Exception ex)
@@ -91,12 +91,29 @@ namespace IT13_AviahC.Views.Customer
 
         private async void OnTrackClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("//CustomerPortal/CustomerTrack");
+            try
+            {
+                // Use absolute path for more reliable navigation in complex Shell structures
+                await Shell.Current.GoToAsync("//CustomerPortal/CustomerTrack");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Track Order Navigation Error: {ex.Message}");
+                // Fallback to relative if absolute fails
+                try { await Shell.Current.GoToAsync("///CustomerTrack"); } catch { }
+            }
         }
 
         private async void OnShopClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("//CustomerPortal/CustomerBoutique");
+            try
+            {
+                await Shell.Current.GoToAsync("///CustomerBoutique");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Shop Navigation Error: {ex.Message}");
+            }
         }
     }
 }
