@@ -1,5 +1,6 @@
 using Microsoft.Maui.Controls;
 using IT13_AviahC.Services;
+using System.Data;
 
 namespace IT13_AviahC.Views.Customer
 {
@@ -13,52 +14,40 @@ namespace IT13_AviahC.Views.Customer
             _databaseService = new DatabaseService();
         }
 
-        private async void OnSubmitFeedbackClicked(object sender, EventArgs e)
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _ = LoadFeedbackHistoryAsync();
+        }
+
+        private async Task LoadFeedbackHistoryAsync()
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(SubjectEntry.Text) || string.IsNullOrWhiteSpace(MessageEditor.Text))
-                {
-                    await DisplayAlertAsync("Validation", "Please fill in both the subject and your message.", "OK");
-                    return;
-                }
-
-                // Disable button to prevent double submission
-                SubmitButton.IsEnabled = false;
-                SubmitButton.Text = "Submitting...";
-
                 string userEmail = UserSession.UserEmail ?? "customer@aviah.com";
-                int result = await _databaseService.SubmitFeedbackAsync(userEmail, SubjectEntry.Text, MessageEditor.Text);
+                DataTable dt = await _databaseService.GetFeedbackHistoryAsync(userEmail);
 
-                if (result > 0)
+                var history = new List<object>();
+                foreach (DataRow row in dt.Rows)
                 {
-                    await DisplayAlertAsync("Success", "Your feedback has been submitted successfully! Our team will review it shortly.", "OK");
-                    
-                    // Clear the form
-                    MainThread.BeginInvokeOnMainThread(() =>
+                    history.Add(new
                     {
-                        SubjectEntry.Text = string.Empty;
-                        MessageEditor.Text = string.Empty;
+                        OrderRef = row["OrderRef"]?.ToString() ?? "N/A",
+                        Comments = row["Comments"]?.ToString() ?? "",
+                        DateSubmitted = row["DateSubmitted"] != DBNull.Value ? Convert.ToDateTime(row["DateSubmitted"]) : DateTime.Now
                     });
                 }
-                else
+
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    await DisplayAlertAsync("Error", "Failed to submit feedback. Please try again later.", "OK");
-                }
+                    FeedbackHistoryCollection.ItemsSource = history;
+                    EmptyHistoryView.IsVisible = history.Count == 0;
+                    FeedbackHistoryCollection.IsVisible = history.Count > 0;
+                });
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Feedback Error: {ex.Message}");
-                await DisplayAlertAsync("Error", "Something went wrong. Please try again.", "OK");
-            }
-            finally
-            {
-                // Re-enable button
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    SubmitButton.IsEnabled = true;
-                    SubmitButton.Text = "✉  Submit Feedback";
-                });
+                System.Diagnostics.Debug.WriteLine($"History Error: {ex.Message}");
             }
         }
     }

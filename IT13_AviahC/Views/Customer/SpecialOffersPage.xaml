@@ -6,82 +6,98 @@
              BackgroundColor="#F8FAFC"
              Shell.NavBarIsVisible="False">
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="0">
-            <components:CustomerHeaderView ActiveTab="Offers" />
+    <Grid RowDefinitions="Auto,*">
+        <components:CustomerHeaderView Grid.Row="0" ActiveTab="Offers" />
 
-            <VerticalStackLayout Padding="40" Spacing="32">
-
-                <!-- Promo Banner -->
-                <Border BackgroundColor="#DC2626" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="20">
-                        <VerticalStackLayout Spacing="8" VerticalOptions="Center">
-                            <HorizontalStackLayout Spacing="12">
-                                <Label Text="🔥" FontSize="20" VerticalOptions="Center"/>
-                                <Label Text="Hot Deals &amp; Special Offers" TextColor="White" FontSize="22" FontAttributes="Bold" VerticalOptions="Center"/>
-                            </HorizontalStackLayout>
-                            <Label Text="Limited-time discounts on our best-selling items. Don't miss out!" TextColor="#FEE2E2" FontSize="14" />
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="30" Spacing="30">
+                
+                <!-- Premium Hero Section -->
+                <Border BackgroundColor="#1E293B" StrokeShape="RoundRectangle 30" Padding="40" StrokeThickness="0">
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                        <VerticalStackLayout Spacing="15" VerticalOptions="Center">
+                            <Border BackgroundColor="#FACC15" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 8" StrokeThickness="0">
+                                <Label Text="SEASONAL SALE" TextColor="#1E293B" FontAttributes="Bold" FontSize="11" CharacterSpacing="1" />
+                            </Border>
+                            <Label Text="Exclusive Offers" TextColor="White" FontSize="42" FontAttributes="Bold" />
+                            <Label Text="Premium fashion pieces at unbeatable prices. Once they're gone, they're gone!" TextColor="#94A3B8" FontSize="16" />
                         </VerticalStackLayout>
-                        <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="20,10" StrokeThickness="0" VerticalOptions="Center">
-                            <Label Text="Shop All Deals" TextColor="#DC2626" FontAttributes="Bold" FontSize="14"/>
-                        </Border>
+                        
+                        <Image Grid.Column="1" Source="dress.png" HeightRequest="200" HorizontalOptions="End">
+                            <Image.Shadow>
+                                <Shadow Brush="Black" Offset="0,10" Radius="20" Opacity="0.3" />
+                            </Image.Shadow>
+                        </Image>
                     </Grid>
                 </Border>
 
-                <!-- Section Header -->
-                <Label Text="Discounted Items" FontSize="22" FontAttributes="Bold" TextColor="#1E293B"/>
+                <!-- Grid Header -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Hot Deals" FontSize="24" FontAttributes="Bold" TextColor="#1E293B" />
+                        <Label Text="Selected items currently on promotion" TextColor="#64748B" FontSize="14" />
+                    </VerticalStackLayout>
+                </Grid>
 
                 <!-- Empty State -->
-                <VerticalStackLayout x:Name="EmptyPromotionsView" Spacing="16" Padding="60" HorizontalOptions="Center" IsVisible="False">
-                    <Border BackgroundColor="#FEF2F2" StrokeShape="RoundRectangle 50" HeightRequest="100" WidthRequest="100" StrokeThickness="0" HorizontalOptions="Center">
-                        <Label Text="🏷️" FontSize="40" HorizontalOptions="Center" VerticalOptions="Center"/>
-                    </Border>
-                    <Label Text="No Active Promotions" FontSize="20" FontAttributes="Bold" TextColor="#1E293B" HorizontalTextAlignment="Center" />
-                    <Label Text="Check back later for exclusive deals and seasonal sales!" FontSize="14" TextColor="#64748B" HorizontalTextAlignment="Center" MaxWidthRequest="350"/>
+                <VerticalStackLayout x:Name="EmptyStateView" IsVisible="False" Spacing="20" Padding="40" HorizontalOptions="Center">
+                    <Label Text="🏷️" FontSize="60" HorizontalOptions="Center" />
+                    <Label Text="No active offers right now" FontSize="18" FontAttributes="Bold" TextColor="#1E293B" HorizontalOptions="Center" />
+                    <Label Text="Check back later for exclusive discounts." TextColor="#64748B" HorizontalOptions="Center" />
                 </VerticalStackLayout>
 
-                <!-- Offers Grid -->
-                <FlexLayout x:Name="OffersCollection" Wrap="Wrap" JustifyContent="Start" AlignContent="Start">
-                    <BindableLayout.ItemTemplate>
+                <!-- Product Grid -->
+                <CollectionView x:Name="OffersCollection" SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="4" HorizontalItemSpacing="20" VerticalItemSpacing="20" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" StrokeThickness="1" Stroke="#E2E8F0" WidthRequest="240" Margin="0,0,20,20">
-                                <VerticalStackLayout>
-                                    <!-- Image with Discount Badge -->
-                                    <Grid>
-                                        <Border BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 16,16,0,0" HeightRequest="200" StrokeThickness="0">
-                                            <Image Source="{Binding ImageUrl}" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill"/>
-                                        </Border>
-                                        <!-- Badges -->
-                                        <HorizontalStackLayout Spacing="6" Margin="12" VerticalOptions="Start" HorizontalOptions="Start">
-                                            <Border BackgroundColor="#DC2626" StrokeShape="RoundRectangle 6" Padding="8,4" StrokeThickness="0">
-                                                <Label Text="{Binding DiscountPercent}" TextColor="White" FontSize="11" FontAttributes="Bold"/>
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 20" StrokeThickness="0" HeightRequest="380">
+                                <Border.Shadow>
+                                    <Shadow Brush="#CBD5E1" Offset="0,4" Radius="10" Opacity="0.2" />
+                                </Border.Shadow>
+                                
+                                <Grid RowDefinitions="*,Auto">
+                                    <!-- Product Image Area -->
+                                    <Border Grid.Row="0" StrokeShape="RoundRectangle 20,20,0,0" StrokeThickness="0" BackgroundColor="#F1F5F9">
+                                        <Grid>
+                                            <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />
+                                            
+                                            <!-- Sale Badge -->
+                                            <Border Margin="15" VerticalOptions="Start" HorizontalOptions="Start" BackgroundColor="#EF4444" Padding="12,6" StrokeShape="RoundRectangle 8" StrokeThickness="0">
+                                                <Label Text="SALE" TextColor="White" FontSize="11" FontAttributes="Bold" />
                                             </Border>
-                                            <Border BackgroundColor="#7C3AED" StrokeShape="RoundRectangle 6" Padding="8,4" StrokeThickness="0">
-                                                <Label Text="{Binding PromotionName}" TextColor="White" FontSize="11" FontAttributes="Bold"/>
-                                            </Border>
-                                        </HorizontalStackLayout>
-                                    </Grid>
+                                        </Grid>
+                                    </Border>
 
-                                    <!-- Info -->
-                                    <VerticalStackLayout Padding="16" Spacing="8">
-                                        <Label Text="{Binding ItemName}" FontSize="15" FontAttributes="Bold" TextColor="#1E293B" MaxLines="1" LineBreakMode="TailTruncation"/>
+                                    <!-- Content Area -->
+                                    <VerticalStackLayout Grid.Row="1" Padding="20" Spacing="10">
+                                        <Label Text="{Binding Category}" FontSize="12" TextColor="#6366F1" FontAttributes="Bold" />
+                                        <Label Text="{Binding ProductName}" FontSize="16" FontAttributes="Bold" TextColor="#1E293B" MaxLines="1" LineBreakMode="TailTruncation" />
                                         
-                                        <HorizontalStackLayout Spacing="10">
-                                            <Label Text="{Binding PromoPrice}" FontSize="16" TextColor="#DC2626" FontAttributes="Bold"/>
-                                            <Label Text="{Binding OriginalPrice}" FontSize="13" TextColor="#94A3B8" TextDecorations="Strikethrough" VerticalOptions="Center"/>
+                                        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                                            <Label Text="{Binding DiscountedPriceText}" FontSize="18" FontAttributes="Bold" TextColor="#EF4444" />
+                                            <Label Text="{Binding FormattedPrice}" FontSize="14" TextColor="#94A3B8" TextDecorations="Strikethrough" VerticalOptions="Center" />
                                         </HorizontalStackLayout>
-                                        
-                                        <Border BackgroundColor="#FEF2F2" StrokeShape="RoundRectangle 8" Padding="10,6" StrokeThickness="0">
-                                            <Label Text="{Binding Savings}" FontSize="12" TextColor="#DC2626" FontAttributes="Bold"/>
-                                        </Border>
+
+                                        <Button Text="Order Now" 
+                                                Clicked="OnOrderClicked"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#1E293B" 
+                                                TextColor="White" 
+                                                HeightRequest="45" 
+                                                CornerRadius="12" 
+                                                FontAttributes="Bold"
+                                                Margin="0,5,0,0" />
                                     </VerticalStackLayout>
-                                </VerticalStackLayout>
+                                </Grid>
                             </Border>
                         </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </FlexLayout>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
             </VerticalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+    </Grid>
 </ContentPage>

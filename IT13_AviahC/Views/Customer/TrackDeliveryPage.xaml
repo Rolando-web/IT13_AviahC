@@ -6,148 +6,173 @@
              BackgroundColor="#F8FAFC"
              Shell.NavBarIsVisible="False">
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="0">
-            <components:CustomerHeaderView ActiveTab="Track" />
+    <Grid RowDefinitions="Auto,*">
+        <!-- Modern Header -->
+        <components:CustomerHeaderView Grid.Row="0" ActiveTab="Track" />
 
-            <VerticalStackLayout Padding="40" Spacing="32">
-                <!-- Promo Banner -->
-                <Border BackgroundColor="#8B5CF6" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="20">
-                        <VerticalStackLayout Spacing="8" VerticalOptions="Center">
-                            <HorizontalStackLayout Spacing="8">
-                                <Label Text="★" TextColor="#FBBF24" FontSize="20" VerticalOptions="Center"/>
-                                <Label Text="Track Your Orders" TextColor="White" FontSize="20" FontAttributes="Bold" VerticalOptions="Center"/>
-                            </HorizontalStackLayout>
-                            <Label Text="Stay updated with your order's journey in real-time." TextColor="#E9D5FF" FontSize="14" />
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="30" Spacing="25">
+                <!-- Status Banner -->
+                <Border BackgroundColor="#6366F1" StrokeShape="RoundRectangle 20" Padding="25" StrokeThickness="0">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Live Tracking" TextColor="#E0E7FF" FontSize="12" FontAttributes="Bold" CharacterSpacing="1" />
+                            <Label x:Name="OrderRefLabel" Text="Loading Order..." TextColor="White" FontSize="24" FontAttributes="Bold" />
+                            <Label x:Name="OrderDateLabel" Text="--" TextColor="#C7D2FE" FontSize="13" />
                         </VerticalStackLayout>
-                        <Button Grid.Column="1" Text="Shop New Arrivals" BackgroundColor="White" TextColor="#624890" CornerRadius="20" Padding="24,10" FontAttributes="Bold" VerticalOptions="Center"/>
+                        <Border Grid.Column="1" BackgroundColor="#4F46E5" StrokeShape="RoundRectangle 12" Padding="15,8" VerticalOptions="Center">
+                            <Label Text="Active" TextColor="White" FontSize="12" FontAttributes="Bold" />
+                        </Border>
                     </Grid>
                 </Border>
 
-                <!-- Empty State View -->
-                <VerticalStackLayout x:Name="EmptyStateView" Spacing="24" Padding="60" IsVisible="False" HorizontalOptions="Center" VerticalOptions="Center">
-                    <Border BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 50" HeightRequest="100" WidthRequest="100" StrokeThickness="0">
-                        <Path Data="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zm-14 9c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm13 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" Fill="#94A3B8" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center" VerticalOptions="Center" />
-                    </Border>
-                    <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                        <Label Text="No Active Orders" FontSize="24" FontAttributes="Bold" TextColor="#1E293B" HorizontalTextAlignment="Center" />
-                        <Label Text="You don't have any orders being delivered right now. Start shopping to see your orders here!" FontSize="14" TextColor="#64748B" HorizontalTextAlignment="Center" MaxWidthRequest="400" />
-                    </VerticalStackLayout>
-                    <Button Text="Start Shopping" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="32,16" FontAttributes="Bold" HorizontalOptions="Center" />
+                <!-- Empty State -->
+                <VerticalStackLayout x:Name="EmptyStateView" IsVisible="False" Spacing="20" Padding="40" HorizontalOptions="Center">
+                    <Label Text="📦" FontSize="60" HorizontalOptions="Center" />
+                    <Label Text="No active deliveries" FontSize="18" FontAttributes="Bold" TextColor="#1E293B" HorizontalOptions="Center" />
+                    <Label Text="Orders will appear here once they are shipped." TextColor="#64748B" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
                 </VerticalStackLayout>
 
-                <!-- Tracking Content -->
-                <VerticalStackLayout x:Name="TrackingContent" Spacing="32" IsVisible="True">
-                    <!-- Order Status Card -->
-                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="40" StrokeThickness="0">
-                        <VerticalStackLayout Spacing="40">
-                            <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
-                                <Label Text="Order Status:" FontSize="20" FontAttributes="Bold" TextColor="#463366" />
-                                <Label x:Name="OrderRefLabel" Text="#ORD-00000" FontSize="20" FontAttributes="Bold" TextColor="#8B5CF6" />
-                            </HorizontalStackLayout>
-    
-                            <!-- Timeline -->
-                            <Grid ColumnDefinitions="*,*,*,*,*" RowDefinitions="Auto,Auto,Auto" HorizontalOptions="Fill">
-                                <!-- Line Background -->
-                                <BoxView Grid.Row="1" Grid.ColumnSpan="5" HeightRequest="2" BackgroundColor="#E2E8F0" VerticalOptions="Center" Margin="40,0" />
+                <!-- Main Tracking Content -->
+                <Grid x:Name="TrackingContent" RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" ColumnSpacing="20" RowSpacing="20">
+                    
+                    <!-- Progress Timeline (Spans both columns) -->
+                    <Border Grid.Row="0" Grid.ColumnSpan="2" BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="25" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="25">
+                            <Label Text="Delivery Progress" FontSize="16" FontAttributes="Bold" TextColor="#1E293B" />
+                            
+                            <Grid ColumnDefinitions="*,*,*,*" HorizontalOptions="Fill">
+                                <BoxView Grid.ColumnSpan="4" HeightRequest="4" BackgroundColor="#F1F5F9" VerticalOptions="Center" Margin="30,0" />
                                 
-                                <!-- Steps -->
-                                <VerticalStackLayout Grid.Column="0" Spacing="12">
-                                    <Border x:Name="Step1Border" BackgroundColor="#10B981" StrokeShape="RoundRectangle 28" HeightRequest="56" WidthRequest="56" HorizontalOptions="Center" StrokeThickness="0">
-                                        <Path Data="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm3-4H7v-2h8v2zm0-4H7V7h8v2z" Fill="White" HeightRequest="24" WidthRequest="24" HorizontalOptions="Center" VerticalOptions="Center" />
-                                    </Border>
-                                    <Label Text="Order Placed" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center" />
-                                    <Label x:Name="OrderDateLabel" Text="--" FontSize="11" TextColor="#64748B" HorizontalOptions="Center" />
+                                <!-- Step 1 -->
+                                <VerticalStackLayout Grid.Column="0" Spacing="8">
+                                    <Ellipse x:Name="Step1Dot" WidthRequest="20" HeightRequest="20" Fill="#6366F1" HorizontalOptions="Center" />
+                                    <Label Text="Order" FontSize="11" TextColor="#64748B" HorizontalOptions="Center" />
                                 </VerticalStackLayout>
-    
-                                <VerticalStackLayout Grid.Column="1" Spacing="12">
-                                    <Border x:Name="Step2Border" BackgroundColor="#10B981" StrokeShape="RoundRectangle 28" HeightRequest="56" WidthRequest="56" HorizontalOptions="Center" StrokeThickness="0">
-                                        <Path Data="M21 18v1c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h9zm-9-10v8h10V8H12zm4 5.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" Fill="White" HeightRequest="24" WidthRequest="24" HorizontalOptions="Center" VerticalOptions="Center" />
-                                    </Border>
-                                    <Label Text="Paid" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center" />
+                                <!-- Step 2 -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="8">
+                                    <Ellipse x:Name="Step2Dot" WidthRequest="20" HeightRequest="20" Fill="#E2E8F0" HorizontalOptions="Center" />
+                                    <Label Text="Paid" FontSize="11" TextColor="#64748B" HorizontalOptions="Center" />
                                 </VerticalStackLayout>
-    
-                                <VerticalStackLayout Grid.Column="2" Spacing="12">
-                                    <Border x:Name="Step3Border" BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 28" HeightRequest="56" WidthRequest="56" HorizontalOptions="Center" StrokeThickness="0">
-                                        <Path Data="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zm-14 9c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm13 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" Fill="#94A3B8" HeightRequest="24" WidthRequest="24" HorizontalOptions="Center" VerticalOptions="Center" />
-                                    </Border>
-                                    <Label Text="Shipped" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center" />
+                                <!-- Step 3 -->
+                                <VerticalStackLayout Grid.Column="2" Spacing="8">
+                                    <Ellipse x:Name="Step3Dot" WidthRequest="20" HeightRequest="20" Fill="#E2E8F0" HorizontalOptions="Center" />
+                                    <Label Text="Shipping" FontSize="11" TextColor="#64748B" HorizontalOptions="Center" />
                                 </VerticalStackLayout>
-    
-                                <VerticalStackLayout Grid.Column="3" Spacing="12">
-                                    <Border x:Name="Step4Border" BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 28" HeightRequest="56" WidthRequest="56" HorizontalOptions="Center" StrokeThickness="0">
-                                        <Path Data="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.65-.5-.65C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.41 12.25 12 8.66l3.59 3.59L17 10.83 14.92 8H20v6z" Fill="#94A3B8" HeightRequest="24" WidthRequest="24" HorizontalOptions="Center" VerticalOptions="Center" />
-                                    </Border>
-                                    <Label Text="Delivering" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center" />
-                                </VerticalStackLayout>
-    
-                                <VerticalStackLayout Grid.Column="4" Spacing="12">
-                                    <Border x:Name="Step5Border" BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 28" HeightRequest="56" WidthRequest="56" HorizontalOptions="Center" StrokeThickness="0">
-                                        <Path Data="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" Fill="#94A3B8" HeightRequest="24" WidthRequest="24" HorizontalOptions="Center" VerticalOptions="Center" />
-                                    </Border>
-                                    <Label Text="Arrived" FontSize="12" TextColor="#94A3B8" HorizontalOptions="Center" />
+                                <!-- Step 4 -->
+                                <VerticalStackLayout Grid.Column="3" Spacing="8">
+                                    <Ellipse x:Name="Step4Dot" WidthRequest="20" HeightRequest="20" Fill="#E2E8F0" HorizontalOptions="Center" />
+                                    <Label Text="Arrived" FontSize="11" TextColor="#64748B" HorizontalOptions="Center" />
                                 </VerticalStackLayout>
                             </Grid>
-    
-                            <!-- Status Message -->
-                            <Border BackgroundColor="#F0FDF4" StrokeShape="RoundRectangle 16" Padding="20" StrokeThickness="0">
-                                <HorizontalStackLayout Spacing="16">
-                                    <Path Data="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zm-14 9c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm13 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" Fill="#10B981" HeightRequest="24" WidthRequest="24" VerticalOptions="Center" />
-                                    <VerticalStackLayout Spacing="4">
-                                        <Label x:Name="CurrentStatusLabel" Text="Order is being processed" FontSize="16" FontAttributes="Bold" TextColor="#15803D" />
-                                        <Label x:Name="StatusDetailLabel" Text="Your order has been received and is waiting for validation." FontSize="14" TextColor="#15803D" />
-                                    </VerticalStackLayout>
-                                </HorizontalStackLayout>
+
+                            <Border BackgroundColor="#F8FAFC" Padding="15" StrokeShape="RoundRectangle 12" StrokeThickness="0">
+                                <Label x:Name="CurrentStatusLabel" Text="Waiting for status..." FontSize="14" TextColor="#475569" HorizontalTextAlignment="Center" />
                             </Border>
+
+                            <!-- Feedback Trigger Button (Visible only when Completed) -->
+                            <Button x:Name="FeedbackPromptButton" Text="⭐ Rate our Service" IsVisible="False" BackgroundColor="#6366F1" TextColor="White" CornerRadius="12" HeightRequest="45" FontAttributes="Bold" Clicked="OnShowFeedbackModalClicked" />
                         </VerticalStackLayout>
                     </Border>
-    
-                    <Grid ColumnDefinitions="*,2*" ColumnSpacing="32">
-                        <!-- Delivery Address -->
-                        <Border Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0" VerticalOptions="Start">
-                            <VerticalStackLayout Spacing="24">
-                                <Label Text="Delivery Details" FontSize="18" FontAttributes="Bold" TextColor="#463366" />
-                                <VerticalStackLayout Spacing="8">
-                                    <Label x:Name="CustomerNameLabel" Text="--" FontSize="16" FontAttributes="Bold" TextColor="#1E293B" />
-                                    <Label x:Name="OrderItemsLabel" Text="--" FontSize="14" TextColor="#64748B" />
-                                    <Label x:Name="OrderAmountLabel" Text="--" FontSize="14" TextColor="#64748B" />
-                                    <Label x:Name="DriverLabel" Text="Driver: Pending" FontSize="14" TextColor="#624890" FontAttributes="Italic" Margin="0,10,0,0"/>
-                                    <Label x:Name="ETALabel" Text="ETA: Pending" FontSize="14" TextColor="#10B981" FontAttributes="Bold" />
-                                </VerticalStackLayout>
+
+                    <!-- Details Card -->
+                    <Border Grid.Row="1" Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="20" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="15">
+                            <Label Text="Delivery Info" FontSize="15" FontAttributes="Bold" TextColor="#1E293B" />
+                            <VerticalStackLayout Spacing="10">
+                                <Label x:Name="CustomerNameLabel" Text="--" FontSize="14" TextColor="#334155" />
+                                <Label x:Name="DriverLabel" Text="Driver: --" FontSize="13" TextColor="#64748B" />
+                                <Label x:Name="ETALabel" Text="ETA: --" FontSize="13" FontAttributes="Bold" TextColor="#4F46E5" />
                             </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Location Card -->
+                    <Border Grid.Row="1" Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="20" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="15">
+                            <Label Text="Parcel Journey" FontSize="15" FontAttributes="Bold" TextColor="#1E293B" />
+                            <CollectionView x:Name="JourneyCollection">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="30,*" Padding="0,0,0,15">
+                                            <!-- Timeline Line and Dot -->
+                                            <BoxView Grid.RowSpan="2" WidthRequest="1" BackgroundColor="#E2E8F0" HorizontalOptions="Center" VerticalOptions="Fill" Margin="0,5,0,0" />
+                                            
+                                            <Ellipse x:Name="TimelineDot" WidthRequest="10" HeightRequest="10" Fill="#CBD5E1" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,5,0,0">
+                                                <Ellipse.Triggers>
+                                                    <DataTrigger TargetType="Ellipse" Binding="{Binding IsLatest}" Value="True">
+                                                        <Setter Property="Fill" Value="#22C55E" />
+                                                        <Setter Property="WidthRequest" Value="12" />
+                                                        <Setter Property="HeightRequest" Value="12" />
+                                                    </DataTrigger>
+                                                </Ellipse.Triggers>
+                                            </Ellipse>
+                                            
+                                            <Border Grid.Column="1" Padding="12" StrokeThickness="0" BackgroundColor="Transparent">
+                                                <Border.Triggers>
+                                                    <DataTrigger TargetType="Border" Binding="{Binding IsLatest}" Value="True">
+                                                        <Setter Property="BackgroundColor" Value="#F0FDF4" />
+                                                        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+                                                    </DataTrigger>
+                                                </Border.Triggers>
+                                                <VerticalStackLayout Spacing="2">
+                                                    <HorizontalStackLayout Spacing="8">
+                                                        <Label Text="{Binding FormattedTime}" FontSize="11" TextColor="#94A3B8" VerticalOptions="Center" />
+                                                        <Label Text="{Binding Status}" FontSize="12" FontAttributes="Bold" TextColor="#1E293B" VerticalOptions="Center">
+                                                            <Label.Triggers>
+                                                                <DataTrigger TargetType="Label" Binding="{Binding IsLatest}" Value="True">
+                                                                    <Setter Property="TextColor" Value="#166534" />
+                                                                </DataTrigger>
+                                                            </Label.Triggers>
+                                                        </Label>
+                                                    </HorizontalStackLayout>
+                                                    <Label Text="{Binding Location}" FontSize="11" TextColor="#64748B" Margin="0,2,0,0">
+                                                        <Label.Triggers>
+                                                            <DataTrigger TargetType="Label" Binding="{Binding IsLatest}" Value="True">
+                                                                    <Setter Property="TextColor" Value="#15803D" />
+                                                            </DataTrigger>
+                                                        </Label.Triggers>
+                                                    </Label>
+                                                </VerticalStackLayout>
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Border>
+
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Feedback Modal Overlay -->
+        <Grid x:Name="FeedbackModalOverlay" Grid.RowSpan="2" BackgroundColor="#80000000" IsVisible="False">
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="30" WidthRequest="450" HorizontalOptions="Center" VerticalOptions="Center" StrokeThickness="0">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="How was your delivery?" FontSize="22" FontAttributes="Bold" TextColor="#1E293B" HorizontalTextAlignment="Center" />
+                    <Label Text="We're glad your parcel arrived! Please share your thoughts with us." FontSize="14" TextColor="#64748B" HorizontalTextAlignment="Center" />
+                    
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Subject" FontSize="12" FontAttributes="Bold" TextColor="#64748B" />
+                        <Border BackgroundColor="#F8FAFC" Padding="15" StrokeShape="RoundRectangle 12" StrokeThickness="0">
+                            <Entry x:Name="FeedbackSubjectEntry" Placeholder="e.g. Excellent Service" TextColor="#1E293B" />
                         </Border>
-    
-                        <!-- Parcel Journey -->
-                        <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
-                            <VerticalStackLayout Spacing="24">
-                                <Label Text="Parcel Journey" FontSize="18" FontAttributes="Bold" TextColor="#463366" />
-                                
-                                <VerticalStackLayout Spacing="16">
-                                    <!-- Journey Items -->
-                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
-                                        <Ellipse WidthRequest="12" HeightRequest="12" Fill="#10B981" VerticalOptions="Start" Margin="0,10,0,0"/>
-                                        <Border BackgroundColor="#F0FDF4" StrokeShape="RoundRectangle 12" Padding="16" StrokeThickness="0">
-                                            <VerticalStackLayout Spacing="4">
-                                                <Label Text="System Status Update" FontSize="14" FontAttributes="Bold" TextColor="#15803D" />
-                                                <Label Text="Order confirmed and queued for processing." FontSize="13" TextColor="#15803D" />
-                                            </VerticalStackLayout>
-                                        </Border>
-                                    </Grid>
-    
-                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
-                                        <Ellipse WidthRequest="12" HeightRequest="12" Fill="#CBD5E1" VerticalOptions="Center"/>
-                                        <HorizontalStackLayout Grid.Column="1" Spacing="12">
-                                            <Label Text="Latest" FontSize="13" TextColor="#64748B" WidthRequest="120" />
-                                            <Label x:Name="CurrentLocationLabel" Text="Preparing items for shipment..." FontSize="13" TextColor="#1E293B" />
-                                        </HorizontalStackLayout>
-                                    </Grid>
-                                </VerticalStackLayout>
-                            </VerticalStackLayout>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Message" FontSize="12" FontAttributes="Bold" TextColor="#64748B" />
+                        <Border BackgroundColor="#F8FAFC" Padding="15" StrokeShape="RoundRectangle 12" StrokeThickness="0">
+                            <Editor x:Name="FeedbackMessageEditor" Placeholder="Your comments..." HeightRequest="100" TextColor="#1E293B" />
                         </Border>
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                        <Button Text="Later" Clicked="OnCloseFeedbackModalClicked" BackgroundColor="#F1F5F9" TextColor="#64748B" HeightRequest="50" CornerRadius="12" />
+                        <Button Grid.Column="1" Text="Submit" Clicked="OnSubmitModalFeedbackClicked" BackgroundColor="#6366F1" TextColor="White" HeightRequest="50" CornerRadius="12" FontAttributes="Bold" />
                     </Grid>
                 </VerticalStackLayout>
-            </VerticalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+            </Border>
+        </Grid>
+    </Grid>
 </ContentPage>

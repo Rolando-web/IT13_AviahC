@@ -6,71 +6,54 @@
              BackgroundColor="#F8FAFC"
              Shell.NavBarIsVisible="False">
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="0">
-            <!-- Header -->
-            <components:CustomerHeaderView ActiveTab="Feedback" />
+    <Grid RowDefinitions="Auto,*">
+        <components:CustomerHeaderView Grid.Row="0" ActiveTab="Feedback" />
 
+        <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="40" Spacing="32">
-                <!-- Promo Banner -->
-                <Border BackgroundColor="#8B5CF6" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="20">
-                        <VerticalStackLayout Spacing="8" VerticalOptions="Center">
-                            <HorizontalStackLayout Spacing="12">
-                                <Label Text="💬" FontSize="20" VerticalOptions="Center"/>
-                                <Label Text="We Value Your Feedback" TextColor="White" FontSize="22" FontAttributes="Bold" VerticalOptions="Center"/>
-                            </HorizontalStackLayout>
-                            <Label Text="Your thoughts help us improve and serve you better." TextColor="#E9D5FF" FontSize="14" />
-                        </VerticalStackLayout>
-                    </Grid>
-                </Border>
+                <!-- Feedback History List -->
+                <VerticalStackLayout Spacing="24">
+                    <Label Text="My Feedback History" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                    
+                    <CollectionView x:Name="FeedbackHistoryCollection">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="24" Margin="0,0,0,16" StrokeThickness="0">
+                                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="12">
+                                        <VerticalStackLayout Spacing="4">
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label Text="📅" FontSize="14" VerticalOptions="Center" />
+                                                <Label Text="{Binding DateSubmitted, StringFormat='{0:MMM dd, yyyy}'}" FontSize="18" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                                                <Label Text="•" FontSize="18" TextColor="#94A3B8" VerticalOptions="Center" Margin="4,0" />
+                                                <Label Text="{Binding OrderRef}" FontSize="14" FontAttributes="Bold" TextColor="#624890" VerticalOptions="Center" />
+                                            </HorizontalStackLayout>
+                                            <Label Text="Verified Customer Review" FontSize="13" TextColor="#64748B" />
+                                        </VerticalStackLayout>
 
-                <!-- Feedback Form Card -->
-                <Border BackgroundColor="White" 
-                        StrokeShape="RoundRectangle 24" 
-                        Padding="48" 
-                        StrokeThickness="1" 
-                        Stroke="#E2E8F0" 
-                        HorizontalOptions="Center" 
-                        MaximumWidthRequest="600">
-                    <VerticalStackLayout Spacing="32">
-                        <VerticalStackLayout Spacing="8">
-                            <Label Text="Share Your Experience" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
-                            <Label Text="As a valued member, your feedback goes directly to our design team!" FontSize="14" TextColor="#64748B" />
-                        </VerticalStackLayout>
+                                        <Border Grid.Column="1" BackgroundColor="#F0FDF4" StrokeShape="RoundRectangle 8" Padding="12,4" StrokeThickness="0" VerticalOptions="Center">
+                                            <Label Text="SUBMITTED" TextColor="#166534" FontSize="11" FontAttributes="Bold" />
+                                        </Border>
 
-                        <VerticalStackLayout Spacing="24">
-                            <!-- Subject -->
-                            <VerticalStackLayout Spacing="8">
-                                <Label Text="Subject" FontSize="14" FontAttributes="Bold" TextColor="#1E293B" />
-                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="16,4" StrokeThickness="1" Stroke="#E2E8F0">
-                                    <Entry x:Name="SubjectEntry" Placeholder="e.g. Product Quality, Delivery Speed..." TextColor="#1E293B" FontSize="15" HeightRequest="48" BackgroundColor="Transparent" />
+                                        <BoxView Grid.Row="1" Grid.ColumnSpan="2" HeightRequest="1" BackgroundColor="#F1F5F9" Margin="0,4" />
+
+                                        <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Comments}" FontSize="15" TextColor="#475569" LineBreakMode="WordWrap" Margin="0,12,0,0" />
+                                    </Grid>
                                 </Border>
-                            </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-                            <!-- Message -->
-                            <VerticalStackLayout Spacing="8">
-                                <Label Text="Message" FontSize="14" FontAttributes="Bold" TextColor="#1E293B" />
-                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="16" StrokeThickness="1" Stroke="#E2E8F0">
-                                    <Editor x:Name="MessageEditor" Placeholder="Tell us what you think..." TextColor="#1E293B" FontSize="15" HeightRequest="150" BackgroundColor="Transparent" AutoSize="TextChanges" />
-                                </Border>
-                            </VerticalStackLayout>
-
-                            <!-- Submit Button (replaced TapGestureRecognizer with real Button to fix freezing) -->
-                            <Button x:Name="SubmitButton"
-                                    Text="✉  Submit Feedback" 
-                                    BackgroundColor="#624890" 
-                                    TextColor="White" 
-                                    FontAttributes="Bold" 
-                                    FontSize="16" 
-                                    HeightRequest="56" 
-                                    CornerRadius="12" 
-                                    HorizontalOptions="Fill"
-                                    Clicked="OnSubmitFeedbackClicked"/>
-                        </VerticalStackLayout>
+                    <!-- Empty State -->
+                    <VerticalStackLayout x:Name="EmptyHistoryView" IsVisible="False" Spacing="20" Padding="60" HorizontalOptions="Center">
+                        <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 50" HeightRequest="100" WidthRequest="100" StrokeThickness="0" HorizontalOptions="Center">
+                            <Label Text="📝" FontSize="40" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="No Feedback Found" FontSize="20" FontAttributes="Bold" TextColor="#463366" HorizontalTextAlignment="Center" />
+                        <Label Text="You haven't submitted any feedback yet. Complete an order to share your experience!" 
+                               FontSize="14" TextColor="#64748B" HorizontalTextAlignment="Center" MaxLines="2" />
                     </VerticalStackLayout>
-                </Border>
+                </VerticalStackLayout>
             </VerticalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+    </Grid>
 </ContentPage>

@@ -13,27 +13,24 @@ namespace IT13_AviahC.Models
         public string? StatusColor { get; set; }
         public string? StatusTextColor { get; set; }
         public string? ImageUrl { get; set; }
+        public bool IsOnPromotion { get; set; }
+        public decimal? DiscountPrice { get; set; }
         public int? PromoId { get; set; }
         public string? PromoCode { get; set; }
         public string? DiscountValue { get; set; }
         public string? PromotionName { get; set; }
 
         public string FormattedPrice => UnitPrice.ToString("₱#,##0.00");
-        public string DiscountedPriceText => string.IsNullOrEmpty(DiscountValue) ? FormattedPrice : $"Discounted: {CalculateDiscountedPrice():₱#,##0.00}";
-
-        private decimal CalculateDiscountedPrice()
-        {
-            if (string.IsNullOrEmpty(DiscountValue)) return UnitPrice;
+        public string FormattedDiscountPrice => IsOnPromotion && DiscountPrice.HasValue 
+            ? DiscountPrice.Value.ToString("₱#,##0.00") 
+            : "--";
             
-            string val = DiscountValue.Replace("%", "").Replace("OFF", "").Trim();
-            if (decimal.TryParse(val, out decimal discount))
-            {
-                if (DiscountValue.Contains("%"))
-                    return UnitPrice * (1 - (discount / 100));
-                else
-                    return Math.Max(0, UnitPrice - discount);
-            }
-            return UnitPrice;
-        }
+        public string PromoStatusText => IsOnPromotion ? "On Sale" : "Regular";
+        public string PromoStatusColor => IsOnPromotion ? "#FEE2E2" : "#F1F5F9";
+        public string PromoStatusTextColor => IsOnPromotion ? "#EF4444" : "#64748B";
+
+        public string DiscountedPriceText => IsOnPromotion && DiscountPrice.HasValue 
+            ? $"Sale: {DiscountPrice.Value:₱#,##0.00}" 
+            : FormattedPrice;
     }
 }

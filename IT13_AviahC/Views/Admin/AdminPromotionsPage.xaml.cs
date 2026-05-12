@@ -1,119 +1,130 @@
 using System.Data;
+using System.Collections.ObjectModel;
 using IT13_AviahC.Services;
+using IT13_AviahC.Models;
 
-namespace IT13_AviahC.Views.Admin
+namespace IT13_AviahC.Views.Admin;
+
+public partial class AdminPromotionsPage : ContentPage
 {
-    public partial class AdminPromotionsPage : ContentPage
+    private readonly DatabaseService _db;
+    private Product? _selectedProduct;
+    public ObservableCollection<Product> Products { get; } = new();
+
+    public AdminPromotionsPage()
     {
-        private readonly DatabaseService _dbService;
+        InitializeComponent();
+        _db = new DatabaseService();
+        ProductsCollection.ItemsSource = Products;
+    }
 
-        public AdminPromotionsPage()
-        {
-            InitializeComponent();
-            _dbService = new DatabaseService();
-        }
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _ = LoadProductsAsync();
+    }
 
-        protected override void OnAppearing()
+    private async Task LoadProductsAsync()
+    {
+        try
         {
-            base.OnAppearing();
-            LoadPromotions();
-        }
+            DataTable dt = await _db.GetAllInventoryAsync();
+            var list = new List<Product>();
+            int promoCount = 0;
 
-        private async void LoadPromotions()
-        {
-            try
+            foreach (DataRow row in dt.Rows)
             {
-                DataTable dt = _dbService.GetAllPromotions();
-                var promotions = new List<object>();
-
-                foreach (DataRow row in dt.Rows)
+                var product = new Product
                 {
-                    int usage = Convert.ToInt32(row["UsageCount"] ?? 0);
-                    int max = Convert.ToInt32(row["MaxUsage"] ?? 0);
-                    double progress = max > 0 ? (double)usage / max : 0;
+                    Id = Convert.ToInt32(row["ProductID"]),
+                    ProductName = row["ProductName"]?.ToString(),
+                    Category = row["Category"]?.ToString(),
+                    UnitPrice = Convert.ToDecimal(row["Price"]),
+                    DiscountPrice = row["DiscountPrice"] != DBNull.Value ? Convert.ToDecimal(row["DiscountPrice"]) : (decimal?)null,
+                    IsOnPromotion = row["IsOnPromotion"] != DBNull.Value && Convert.ToBoolean(row["IsOnPromotion"]),
+                    ImageUrl = row["ImageUrl"]?.ToString() ?? "dress.png"
+                };
 
-                    promotions.Add(new
-                    {
-                        PromoCode = row["PromoCode"]?.ToString() ?? string.Empty,
-                        PromotionName = row["PromotionName"]?.ToString() ?? string.Empty,
-                        DiscountValue = row["DiscountValue"]?.ToString() ?? string.Empty,
-                        TargetAudience = row["TargetAudience"]?.ToString() ?? string.Empty,
-                        Duration = $"{Convert.ToDateTime(row["StartDate"] ?? DateTime.Now):yyyy-MM-dd} → {Convert.ToDateTime(row["EndDate"] ?? DateTime.Now):yyyy-MM-dd}",
-                        UsageText = $"{usage} / {max}",
-                        UsageProgress = progress,
-                        Status = row["Status"]?.ToString() ?? string.Empty
-                    });
-                }
-
-                ActivePromosCollection.ItemsSource = promotions;
+                list.Add(product);
+                if (product.IsOnPromotion) promoCount++;
             }
-            catch (Exception ex)
+
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                await DisplayAlertAsync("Error", "Failed to load promotions: " + ex.Message, "OK");
-            }
+                Products.Clear();
+                foreach (var p in list) Products.Add(p);
+                PromoCountLabel.Text = $"{promoCount} Active Promos";
+            });
         }
-
-        private void OnCreatePromotionClicked(object sender, EventArgs e)
+        catch (Exception ex)
         {
-            // Reset form
-            PromoCodeEntry.Text = string.Empty;
-            PromoNameEntry.Text = string.Empty;
-            PromoDiscountEntry.Text = string.Empty;
-            PromoTargetEntry.Text = string.Empty;
-            PromoStartDate.Date = DateTime.Now;
-            PromoEndDate.Date = DateTime.Now.AddMonths(1);
-            PromoStatusPicker.SelectedIndex = 0;
+            System.Diagnostics.Debug.WriteLine($"Promo Load Error: {ex.Message}");
+        }
+    }
 
+    private void OnApplyPromoClicked(object sender, EventArgs e)
+    {
+        if (sender is Button btn && btn.CommandParameter is Product product)
+        {
+            _selectedProduct = product;
+            ModalTitleLabel.Text = $"Promotion: {product.ProductName}";
+            RegularPriceLabel.Text = product.FormattedPrice;
+            DiscountPriceEntry.Text = product.DiscountPrice?.ToString() ?? "";
+            
             PromoModal.IsVisible = true;
         }
+    }
 
-        private void OnCloseModalClicked(object sender, EventArgs e)
+    private async void OnRemovePromoClicked(object sender, EventArgs e)
+    {
+        if (sender is Button btn && btn.CommandParameter is Product product)
         {
-            PromoModal.IsVisible = false;
-        }
-
-        private async void OnSavePromotionClicked(object sender, EventArgs e)
-        {
-            string code = PromoCodeEntry.Text;
-            string name = PromoNameEntry.Text;
-            string discount = PromoDiscountEntry.Text;
-            string target = PromoTargetEntry.Text;
-            DateTime start = PromoStartDate.Date ?? DateTime.Now;
-            DateTime end = PromoEndDate.Date ?? DateTime.Now.AddMonths(1);
-            string status = PromoStatusPicker.SelectedItem?.ToString() ?? "Active";
-
-            if (string.IsNullOrWhiteSpace(code) || string.IsNullOrWhiteSpace(name))
+            bool confirm = await DisplayAlert("Remove Promotion", $"Restore {product.ProductName} to original price of {product.UnitPrice:₱#,##0.00}?", "Yes", "No");
+            if (confirm)
             {
-                await DisplayAlertAsync("Validation Error", "Promo Code and Name are required.", "OK");
+                int res = await _db.SetProductPromotionAsync(product.Id, false, null);
+                if (res > 0)
+                {
+                    await DisplayAlert("Success", "Product restored to Boutique.", "OK");
+                    await LoadProductsAsync();
+                }
+            }
+        }
+    }
+
+    private void OnCloseModalClicked(object sender, EventArgs e)
+    {
+        PromoModal.IsVisible = false;
+        _selectedProduct = null;
+    }
+
+    private async void OnSavePromoClicked(object sender, EventArgs e)
+    {
+        if (_selectedProduct == null) return;
+
+        if (decimal.TryParse(DiscountPriceEntry.Text, out decimal discountPrice))
+        {
+            if (discountPrice >= _selectedProduct.UnitPrice)
+            {
+                await DisplayAlert("Invalid Price", "Discounted price must be lower than the regular price.", "OK");
                 return;
             }
 
-            string query = @"
-                INSERT INTO Promotions (PromoCode, PromotionName, DiscountValue, TargetAudience, Status, UsageCount, MaxUsage, StartDate, EndDate)
-                VALUES (@Code, @Name, @Discount, @Target, @Status, 0, 1000, @Start, @End)";
-            
-            var parameters = new Dictionary<string, object>
+            int result = await _db.SetProductPromotionAsync(_selectedProduct.Id, true, discountPrice);
+            if (result > 0)
             {
-                { "@Code", code },
-                { "@Name", name },
-                { "@Discount", discount },
-                { "@Target", target },
-                { "@Status", status },
-                { "@Start", start },
-                { "@End", end }
-            };
-
-            int rows = await _dbService.ExecuteNonQueryAsync(query, parameters);
-            if (rows > 0)
-            {
-                await DisplayAlertAsync("Success", "Promotion created successfully.", "OK");
+                await DisplayAlert("Success", "Promotion applied successfully!", "OK");
                 PromoModal.IsVisible = false;
-                LoadPromotions(); // Refresh table
+                await LoadProductsAsync();
             }
             else
             {
-                await DisplayAlertAsync("Error", "Failed to create promotion.", "OK");
+                await DisplayAlert("Error", "Could not apply promotion.", "OK");
             }
+        }
+        else
+        {
+            await DisplayAlert("Error", "Please enter a valid numeric discount price.", "OK");
         }
     }
 }

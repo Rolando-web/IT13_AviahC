@@ -87,7 +87,7 @@ namespace IT13_AviahC.Services
         public async Task<DataTable> GetActiveOrdersAsync(string userEmail)
         {
             string query = @"
-                SELECT o.*, d.ETA, d.DriverName, d.CurrentLocation, d.Destination 
+                SELECT o.*, d.DeliveryID, d.ETA, d.DriverName, d.CurrentLocation, d.Destination 
                 FROM Orders o 
                 LEFT JOIN Deliveries d ON o.OrderRef = d.OrderRef 
                 WHERE o.UserId = (SELECT Id FROM Users WHERE Email = @Email)
@@ -99,12 +99,24 @@ namespace IT13_AviahC.Services
         public async Task<DataTable> GetCustomerOrdersAsync(string userEmail)
         {
             string query = @"
-                SELECT * FROM Orders 
-                WHERE UserId = (SELECT Id FROM Users WHERE Email = @Email)
-                ORDER BY OrderDate DESC";
+                SELECT o.*, 
+                       CASE WHEN EXISTS (SELECT 1 FROM Feedback f WHERE f.OrderRef = o.OrderRef) THEN 1 ELSE 0 END AS HasFeedback
+                FROM Orders o 
+                WHERE o.UserId = (SELECT Id FROM Users WHERE Email = @Email)
+                ORDER BY o.OrderDate DESC";
             
             var parameters = new Dictionary<string, object> { { "@Email", userEmail } };
             return await ExecuteQueryAsync(query, parameters);
+        }
+
+        public async Task<DataTable> GetSpecificOrderTrackingAsync(string orderRef)
+        {
+            string query = @"
+                SELECT o.*, d.DeliveryID, d.ETA, d.DriverName, d.CurrentLocation, d.Destination 
+                FROM Orders o 
+                LEFT JOIN Deliveries d ON o.OrderRef = d.OrderRef 
+                WHERE o.OrderRef = @OrderRef";
+            return await ExecuteQueryAsync(query, new Dictionary<string, object> { { "@OrderRef", orderRef } });
         }
     }
 }

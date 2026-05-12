@@ -39,22 +39,63 @@ namespace IT13_AviahC.Services
                        p.Category,
                        p.StockQuantity,
                        p.Price,
+                       p.DiscountPrice,
+                       p.IsOnPromotion,
                        p.ImageUrl,
                        p.Description,
                        'PROD-' + CAST(p.ProductID AS VARCHAR) AS SKU,
                        CASE 
                            WHEN p.StockQuantity <= 0 THEN 'Out of Stock'
-                           WHEN p.StockQuantity <= 10 THEN 'Low Stock'
-                           ELSE 'In Stock'
+                           ELSE 'Available Stock: ' + CAST(p.StockQuantity AS VARCHAR)
                        END AS Status
                 FROM Products p 
                 ORDER BY p.ProductName";
             return await ExecuteQueryAsync(query);
         }
 
+        public async Task<DataTable> GetBoutiqueProductsAsync()
+        {
+            string query = @"
+                SELECT *, 
+                       CASE 
+                           WHEN StockQuantity <= 0 THEN 'Out of Stock'
+                           ELSE 'Available Stock: ' + CAST(StockQuantity AS VARCHAR)
+                       END AS Status
+                FROM Products 
+                WHERE IsOnPromotion = 0 OR IsOnPromotion IS NULL 
+                ORDER BY ProductName";
+            return await ExecuteQueryAsync(query);
+        }
+
+        public async Task<DataTable> GetPromotedProductsAsync()
+        {
+            string query = @"
+                SELECT *, 
+                       CASE 
+                           WHEN StockQuantity <= 0 THEN 'Out of Stock'
+                           ELSE 'Available Stock: ' + CAST(StockQuantity AS VARCHAR)
+                       END AS Status
+                FROM Products 
+                WHERE IsOnPromotion = 1 
+                ORDER BY ProductName";
+            return await ExecuteQueryAsync(query);
+        }
+
+        public async Task<int> SetProductPromotionAsync(int productId, bool isOnPromotion, decimal? discountPrice)
+        {
+            string query = "UPDATE Products SET IsOnPromotion = @Promo, DiscountPrice = @Price WHERE ProductID = @Id";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@Id", productId },
+                { "@Promo", isOnPromotion ? 1 : 0 },
+                { "@Price", discountPrice ?? (object)DBNull.Value }
+            };
+            return await ExecuteNonQueryAsync(query, parameters);
+        }
+
         public int AddInventory(string productName, string sku, string category, int stock, string unit, decimal price, string status, string imageUrl, int? promoId = null)
         {
-            string query = "INSERT INTO Products (ProductName, Category, StockQuantity, Price, ImageUrl, Description) VALUES (@ProductName, @Category, @Stock, @Price, @ImageUrl, @Description)";
+            string query = "INSERT INTO Products (ProductName, Category, StockQuantity, Price, ImageUrl, Description, IsOnPromotion) VALUES (@ProductName, @Category, @Stock, @Price, @ImageUrl, @Description, 0)";
             var parameters = new Dictionary<string, object>
             {
                 { "@ProductName", productName },

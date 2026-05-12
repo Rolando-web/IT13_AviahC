@@ -1,26 +1,26 @@
 using System.Data;
 using IT13_AviahC.Services;
+using IT13_AviahC.Models;
 
 namespace IT13_AviahC.Views.Admin
 {
-    public class DeliveryItem
-    {
-        public string DeliveryID       { get; set; } = string.Empty;
-        public string Status           { get; set; } = string.Empty;
-        public string StatusColorDark  { get; set; } = "#624890";
-        public string StatusColorLight { get; set; } = "#F3F0FA";
-        public string DetailsText      { get; set; } = string.Empty;
-        public string ETA              { get; set; } = "TBD";
-        public string DriverName       { get; set; } = "Unassigned";
-        public string CurrentLocation  { get; set; } = "Unknown";
-        public string Destination      { get; set; } = "Not set";
-    }
-
     public partial class AdminLogisticsPage : ContentPage
     {
         private readonly DatabaseService _dbService;
-        private string _selectedDeliveryId  = string.Empty;
-        private string _selectedOrderRef    = string.Empty;
+        private string _selectedDeliveryId = string.Empty;
+        private readonly List<string> _statusSequence = new()
+        {
+            "Order placed",
+            "Preparing to ship",
+            "Your parcel has been picked up by our logistics partner",
+            "Parcel has been received at dropoff point",
+            "Parcel has arrived at sorting facility",
+            "Parcel is loaded into truck, to leave sorting center soon",
+            "Parcel has departed from sorting facility",
+            "The order is in transit and is on its way to the next location",
+            "Out for delivery",
+            "Package delivered successfully"
+        };
 
         public AdminLogisticsPage()
         {
@@ -31,60 +31,39 @@ namespace IT13_AviahC.Views.Admin
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            LoadDeliveries();
+            _ = LoadDeliveries();
         }
 
-        // ─── LOAD ─────────────────────────────────────────────────────────────
-        private async void LoadDeliveries()
+        private async Task LoadDeliveries()
         {
             try
             {
-                // Use new async method from DatabaseService.Deliveries.cs
                 DataTable dt = await _dbService.GetAllDeliveriesAsync();
-
-                var deliveries      = new List<DeliveryItem>();
-                var pendingOptions  = new List<string>();
+                var deliveries = new List<DeliveryItem>();
+                var pendingOptions = new List<string>();
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    string status     = row["Status"]?.ToString()      ?? "Pending";
-                    string deliveryId = row["DeliveryID"]?.ToString()  ?? "N/A";
-                    string orderRef   = row["OrderRef"]?.ToString()     ?? "N/A";
-                    string customer   = row["CustomerName"]?.ToString() ?? "Unknown";
-
-                    string dark  = "#624890";
-                    string light = "#F3F0FA";
-
-                    switch (status)
+                    var item = new DeliveryItem
                     {
-                        case "Delivered":
-                            dark  = "#15803D"; light = "#DCFCE7"; break;
-                        case "In Transit":
-                        case "Out for Delivery":
-                            dark  = "#1D4ED8"; light = "#DBEAFE"; break;
-                        case "Pending":
-                            dark  = "#D97706"; light = "#FEF3C7";
-                            pendingOptions.Add($"{deliveryId} — {orderRef}");
-                            break;
-                        case "Failed":
-                            dark  = "#DC2626"; light = "#FEE2E2"; break;
+                        DeliveryID = row["DeliveryID"]?.ToString() ?? "N/A",
+                        OrderRef = row["OrderRef"]?.ToString() ?? "N/A",
+                        CustomerName = row["CustomerName"]?.ToString() ?? "Unknown",
+                        Status = row["Status"]?.ToString() ?? "Pending",
+                        ETA = row["ETA"]?.ToString() ?? "TBD",
+                        DriverName = row["DriverName"]?.ToString() ?? "Unassigned",
+                        CurrentLocation = row["CurrentLocation"]?.ToString() ?? "Unknown",
+                        Destination = row["Destination"]?.ToString() ?? "Not set"
+                    };
+
+                    deliveries.Add(item);
+
+                    if (item.Status == "Pending" || item.Status == "Order placed")
+                    {
+                        pendingOptions.Add($"{item.DeliveryID} — {item.OrderRef}");
                     }
-
-                    deliveries.Add(new DeliveryItem
-                    {
-                        DeliveryID       = deliveryId,
-                        Status           = status,
-                        StatusColorDark  = dark,
-                        StatusColorLight = light,
-                        DetailsText      = $"Ref: {orderRef} • {customer}",
-                        ETA              = row["ETA"]?.ToString()              ?? "TBD",
-                        DriverName       = row["DriverName"]?.ToString()       ?? "Unassigned",
-                        CurrentLocation  = row["CurrentLocation"]?.ToString()  ?? "Unknown",
-                        Destination      = row["Destination"]?.ToString()      ?? "Not set"
-                    });
                 }
 
-                // Load real drivers from DB
                 DataTable driversDt = await _dbService.GetAllDriversAsync();
                 var driverList = new List<string>();
                 foreach (DataRow r in driversDt.Rows)
@@ -96,43 +75,60 @@ namespace IT13_AviahC.Views.Admin
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     DeliveriesCollection.ItemsSource = deliveries;
-                    DeliveryPicker.ItemsSource       = pendingOptions;
-                    DriverPicker.ItemsSource         = driverList;
+                    DeliveryPicker.ItemsSource = pendingOptions;
+                    DriverPicker.ItemsSource = driverList;
                 });
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Logistics Load Error: {ex.Message}");
-                await DisplayAlertAsync("Error", "Failed to load deliveries: " + ex.Message, "OK");
             }
         }
 
-        // ─── OPEN UPDATE MODAL ────────────────────────────────────────────────
         private void OnUpdateStatusClicked(object? sender, EventArgs e)
         {
-            var button   = sender as Button;
+            var button = sender as Button;
             var delivery = button?.CommandParameter as DeliveryItem;
             if (delivery == null) return;
 
             _selectedDeliveryId = delivery.DeliveryID;
-            // Extract OrderRef from DetailsText "Ref: ORD-xxx • Customer"
-            _selectedOrderRef = delivery.DetailsText.Contains("•")
-                ? delivery.DetailsText.Split('•')[0].Replace("Ref:", "").Trim()
-                : string.Empty;
 
-            ModalTitle.Text        = $"Update: {_selectedDeliveryId}";
-            DetailsEntry.Text      = delivery.CurrentLocation;
+            ModalTitle.Text = $"Update: {_selectedDeliveryId}";
+            DetailsEntry.Text = delivery.CurrentLocation;
+
+            // Enforce sequence logic
+            string currentStatus = delivery.Status;
+            if (currentStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                currentStatus = _statusSequence[0];
+
+            int currentIndex = _statusSequence.FindIndex(s => s.Equals(currentStatus, StringComparison.OrdinalIgnoreCase));
+            var availableStatuses = new List<string>();
+
+            if (currentIndex == -1)
+            {
+                availableStatuses.Add(_statusSequence[0]);
+            }
+            else
+            {
+                availableStatuses.Add(_statusSequence[currentIndex]);
+                if (currentIndex + 1 < _statusSequence.Count)
+                {
+                    availableStatuses.Add(_statusSequence[currentIndex + 1]);
+                }
+            }
+
+            StatusPicker.ItemsSource = availableStatuses;
+            StatusPicker.SelectedIndex = 0;
+
             ModalOverlay.IsVisible = true;
         }
 
         private void OnCloseModalClicked(object? sender, EventArgs e)
         {
-            ModalOverlay.IsVisible  = false;
-            _selectedDeliveryId     = string.Empty;
-            _selectedOrderRef       = string.Empty;
+            ModalOverlay.IsVisible = false;
+            _selectedDeliveryId = string.Empty;
         }
 
-        // ─── CONFIRM UPDATE ───────────────────────────────────────────────────
         private async void OnConfirmUpdateClicked(object? sender, EventArgs e)
         {
             if (StatusPicker.SelectedItem == null || string.IsNullOrEmpty(_selectedDeliveryId))
@@ -141,15 +137,14 @@ namespace IT13_AviahC.Views.Admin
                 return;
             }
 
-            string newStatus     = StatusPicker.SelectedItem.ToString()!;
-            string location      = DetailsEntry.Text?.Trim() ?? string.Empty;
-            string driverName    = DriverPicker.SelectedItem?.ToString() ?? "Unassigned";
+            string newStatus = StatusPicker.SelectedItem.ToString()!;
+            string location = DetailsEntry.Text?.Trim() ?? string.Empty;
+            string driverName = DriverPicker.SelectedItem?.ToString() ?? "Unassigned";
 
-            // Use the unified UpdateDeliveryAsync which also syncs Orders.Status
             int result = await _dbService.UpdateDeliveryAsync(
                 _selectedDeliveryId, newStatus, location,
-                destination: string.Empty,   // keep existing destination
-                eta: string.Empty,           // keep existing ETA
+                destination: string.Empty,
+                eta: string.Empty,
                 driverName: driverName);
 
             if (result > 0)
@@ -162,10 +157,9 @@ namespace IT13_AviahC.Views.Admin
                 await DisplayAlertAsync("Failed", "Could not update delivery status.", "OK");
             }
 
-            ModalOverlay.IsVisible  = false;
-            _selectedDeliveryId     = string.Empty;
-            _selectedOrderRef       = string.Empty;
-            LoadDeliveries();
+            ModalOverlay.IsVisible = false;
+            _selectedDeliveryId = string.Empty;
+            _ = LoadDeliveries();
         }
     }
 }

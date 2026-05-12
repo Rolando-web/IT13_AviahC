@@ -23,7 +23,7 @@ namespace IT13_AviahC.Views.Customer
         {
             try
             {
-                DataTable dt = await _databaseService.GetAllInventoryAsync();
+                DataTable dt = await _databaseService.GetBoutiqueProductsAsync();
                 var items = new List<Product>();
 
                 if (dt != null)

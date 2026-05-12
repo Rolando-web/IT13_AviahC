@@ -18,8 +18,14 @@
                 <Grid ColumnDefinitions="*,340" ColumnSpacing="24" Padding="32">
                     <!-- Left: Deliveries List -->
                     <VerticalStackLayout Grid.Column="0" Spacing="24">
-                        <Label Text="Delivery Logistics" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
-                        <Label Text="Active Deliveries" FontSize="16" FontAttributes="Bold" TextColor="#7D6A9E" Margin="0,-12,0,0" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout>
+                                <Label Text="Delivery Logistics" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                                <Label Text="Active Deliveries" FontSize="16" FontAttributes="Bold" TextColor="#7D6A9E" />
+                            </VerticalStackLayout>
+                            <Button Grid.Column="1" Text="View Delivered Orders" Clicked="OnViewDeliveredClicked" 
+                                    BackgroundColor="#F0FDF4" TextColor="#166534" CornerRadius="12" HeightRequest="40" Padding="15,0" />
+                        </Grid>
 
                         <CollectionView x:Name="DeliveriesCollection">
                             <CollectionView.EmptyView>
@@ -30,7 +36,7 @@
                             </CollectionView.EmptyView>
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="models:DeliveryItem">
-                                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="24" StrokeThickness="0" Margin="0,0,0,16">
+                                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="24" StrokeThickness="0" Margin="0,0,0,24">
                                         <VerticalStackLayout Spacing="20">
                                             <Grid ColumnDefinitions="Auto,*,Auto">
                                                 <!-- Product Image -->

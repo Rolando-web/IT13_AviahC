@@ -7,6 +7,7 @@ namespace IT13_AviahC.Views.Customer
     public partial class MyOrdersPage : ContentPage
     {
         private readonly DatabaseService _databaseService;
+        private string _currentOrderRef = string.Empty;
 
         public MyOrdersPage()
         {
@@ -43,7 +44,8 @@ namespace IT13_AviahC.Views.Customer
                             FormattedTotal = $"₱{amount:N2}",
                             Status = status,
                             StatusColor = GetStatusColor(status),
-                            IsTrackable = status.ToLower() != "completed" && status.ToLower() != "cancelled"
+                            IsTrackable = status.ToLower() != "completed" && status.ToLower() != "cancelled",
+                            HasFeedback = row.Table.Columns.Contains("HasFeedback") && row["HasFeedback"] != DBNull.Value && Convert.ToInt32(row["HasFeedback"]) == 1
                         });
                     }
                 }
@@ -89,18 +91,54 @@ namespace IT13_AviahC.Views.Customer
             };
         }
 
-        private async void OnTrackClicked(object sender, EventArgs e)
+        private void OnTrackClicked(object sender, EventArgs e)
         {
-            try
+            if (sender is Button btn && btn.CommandParameter is OrderItem item)
             {
-                // Use absolute path for more reliable navigation in complex Shell structures
-                await Shell.Current.GoToAsync("//CustomerPortal/CustomerTrack");
+                UserSession.SelectedOrderRef = item.OrderRef;
+                
+                MainThread.BeginInvokeOnMainThread(async () => 
+                {
+                    try { await Shell.Current.GoToAsync("///CustomerTrack"); }
+                    catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Track Nav Error: {ex.Message}"); }
+                });
             }
-            catch (Exception ex)
+        }
+
+        private void OnFeedbackClicked(object sender, EventArgs e)
+        {
+            if (sender is Button btn && btn.CommandParameter is OrderItem item)
             {
-                System.Diagnostics.Debug.WriteLine($"Track Order Navigation Error: {ex.Message}");
-                // Fallback to relative if absolute fails
-                try { await Shell.Current.GoToAsync("///CustomerTrack"); } catch { }
+                _currentOrderRef = item.OrderRef;
+                ModalTitle.Text = $"Review Order: {item.OrderRef}";
+                FeedbackModalOverlay.IsVisible = true;
+            }
+        }
+
+        private void OnCloseFeedbackModalClicked(object sender, EventArgs e)
+        {
+            FeedbackModalOverlay.IsVisible = false;
+        }
+
+        private async void OnSubmitModalFeedbackClicked(object sender, EventArgs e)
+        {
+            string subject = FeedbackSubjectEntry.Text ?? "Order Feedback";
+            string message = FeedbackMessageEditor.Text ?? "";
+
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                await DisplayAlertAsync("Feedback Required", "Please enter your message.", "OK");
+                return;
+            }
+
+            int result = await _databaseService.SubmitFeedbackAsync(UserSession.UserEmail ?? "customer@aviah.com", _currentOrderRef, subject, message);
+            if (result > 0)
+            {
+                await DisplayAlertAsync("Thank You", "Your feedback has been received!", "OK");
+                FeedbackModalOverlay.IsVisible = false;
+                FeedbackSubjectEntry.Text = string.Empty;
+                FeedbackMessageEditor.Text = string.Empty;
+                _ = LoadOrdersSafe(); // Refresh to hide feedback button
             }
         }
 

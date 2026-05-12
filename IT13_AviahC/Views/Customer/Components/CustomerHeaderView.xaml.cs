@@ -4,10 +4,6 @@ namespace IT13_AviahC.Views.Customer.Components
 {
     public partial class CustomerHeaderView : ContentView
     {
-        // Static navigation guard with a "reset" mechanism
-        private static bool _isNavigating = false;
-        private static DateTime _lastNavTime = DateTime.MinValue;
-
         public static readonly BindableProperty ActiveTabProperty =
             BindableProperty.Create(nameof(ActiveTab), typeof(string), typeof(CustomerHeaderView), "Boutique", propertyChanged: OnActiveTabChanged);
 
@@ -81,50 +77,34 @@ namespace IT13_AviahC.Views.Customer.Components
 
         private async void OnNavClicked(object sender, EventArgs e)
         {
-            // Reset navigation lock if it's been more than 5 seconds (safety against silent hangs)
-            if (_isNavigating && (DateTime.Now - _lastNavTime).TotalSeconds > 5)
-            {
-                _isNavigating = false;
-            }
-
-            if (_isNavigating) return;
-
             if (sender is Button button && button.CommandParameter is string route)
             {
                 if (route == ActiveTab) return;
 
                 string? shellRoute = route switch
                 {
-                    "Boutique" => "//CustomerPortal/CustomerBoutique",
-                    "Offers" => "//CustomerPortal/CustomerOffers",
-                    "Orders" => "//CustomerPortal/CustomerOrders",
-                    "Track" => "//CustomerPortal/CustomerTrack",
-                    "Feedback" => "//CustomerPortal/UserFeedback",
+                    "Boutique" => "///CustomerBoutique",
+                    "Offers" => "///CustomerOffers",
+                    "Orders" => "///CustomerOrders",
+                    "Track" => "///CustomerTrack",
+                    "Feedback" => "///UserFeedback",
                     _ => null
                 };
 
                 if (shellRoute != null)
                 {
-                    _isNavigating = true;
-                    _lastNavTime = DateTime.Now;
                     try
                     {
-                        // Use absolute path for more reliable navigation in complex Shell structures
-                        await Shell.Current.GoToAsync(shellRoute);
+                        // Use MainThread to ensure navigation doesn't deadlock with current event cycle
+                        MainThread.BeginInvokeOnMainThread(async () => 
+                        {
+                            try { await Shell.Current.GoToAsync(shellRoute); }
+                            catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Navigation Error: {ex.Message}"); }
+                        });
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Debug.WriteLine($"Navigation Error: {ex.Message}");
-                        _isNavigating = false;
-                    }
-                    finally
-                    {
-                        // The destination page will have its own header instance, 
-                        // but we reset the global lock after a delay to allow UI to settle
-                        _ = Task.Run(async () => {
-                            await Task.Delay(1000);
-                            _isNavigating = false;
-                        });
+                        System.Diagnostics.Debug.WriteLine($"Critical Navigation Error: {ex.Message}");
                     }
                 }
             }
@@ -132,8 +112,6 @@ namespace IT13_AviahC.Views.Customer.Components
 
         private async void OnLogoutClicked(object sender, EventArgs e)
         {
-            if (_isNavigating) return;
-
             try
             {
                 if (Shell.Current?.CurrentPage != null)
@@ -141,8 +119,6 @@ namespace IT13_AviahC.Views.Customer.Components
                     bool answer = await Shell.Current.CurrentPage.DisplayAlertAsync("Logout", "Are you sure you want to logout?", "Yes", "No");
                     if (answer)
                     {
-                        _isNavigating = true;
-                        _lastNavTime = DateTime.Now;
                         try
                         {
                             Services.UserSession.UserName = null;
@@ -153,7 +129,6 @@ namespace IT13_AviahC.Views.Customer.Components
                         finally
                         {
                             await Task.Delay(500);
-                            _isNavigating = false;
                         }
                     }
                 }
@@ -161,7 +136,6 @@ namespace IT13_AviahC.Views.Customer.Components
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Logout Error: {ex.Message}");
-                _isNavigating = false;
             }
         }
     }

@@ -2,85 +2,83 @@ using System.Data;
 using IT13_AviahC.Models;
 using IT13_AviahC.Services;
 
-namespace IT13_AviahC.Views.Customer
+namespace IT13_AviahC.Views.Customer;
+
+public partial class SpecialOffersPage : ContentPage
 {
-    public partial class SpecialOffersPage : ContentPage
+    private readonly DatabaseService _db;
+
+    public SpecialOffersPage()
     {
-        private readonly DatabaseService _databaseService;
+        InitializeComponent();
+        _db = new DatabaseService();
+    }
 
-        public SpecialOffersPage()
-        {
-            InitializeComponent();
-            _databaseService = new DatabaseService();
-        }
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _ = LoadOffersAsync();
+    }
 
-        protected override void OnAppearing()
+    private async Task LoadOffersAsync()
+    {
+        try
         {
-            base.OnAppearing();
-            _ = LoadOffersSafe();
-        }
+            DataTable dt = await _db.GetPromotedProductsAsync();
+            var items = new List<Product>();
 
-        private async Task LoadOffersSafe()
-        {
-            try
+            foreach (DataRow row in dt.Rows)
             {
-                DataTable dt = await _databaseService.GetPromotionsAsync();
-                var offers = new List<OfferItem>();
-
-                if (dt != null && dt.Rows.Count > 0)
+                items.Add(new Product
                 {
-                    foreach (DataRow row in dt.Rows)
-                    {
-                        decimal originalPrice = row["Price"] != DBNull.Value ? Convert.ToDecimal(row["Price"]) : 0m;
-                        string discountValue = row["DiscountValue"]?.ToString() ?? "";
-                        decimal promoPrice = originalPrice;
-                        
-                        string val = discountValue.Replace("%", "").Replace("OFF", "").Trim();
-                        if (decimal.TryParse(val, out decimal discountAmt))
-                        {
-                            if (discountValue.Contains("%"))
-                                promoPrice = originalPrice * (1 - (discountAmt / 100));
-                            else
-                                promoPrice = Math.Max(0, originalPrice - discountAmt);
-                        }
-
-                        offers.Add(new OfferItem 
-                        { 
-                            ItemName = row["ProductName"]?.ToString() ?? "Special Item", 
-                            OriginalPrice = $"₱{originalPrice:N2}", 
-                            PromoPrice = $"₱{promoPrice:N2}", 
-                            DiscountPercent = discountValue, 
-                            Savings = $"You save: ₱{(originalPrice - promoPrice):N2}", 
-                            ImageUrl = row["ImageUrl"]?.ToString() ?? "package_icon.png",
-                            PromotionName = row["PromotionName"]?.ToString() ?? "Special Offer"
-                        });
-                    }
-                }
-
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    if (offers.Count > 0)
-                    {
-                        OffersCollection.IsVisible = true;
-                        EmptyPromotionsView.IsVisible = false;
-                    }
-                    else
-                    {
-                        OffersCollection.IsVisible = false;
-                        EmptyPromotionsView.IsVisible = true;
-                    }
-
-                    BindableLayout.SetItemsSource(OffersCollection, offers);
+                    Id = Convert.ToInt32(row["ProductID"]),
+                    ProductName = row["ProductName"]?.ToString(),
+                    Category = row["Category"]?.ToString(),
+                    UnitPrice = Convert.ToDecimal(row["Price"]),
+                    DiscountPrice = row["DiscountPrice"] != DBNull.Value ? Convert.ToDecimal(row["DiscountPrice"]) : (decimal?)null,
+                    IsOnPromotion = true, // We fetched from GetPromotedProductsAsync
+                    ImageUrl = row["ImageUrl"]?.ToString() ?? "dress.png"
                 });
             }
-            catch (Exception ex)
+
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                System.Diagnostics.Debug.WriteLine($"Error loading offers: {ex.Message}");
-                MainThread.BeginInvokeOnMainThread(() =>
+                if (items.Count > 0)
+                {
+                    OffersCollection.IsVisible = true;
+                    EmptyStateView.IsVisible = false;
+                    OffersCollection.ItemsSource = items;
+                }
+                else
                 {
                     OffersCollection.IsVisible = false;
-                    EmptyPromotionsView.IsVisible = true;
-                });
+                    EmptyStateView.IsVisible = true;
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Offers Load Error: {ex.Message}");
+        }
+    }
+
+    private async void OnOrderClicked(object sender, EventArgs e)
+    {
+        if (sender is Button btn && btn.CommandParameter is Product product)
+        {
+            decimal finalPrice = product.DiscountPrice ?? product.UnitPrice;
+            bool confirm = await DisplayAlert("Confirm Purchase", $"Order {product.ProductName} for the special price of {finalPrice:₱#,##0.00}?", "Yes", "No");
+            
+            if (confirm)
+            {
+                string email = UserSession.UserEmail ?? "customer@aviah.com";
+                int result = await _db.PlaceOrderAsync(email, product.ProductName ?? "Promo Item", finalPrice);
+                
+                if (result > 0)
+                {
+                    await DisplayAlert("Order Placed!", "Your promotional item has been ordered successfully.", "OK");
+                    await Shell.Current.GoToAsync("///CustomerOrders");
+                }
             }
         }
     }

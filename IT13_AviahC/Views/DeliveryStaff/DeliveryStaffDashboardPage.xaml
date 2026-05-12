@@ -39,7 +39,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="TO DELIVER" FontSize="11" FontAttributes="Bold" TextColor="#64748B" CharacterSpacing="1" />
-                                    <Label Text="8" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                                    <Label x:Name="ToDeliverLabel" Text="0" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Border>
@@ -52,7 +52,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="COMPLETED" FontSize="11" FontAttributes="Bold" TextColor="#64748B" CharacterSpacing="1" />
-                                    <Label Text="5" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                                    <Label x:Name="CompletedLabel" Text="0" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Border>
@@ -65,7 +65,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="PENDING" FontSize="11" FontAttributes="Bold" TextColor="#64748B" CharacterSpacing="1" />
-                                    <Label Text="3" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                                    <Label x:Name="PendingLabel" Text="0" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Border>
@@ -78,7 +78,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="DELAYED" FontSize="11" FontAttributes="Bold" TextColor="#64748B" CharacterSpacing="1" />
-                                    <Label Text="0" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                                    <Label x:Name="DelayedLabel" Text="0" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Border>
@@ -89,58 +89,30 @@
                         <VerticalStackLayout Spacing="24">
                             <Label Text="Assigned Deliveries" FontSize="18" FontAttributes="Bold" TextColor="#463366" />
                             
-                            <VerticalStackLayout Spacing="16">
-                                <!-- Card 1 -->
-                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="24" StrokeThickness="0">
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <VerticalStackLayout Spacing="8">
-                                            <Label Text="ORD-1290" FontSize="14" FontAttributes="Bold" TextColor="#463366" />
-                                            <Label Text="Maria S." FontSize="13" TextColor="#1E293B" />
-                                            <Label Text="Makati City" FontSize="12" TextColor="#64748B" />
-                                        </VerticalStackLayout>
-                                        <VerticalStackLayout Grid.Column="1" Spacing="8" HorizontalOptions="End" VerticalOptions="Center">
-                                            <Border BackgroundColor="#DBEAFE" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="End" StrokeThickness="0">
-                                                <Label Text="In Transit" TextColor="#1D4ED8" FontSize="11" FontAttributes="Bold" />
-                                            </Border>
-                                            <Label Text="ETA 15m" FontSize="12" FontAttributes="Bold" TextColor="#463366" HorizontalTextAlignment="End" />
-                                        </VerticalStackLayout>
-                                    </Grid>
-                                </Border>
-
-                                <!-- Card 2 -->
-                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="24" StrokeThickness="0">
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <VerticalStackLayout Spacing="8">
-                                            <Label Text="ORD-1285" FontSize="14" FontAttributes="Bold" TextColor="#463366" />
-                                            <Label Text="Juan D." FontSize="13" TextColor="#1E293B" />
-                                            <Label Text="Quezon City" FontSize="12" TextColor="#64748B" />
-                                        </VerticalStackLayout>
-                                        <VerticalStackLayout Grid.Column="1" Spacing="8" HorizontalOptions="End" VerticalOptions="Center">
-                                            <Border BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="End" StrokeThickness="0">
-                                                <Label Text="Pending" TextColor="#475569" FontSize="11" FontAttributes="Bold" />
-                                            </Border>
-                                            <Label Text="Starts 2:00 PM" FontSize="12" FontAttributes="Bold" TextColor="#463366" HorizontalTextAlignment="End" />
-                                        </VerticalStackLayout>
-                                    </Grid>
-                                </Border>
-
-                                <!-- Card 3 -->
-                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="24" StrokeThickness="0">
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <VerticalStackLayout Spacing="8">
-                                            <Label Text="ORD-1282" FontSize="14" FontAttributes="Bold" TextColor="#463366" />
-                                            <Label Text="Anna R." FontSize="13" TextColor="#1E293B" />
-                                            <Label Text="Pasig City" FontSize="12" TextColor="#64748B" />
-                                        </VerticalStackLayout>
-                                        <VerticalStackLayout Grid.Column="1" Spacing="8" HorizontalOptions="End" VerticalOptions="Center">
-                                            <Border BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="End" StrokeThickness="0">
-                                                <Label Text="Pending" TextColor="#475569" FontSize="11" FontAttributes="Bold" />
-                                            </Border>
-                                            <Label Text="Starts 4:00 PM" FontSize="12" FontAttributes="Bold" TextColor="#463366" HorizontalTextAlignment="End" />
-                                        </VerticalStackLayout>
-                                    </Grid>
-                                </Border>
-                            </VerticalStackLayout>
+                            <CollectionView x:Name="AssignedDeliveriesCollection">
+                                <CollectionView.EmptyView>
+                                    <Label Text="No deliveries assigned yet." TextColor="#64748B" HorizontalTextAlignment="Center" Padding="20" />
+                                </CollectionView.EmptyView>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:DeliveryItem">
+                                        <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="24" StrokeThickness="0" Margin="0,0,0,12">
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <VerticalStackLayout Spacing="8">
+                                                    <Label Text="{Binding OrderRef}" FontSize="14" FontAttributes="Bold" TextColor="#463366" />
+                                                    <Label Text="{Binding CustomerName}" FontSize="13" TextColor="#1E293B" />
+                                                    <Label Text="{Binding Destination}" FontSize="12" TextColor="#64748B" />
+                                                </VerticalStackLayout>
+                                                <VerticalStackLayout Grid.Column="1" Spacing="8" HorizontalOptions="End" VerticalOptions="Center">
+                                                    <Border BackgroundColor="{Binding StatusBgLight}" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="End" StrokeThickness="0">
+                                                        <Label Text="{Binding Status}" TextColor="{Binding StatusColorDark}" FontSize="11" FontAttributes="Bold" />
+                                                    </Border>
+                                                    <Label Text="{Binding ETA, StringFormat='ETA {0}'}" FontSize="12" FontAttributes="Bold" TextColor="#463366" HorizontalTextAlignment="End" />
+                                                </VerticalStackLayout>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
                         </VerticalStackLayout>
                     </Border>
                 </VerticalStackLayout>

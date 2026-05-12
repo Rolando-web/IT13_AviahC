@@ -19,5 +19,8 @@ namespace IT13_AviahC.Models
         public string Status { get; set; } = string.Empty;
         public string StatusColor { get; set; } = string.Empty;
         public bool IsTrackable { get; set; }
+        public bool HasFeedback { get; set; }
+        public bool IsCompleted => Status != null && (Status.Equals("Completed", StringComparison.OrdinalIgnoreCase) || Status.Equals("Package delivered successfully", StringComparison.OrdinalIgnoreCase));
+        public bool CanSubmitFeedback => IsCompleted && !HasFeedback;
     }
 }

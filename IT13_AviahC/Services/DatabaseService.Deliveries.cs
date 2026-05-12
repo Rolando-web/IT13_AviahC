@@ -79,13 +79,32 @@ namespace IT13_AviahC.Services
 
             if (result > 0)
             {
+                // Sync Order status: If delivered successfully, mark order as Completed
+                string orderStatus = newStatus;
+                if (newStatus.Equals("Package delivered successfully", StringComparison.OrdinalIgnoreCase))
+                {
+                    orderStatus = "Completed";
+                }
+
                 string syncOrder = @"
                     UPDATE Orders SET Status = @Status
                     WHERE OrderRef = (SELECT TOP 1 OrderRef FROM Deliveries WHERE DeliveryID = @DeliveryID)";
+                
                 await ExecuteNonQueryAsync(syncOrder, new Dictionary<string, object>
                 {
-                    { "@Status",     newStatus },
+                    { "@Status",     orderStatus },
                     { "@DeliveryID", deliveryId }
+                });
+
+                // RECORD HISTORY (Parcel Journey)
+                string recordHistory = @"
+                    INSERT INTO DeliveryHistory (DeliveryID, Status, Location, UpdateTime)
+                    VALUES (@DeliveryID, @Status, @Location, GETDATE())";
+                await ExecuteNonQueryAsync(recordHistory, new Dictionary<string, object>
+                {
+                    { "@DeliveryID", deliveryId },
+                    { "@Status",     newStatus },
+                    { "@Location",   currentLocation }
                 });
             }
 
@@ -108,6 +127,13 @@ namespace IT13_AviahC.Services
                 { "@DriverName",  driverName },
                 { "@DeliveryID",  deliveryId }
             });
+        }
+
+        /// <summary>Get all history logs for a delivery (The Parcel Journey).</summary>
+        public async Task<DataTable> GetDeliveryHistoryAsync(string deliveryId)
+        {
+            string query = "SELECT * FROM DeliveryHistory WHERE DeliveryID = @DeliveryID ORDER BY UpdateTime DESC";
+            return await ExecuteQueryAsync(query, new Dictionary<string, object> { { "@DeliveryID", deliveryId } });
         }
 
         /// <summary>Get all Users with role DeliverStaff for driver picker.</summary>

@@ -3,6 +3,14 @@ using IT13_AviahC.Services;
 
 namespace IT13_AviahC.Views.Customer
 {
+    public class JourneyLog
+    {
+        public string Status { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
+        public string FormattedTime { get; set; } = string.Empty;
+        public bool IsLatest { get; set; } = false;
+    }
+
     public partial class TrackDeliveryPage : ContentPage
     {
         private readonly DatabaseService _databaseService;
@@ -16,8 +24,12 @@ namespace IT13_AviahC.Views.Customer
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            // Start loading data after the page has appeared
-            Task.Run(async () => await LoadTrackingDataSafe());
+            
+            // Force refresh data every time page appears
+            MainThread.BeginInvokeOnMainThread(async () => {
+                await Task.Delay(300); 
+                await LoadTrackingDataSafe();
+            });
         }
 
         private async Task LoadTrackingDataSafe()
@@ -25,7 +37,18 @@ namespace IT13_AviahC.Views.Customer
             try
             {
                 string userEmail = UserSession.UserEmail ?? "Customer@aviah.com";
-                DataTable dt = await _databaseService.GetActiveOrdersAsync(userEmail);
+                DataTable dt;
+
+                if (!string.IsNullOrEmpty(UserSession.SelectedOrderRef))
+                {
+                    // Track SPECIFIC order
+                    dt = await _databaseService.GetSpecificOrderTrackingAsync(UserSession.SelectedOrderRef);
+                }
+                else
+                {
+                    // Fallback to LATEST active order
+                    dt = await _databaseService.GetActiveOrdersAsync(userEmail);
+                }
 
                 // Use the MainThread to update UI
                 MainThread.BeginInvokeOnMainThread(() =>
@@ -57,19 +80,6 @@ namespace IT13_AviahC.Views.Customer
                             if (CustomerNameLabel != null)
                                 CustomerNameLabel.Text = UserSession.UserName ?? "Valued Customer";
 
-                            if (OrderItemsLabel != null)
-                                OrderItemsLabel.Text = order.Table.Columns.Contains("ItemSummary") ? order["ItemSummary"]?.ToString() ?? "Order Items" : "Order Items";
-                            
-                            if (OrderAmountLabel != null)
-                            {
-                                if (order.Table.Columns.Contains("TotalAmount") && order["TotalAmount"] != DBNull.Value)
-                                {
-                                    try { OrderAmountLabel.Text = $"₱{Convert.ToDecimal(order["TotalAmount"]):N2}"; }
-                                    catch { OrderAmountLabel.Text = "₱0.00"; }
-                                }
-                                else { OrderAmountLabel.Text = "₱0.00"; }
-                            }
-
                             // 3. Delivery Info
                             string driverName = "Awaiting Driver";
                             if (order.Table.Columns.Contains("DriverName") && order["DriverName"] != DBNull.Value)
@@ -90,25 +100,15 @@ namespace IT13_AviahC.Views.Customer
                                 }
                             }
 
-                            if (CurrentLocationLabel != null)
-                            {
-                                if (order.Table.Columns.Contains("CurrentLocation") && order["CurrentLocation"] != DBNull.Value)
-                                {
-                                    string loc = order["CurrentLocation"]?.ToString() ?? string.Empty;
-                                    CurrentLocationLabel.Text = string.IsNullOrEmpty(loc) ? "Processing at Facility..." : loc;
-                                }
-                                else
-                                {
-                                    CurrentLocationLabel.Text = "Preparing items for shipment...";
-                                }
-                            }
-
                             string status = "Pending";
                             if (order.Table.Columns.Contains("Status") && order["Status"] != DBNull.Value)
                             {
                                 status = order["Status"]?.ToString() ?? "Pending";
                             }
                             UpdateStatusUI(status);
+
+                            // 4. LOAD PARCEL JOURNEY (HISTORY)
+                            _ = LoadJourneyHistoryAsync(order["DeliveryID"]?.ToString() ?? string.Empty);
                         }
                         else
                         {
@@ -133,76 +133,129 @@ namespace IT13_AviahC.Views.Customer
             }
         }
 
+        private async Task LoadJourneyHistoryAsync(string deliveryId)
+        {
+            if (string.IsNullOrEmpty(deliveryId)) return;
+
+            try
+            {
+                DataTable historyDt = await _databaseService.GetDeliveryHistoryAsync(deliveryId);
+                var logs = new List<JourneyLog>();
+
+                int count = 0;
+                foreach (DataRow row in historyDt.Rows)
+                {
+                    DateTime updateTime = row["UpdateTime"] != DBNull.Value ? Convert.ToDateTime(row["UpdateTime"]) : DateTime.Now;
+                    
+                    logs.Add(new JourneyLog
+                    {
+                        Status = row["Status"]?.ToString() ?? "Update",
+                        Location = row["Location"]?.ToString() ?? "In Transit",
+                        FormattedTime = updateTime.ToString("MM/dd/yyyy HH:mm"),
+                        IsLatest = (count == 0) // First item (newest) is the latest
+                    });
+                    count++;
+                }
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    JourneyCollection.ItemsSource = logs;
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"History Error: {ex.Message}");
+            }
+        }
+
         private void UpdateStatusUI(string status)
         {
             try
             {
                 // Safety check for UI elements
-                if (Step1Border == null || CurrentStatusLabel == null || StatusDetailLabel == null) return;
+                if (Step1Dot == null || CurrentStatusLabel == null) return;
 
-                // Reset colors using standard MAUI Color.FromUint or from hex string
-                var gray = Color.FromArgb("#F1F5F9");
-                var green = Color.FromArgb("#10B981");
-                var red = Color.FromArgb("#EF4444");
+                var gray = Color.FromArgb("#E2E8F0");
+                var active = Color.FromArgb("#6366F1");
 
-                Step1Border.BackgroundColor = gray;
-                if (Step2Border != null) Step2Border.BackgroundColor = gray;
-                if (Step3Border != null) Step3Border.BackgroundColor = gray;
-                if (Step4Border != null) Step4Border.BackgroundColor = gray;
-                if (Step5Border != null) Step5Border.BackgroundColor = gray;
+                // Reset dots
+                Step1Dot.Fill = gray;
+                if (Step2Dot != null) Step2Dot.Fill = gray;
+                if (Step3Dot != null) Step3Dot.Fill = gray;
+                if (Step4Dot != null) Step4Dot.Fill = gray;
 
                 string statusLower = (status ?? "Pending").ToLower();
 
                 if (statusLower.Contains("placed") || statusLower == "pending")
                 {
-                    Step1Border.BackgroundColor = green;
-                    CurrentStatusLabel.Text = "Order Placed";
-                    StatusDetailLabel.Text = "Your order has been received and is waiting for validation.";
+                    Step1Dot.Fill = active;
+                    CurrentStatusLabel.Text = "Order Received";
                 }
-                else if (statusLower == "paid" || statusLower == "confirmed")
+                else if (statusLower.Contains("preparing") || statusLower == "paid" || statusLower == "confirmed")
                 {
-                    Step1Border.BackgroundColor = green;
-                    if (Step2Border != null) Step2Border.BackgroundColor = green;
-                    CurrentStatusLabel.Text = "Order Paid & Confirmed";
-                    StatusDetailLabel.Text = "Payment received. We are preparing your items for shipment.";
+                    Step1Dot.Fill = active;
+                    if (Step2Dot != null) Step2Dot.Fill = active;
+                    CurrentStatusLabel.Text = "Processing & Packing";
                 }
-                else if (statusLower == "shipped" || statusLower.Contains("transit"))
+                else if (statusLower.Contains("partner") || statusLower.Contains("dropoff") || statusLower.Contains("facility") || statusLower.Contains("transit") || statusLower.Contains("delivery") || statusLower.Contains("shipped") || statusLower.Contains("departed") || statusLower.Contains("hub") || statusLower.Contains("truck"))
                 {
-                    Step1Border.BackgroundColor = green;
-                    if (Step2Border != null) Step2Border.BackgroundColor = green;
-                    if (Step3Border != null) Step3Border.BackgroundColor = green;
-                    CurrentStatusLabel.Text = "In Transit";
-                    StatusDetailLabel.Text = "Your parcel has been shipped and is on its way to you.";
+                    Step1Dot.Fill = active;
+                    if (Step2Dot != null) Step2Dot.Fill = active;
+                    if (Step3Dot != null) Step3Dot.Fill = active;
+                    CurrentStatusLabel.Text = status; // Shows specific step like "Out for Delivery"
                 }
-                else if (statusLower.Contains("delivery") || statusLower == "delivering")
+                else if (statusLower.Contains("arrived") || statusLower.Contains("delivered") || statusLower.Contains("completed") || statusLower.Contains("success"))
                 {
-                    Step1Border.BackgroundColor = green;
-                    if (Step2Border != null) Step2Border.BackgroundColor = green;
-                    if (Step3Border != null) Step3Border.BackgroundColor = green;
-                    if (Step4Border != null) Step4Border.BackgroundColor = red;
-                    CurrentStatusLabel.Text = "Out for Delivery";
-                    StatusDetailLabel.Text = "Your parcel is with our delivery partner and will arrive today.";
-                }
-                else if (statusLower == "arrived" || statusLower == "delivered" || statusLower == "completed")
-                {
-                    Step1Border.BackgroundColor = green;
-                    if (Step2Border != null) Step2Border.BackgroundColor = green;
-                    if (Step3Border != null) Step3Border.BackgroundColor = green;
-                    if (Step4Border != null) Step4Border.BackgroundColor = green;
-                    if (Step5Border != null) Step5Border.BackgroundColor = green;
-                    CurrentStatusLabel.Text = "Arrived";
-                    StatusDetailLabel.Text = "Your parcel has arrived at your location!";
+                    Step1Dot.Fill = active;
+                    if (Step2Dot != null) Step2Dot.Fill = active;
+                    if (Step3Dot != null) Step3Dot.Fill = active;
+                    if (Step4Dot != null) Step4Dot.Fill = active;
+                    CurrentStatusLabel.Text = "Parcel Delivered";
+
+                    // Show feedback prompt
+                    if (FeedbackPromptButton != null) FeedbackPromptButton.IsVisible = true;
+                    
+                    // Auto-trigger modal once if not already shown this session for this order
+                    string sessionKey = $"FeedbackShown_{UserSession.SelectedOrderRef}";
+                    if (!Preferences.Default.ContainsKey(sessionKey))
+                    {
+                        FeedbackModalOverlay.IsVisible = true;
+                        Preferences.Default.Set(sessionKey, true);
+                    }
                 }
                 else
                 {
-                    Step1Border.BackgroundColor = green;
+                    Step1Dot.Fill = active;
                     CurrentStatusLabel.Text = status;
-                    StatusDetailLabel.Text = "We are currently processing your order status.";
+                    if (FeedbackPromptButton != null) FeedbackPromptButton.IsVisible = false;
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"UpdateStatusUI Error: {ex.Message}");
+            }
+        }
+
+        private void OnShowFeedbackModalClicked(object sender, EventArgs e) => FeedbackModalOverlay.IsVisible = true;
+        private void OnCloseFeedbackModalClicked(object sender, EventArgs e) => FeedbackModalOverlay.IsVisible = false;
+
+        private async void OnSubmitModalFeedbackClicked(object sender, EventArgs e)
+        {
+            string subject = FeedbackSubjectEntry.Text ?? "Delivery Feedback";
+            string message = FeedbackMessageEditor.Text ?? "";
+
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                await DisplayAlertAsync("Feedback Required", "Please enter your message.", "OK");
+                return;
+            }
+
+            int result = await _databaseService.SubmitFeedbackAsync(UserSession.UserEmail ?? "customer@aviah.com", subject, message);
+            if (result > 0)
+            {
+                await DisplayAlertAsync("Thank You", "Your feedback has been received!", "OK");
+                FeedbackModalOverlay.IsVisible = false;
+                FeedbackPromptButton.IsVisible = false; // Hide prompt after submission
             }
         }
     }

@@ -55,9 +55,21 @@
                                             <Label Text="Total Amount" FontSize="11" TextColor="#94A3B8" FontAttributes="Bold" CharacterSpacing="1" />
                                             <Label Text="{Binding FormattedTotal}" FontSize="18" FontAttributes="Bold" TextColor="#624890" />
                                         </VerticalStackLayout>
-                                        <Button Grid.Column="1" Text="Track Order" BackgroundColor="#F3F0FA" TextColor="#624890" 
-                                                CornerRadius="10" Padding="16,0" HeightRequest="36" FontSize="12" FontAttributes="Bold" 
-                                                IsVisible="{Binding IsTrackable}" Clicked="OnTrackClicked" />
+                                        <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                                            <Button Text="Track Order" BackgroundColor="#F3F0FA" TextColor="#624890" 
+                                                    CornerRadius="10" Padding="16,0" HeightRequest="36" FontSize="12" FontAttributes="Bold" 
+                                                    IsVisible="{Binding IsTrackable}" 
+                                                    CommandParameter="{Binding .}"
+                                                    Clicked="OnTrackClicked" />
+                                            <Button Text="Feedback" BackgroundColor="#624890" TextColor="White" 
+                                                    CornerRadius="10" Padding="16,0" HeightRequest="36" FontSize="12" FontAttributes="Bold" 
+                                                    IsVisible="{Binding CanSubmitFeedback}" 
+                                                    CommandParameter="{Binding .}"
+                                                    Clicked="OnFeedbackClicked" />
+                                            <Border IsVisible="{Binding HasFeedback}" BackgroundColor="#F0FDF4" StrokeShape="RoundRectangle 10" Padding="12,0" HeightRequest="36" StrokeThickness="0">
+                                                <Label Text="Review Completed" TextColor="#166534" FontSize="11" FontAttributes="Bold" VerticalOptions="Center" />
+                                            </Border>
+                                        </HorizontalStackLayout>
                                     </Grid>
                                 </Grid>
                             </Border>
@@ -66,5 +78,31 @@
                 </CollectionView>
             </VerticalStackLayout>
         </ScrollView>
+
+        <!-- Feedback Modal Overlay -->
+        <Grid x:Name="FeedbackModalOverlay" Grid.RowSpan="2" BackgroundColor="#80000000" IsVisible="False">
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" WidthRequest="450" VerticalOptions="Center" HorizontalOptions="Center" Padding="32" StrokeThickness="0">
+                <VerticalStackLayout Spacing="24">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label x:Name="ModalTitle" Text="Write a Review" FontSize="20" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                        <Button Grid.Column="1" Text="✕" BackgroundColor="Transparent" TextColor="#64748B" FontSize="20" Clicked="OnCloseFeedbackModalClicked" HeightRequest="40" WidthRequest="40" />
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="SUBJECT" FontAttributes="Bold" FontSize="11" TextColor="#94A3B8" CharacterSpacing="1" />
+                        <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="4" StrokeThickness="0">
+                            <Entry x:Name="FeedbackSubjectEntry" Placeholder="e.g. Delivery, Quality..." TextColor="#1E293B" FontSize="15" BackgroundColor="Transparent" />
+                        </Border>
+
+                        <Label Text="YOUR REVIEW" FontAttributes="Bold" FontSize="11" TextColor="#94A3B8" CharacterSpacing="1" />
+                        <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" Padding="12" StrokeThickness="0">
+                            <Editor x:Name="FeedbackMessageEditor" Placeholder="Share your experience with this order..." TextColor="#1E293B" FontSize="15" HeightRequest="120" BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <Button Text="Submit Feedback" BackgroundColor="#624890" TextColor="White" CornerRadius="16" FontAttributes="Bold" HeightRequest="60" Clicked="OnSubmitModalFeedbackClicked" />
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
     </Grid>
 </ContentPage>
