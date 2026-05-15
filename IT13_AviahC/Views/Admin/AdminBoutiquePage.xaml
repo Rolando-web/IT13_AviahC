@@ -3,11 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:IT13_AviahC.Views.Admin.Components"
              xmlns:modals="clr-namespace:IT13_AviahC.Views.Modals"
-             x:Class="IT13_AviahC.Views.Admin.AdminInventoryPage"
+             xmlns:local="clr-namespace:IT13_AviahC.Views.Admin"
+             x:Class="IT13_AviahC.Views.Admin.AdminBoutiquePage"
              BackgroundColor="#F3F0FA">
     <Grid ColumnDefinitions="Auto,*">
         <!-- Reusable Sidebar -->
-        <components:AdminSidebarView Grid.Column="0" CurrentPage="AdminInventory" />
+        <components:AdminSidebarView Grid.Column="0" CurrentPage="AdminBoutique" />
 
         <Grid Grid.Column="1" RowDefinitions="Auto,*">
             <!-- Header -->
@@ -17,7 +18,10 @@
                 <VerticalStackLayout Padding="32" Spacing="24">
                     <!-- Title Row -->
                     <Grid ColumnDefinitions="*,Auto">
-                        <Label Text="Inventory Management" FontSize="28" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Boutique Inventory" FontSize="28" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                            <Label Text="Manage finished garments and showroom stock" FontSize="14" TextColor="#7D6A9E" />
+                        </VerticalStackLayout>
                         
                         <HorizontalStackLayout Grid.Column="1" Spacing="12">
                             <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Padding="20,10" StrokeThickness="1" Stroke="#E2E8F0">
@@ -27,7 +31,7 @@
                                     <Label Text="Filter" TextColor="#624890" FontAttributes="Bold" FontSize="14" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                             </Border>
-                            <Button x:Name="AddItemButton" Text="+ Add Item" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="24,0" FontAttributes="Bold" FontSize="14" HeightRequest="44" Clicked="OnAddItemClicked" />
+                            <Button x:Name="AddItemButton" Text="+ New Product" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="24,0" FontAttributes="Bold" FontSize="14" HeightRequest="44" />
                         </HorizontalStackLayout>
                     </Grid>
 
@@ -35,26 +39,13 @@
                     <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="0" StrokeThickness="0">
                         <VerticalStackLayout Spacing="0">
                             
-                            <!-- Tabs -->
-                            <Grid ColumnDefinitions="Auto,*" Padding="32,0,0,0">
-                                <VerticalStackLayout Spacing="0">
-                                    <HorizontalStackLayout Padding="16,20" Spacing="8">
-                                        <Path Data="M12,2L2,7l10,5,10-5L12,2z M2,17l10,5,10-5M2,12l10,5,10-5"
-                                              Fill="#624890" Aspect="Uniform" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
-                                        <Label Text="Warehouse (Raw Materials)" TextColor="#624890" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
-                                    </HorizontalStackLayout>
-                                    <BoxView HeightRequest="3" BackgroundColor="#624890" HorizontalOptions="Fill" />
-                                </VerticalStackLayout>
-                                <BoxView Grid.Column="1" HeightRequest="1" BackgroundColor="#F1F5F9" VerticalOptions="End" />
-                            </Grid>
-
                             <!-- Search Bar -->
                             <Grid Padding="32,24">
                                 <Border StrokeShape="RoundRectangle 12" BackgroundColor="#F8FAFC" StrokeThickness="1" Stroke="#E2E8F0" Padding="16,8" HorizontalOptions="Start" WidthRequest="400">
                                     <HorizontalStackLayout Spacing="12">
                                         <Path Data="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
                                               Fill="#94A3B8" Aspect="Uniform" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
-                                        <Entry Placeholder="Search warehouse items..." TextColor="#1E293B" PlaceholderColor="#94A3B8" BackgroundColor="Transparent" FontSize="14" VerticalOptions="Center" />
+                                        <Entry Placeholder="Search boutique products..." TextColor="#1E293B" PlaceholderColor="#94A3B8" BackgroundColor="Transparent" FontSize="14" VerticalOptions="Center" />
                                     </HorizontalStackLayout>
                                 </Border>
                             </Grid>
@@ -62,20 +53,20 @@
                             <!-- Table Header -->
                             <Grid ColumnDefinitions="Auto,2*,*,*,*,*,Auto" Padding="32,16" BackgroundColor="#F3F0FA" ColumnSpacing="10">
                                 <Label Text="Img" FontAttributes="Bold" FontSize="13" TextColor="#624890" WidthRequest="40" />
-                                <Label Grid.Column="1" Text="Item Name" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                <Label Grid.Column="1" Text="Product Name" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
                                 <Label Grid.Column="2" Text="SKU" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
                                 <Label Grid.Column="3" Text="Category" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
-                                <Label Grid.Column="4" Text="Quantity" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
-                                <Label Grid.Column="5" Text="Status" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                <Label Grid.Column="4" Text="Price" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                <Label Grid.Column="5" Text="Stock" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
                                 <Label x:Name="ActionsColumnHeader" Grid.Column="6" Text="Actions" FontAttributes="Bold" FontSize="13" TextColor="#624890" HorizontalTextAlignment="End" WidthRequest="110" />
                             </Grid>
 
                             <!-- Table Rows -->
-                            <CollectionView x:Name="InventoryCollection">
+                            <CollectionView x:Name="BoutiqueCollection">
                                 <CollectionView.EmptyView>
                                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center" Padding="40">
-                                        <Label Text="No items in inventory" FontSize="18" FontAttributes="Bold" TextColor="#64748B" HorizontalTextAlignment="Center" />
-                                        <Label Text="The inventory database is currently empty." FontSize="14" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+                                        <Label Text="No products found" FontSize="18" FontAttributes="Bold" TextColor="#64748B" HorizontalTextAlignment="Center" />
+                                        <Label Text="The boutique inventory is currently empty." FontSize="14" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
                                     </VerticalStackLayout>
                                 </CollectionView.EmptyView>
                                 <CollectionView.ItemTemplate>
@@ -86,40 +77,28 @@
                                                     <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />
                                                 </Border>
 
-                                                <Label Grid.Column="1" Text="{Binding ItemName}" FontAttributes="Bold" FontSize="14" TextColor="#463366" VerticalOptions="Center" />
+                                                <Label Grid.Column="1" Text="{Binding ProductName}" FontAttributes="Bold" FontSize="14" TextColor="#463366" VerticalOptions="Center" />
                                                 
                                                 <Label Grid.Column="2" Text="{Binding SKU}" FontSize="13" TextColor="#94A3B8" VerticalOptions="Center" FontAttributes="Bold" />
                                                 
                                                 <Label Grid.Column="3" Text="{Binding Category}" FontSize="14" TextColor="#64748B" VerticalOptions="Center" />
                                                 
-                                                <HorizontalStackLayout Grid.Column="4" Spacing="4" VerticalOptions="Center">
-                                                    <Label Text="{Binding StockLevel}" FontAttributes="Bold" FontSize="15" TextColor="#463366" />
-                                                    <Label Text="{Binding Unit}" FontSize="13" TextColor="#64748B" VerticalOptions="End" Margin="0,0,0,2" />
+                                                <Label Grid.Column="4" Text="{Binding Price, StringFormat='₱{0:N2}'}" FontAttributes="Bold" FontSize="14" TextColor="#624890" VerticalOptions="Center" />
+                                                
+                                                <HorizontalStackLayout Grid.Column="5" Spacing="4" VerticalOptions="Center">
+                                                    <Label Text="{Binding StockQuantity}" FontAttributes="Bold" FontSize="15" TextColor="#463366" />
+                                                    <Label Text="pcs" FontSize="13" TextColor="#64748B" VerticalOptions="End" Margin="0,0,0,2" />
                                                 </HorizontalStackLayout>
-                                                                                                <!-- Status Pill -->
-                                                <Border Grid.Column="5" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="Start" VerticalOptions="Center" StrokeThickness="0" BackgroundColor="{Binding StatusColor}">
-                                                    <Label Text="{Binding StatusText}" FontSize="11" TextColor="{Binding StatusTextColor}" FontAttributes="Bold" />
-                                                </Border>
 
                                                 <!-- Edit + Delete actions -->
                                                 <HorizontalStackLayout Grid.Column="6" Spacing="12"
                                                                         HorizontalOptions="End" VerticalOptions="Center"
                                                                         WidthRequest="110"
-                                                                        IsVisible="{Binding BindingContext.IsCrudEnabled, Source={x:Reference InventoryCollection}}">
+                                                                        IsVisible="{Binding BindingContext.IsCrudEnabled, Source={RelativeSource AncestorType={x:Type local:AdminBoutiquePage}}}">
                                                     <Label Text="Edit" TextColor="#624890" FontSize="13"
-                                                           TextDecorations="Underline" VerticalOptions="Center">
-                                                        <Label.GestureRecognizers>
-                                                            <TapGestureRecognizer Tapped="OnEditItemClicked"
-                                                                                  CommandParameter="{Binding .}" />
-                                                        </Label.GestureRecognizers>
-                                                    </Label>
+                                                           TextDecorations="Underline" VerticalOptions="Center" />
                                                     <Label Text="Del" TextColor="#EF4444" FontSize="13"
-                                                           TextDecorations="Underline" VerticalOptions="Center">
-                                                        <Label.GestureRecognizers>
-                                                            <TapGestureRecognizer Tapped="OnDeleteItemClicked"
-                                                                                  CommandParameter="{Binding .}" />
-                                                        </Label.GestureRecognizers>
-                                                    </Label>
+                                                           TextDecorations="Underline" VerticalOptions="Center" />
                                                 </HorizontalStackLayout>
                                             </Grid>
                                             <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" Margin="32,0" />
@@ -132,7 +111,5 @@
                 </VerticalStackLayout>
             </ScrollView>
         </Grid>
-        <modals:AdminInventoryModal x:Name="ItemModalView" Grid.ColumnSpan="2" IsVisible="False" />
     </Grid>
 </ContentPage>
-

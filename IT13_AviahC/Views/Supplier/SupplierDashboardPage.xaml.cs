@@ -58,7 +58,7 @@ public partial class SupplierDashboardPage : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", "Failed to load dashboard: " + ex.Message, "OK");
+            await DisplayAlertAsync("Error", "Failed to load dashboard: " + ex.Message, "OK");
         }
     }
 }

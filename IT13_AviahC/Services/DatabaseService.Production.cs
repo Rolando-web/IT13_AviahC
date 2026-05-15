@@ -17,8 +17,8 @@ namespace IT13_AviahC.Services
         public async Task<int> CreateProductionBatchAsync(string batchId, int productId, int targetQty)
         {
             string query = @"
-                INSERT INTO ProductionBatches (BatchID, ProductID, TargetQuantity, Status)
-                VALUES (@BatchID, @ProductID, @TargetQty, 'In Progress')";
+                INSERT INTO ProductionBatches (BatchID, ProductID, TargetQuantity, Status, StartDate)
+                VALUES (@BatchID, @ProductID, @TargetQty, 'In Progress', GETDATE())";
             
             var parameters = new Dictionary<string, object>
             {
@@ -61,14 +61,35 @@ namespace IT13_AviahC.Services
             
             int result = await ExecuteNonQueryAsync(query, parameters);
 
-            // If completed, add to Boutique stock
+            // If completed, add to WAREHOUSE stock (Staff will then Stock-in to Boutique)
             if (result > 0 && status == "Completed")
             {
-                string updateStock = "UPDATE Products SET StockQuantity = StockQuantity + @Qty WHERE ProductID = (SELECT ProductID FROM ProductionBatches WHERE BatchID = @BatchID)";
+                string updateStock = "UPDATE Products SET WarehouseStock = ISNULL(WarehouseStock, 0) + @Qty WHERE ProductID = (SELECT ProductID FROM ProductionBatches WHERE BatchID = @BatchID)";
                 await ExecuteNonQueryAsync(updateStock, new Dictionary<string, object> { { "@Qty", newTotal }, { "@BatchID", batchId } });
             }
 
             return result;
+        }
+        public async Task<DataTable> GetFinishedProductsAsync()
+        {
+            // Products with at least one recipe entry
+            string query = @"
+                SELECT DISTINCT p.* 
+                FROM Products p
+                JOIN ProductMaterials pm ON p.ProductID = pm.ProductID
+                ORDER BY p.ProductName";
+            return await ExecuteQueryAsync(query);
+        }
+
+        public async Task<DataTable> GetProductMaterialsAsync(int productId)
+        {
+            string query = @"
+                SELECT pm.*, rm.ItemName as MaterialName, rm.Quantity as StockQuantity
+                FROM ProductMaterials pm
+                JOIN RawMaterials rm ON pm.MaterialID = rm.MaterialID
+                WHERE pm.ProductID = @ProductID";
+            var parameters = new Dictionary<string, object> { { "@ProductID", productId } };
+            return await ExecuteQueryAsync(query, parameters);
         }
     }
 }

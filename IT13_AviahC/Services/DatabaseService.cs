@@ -85,5 +85,52 @@ namespace IT13_AviahC.Services
         {
             return await Task.Run(() => ExecuteNonQuery(query, parameters));
         }
+
+        public string GetActiveSubscriptionTier()
+        {
+            // Default to Premium if table doesn't exist or no tier is set
+            try
+            {
+                DataTable dt = ExecuteQuery("SELECT TOP 1 TierName FROM SubscriptionSettings");
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    return dt.Rows[0]["TierName"]?.ToString() ?? "Basic";
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching subscription tier: {ex.Message}");
+            }
+            return "Basic";
+        }
+
+        public async Task<int> UpdateSubscriptionTierAsync(string tierName)
+        {
+            System.Diagnostics.Debug.WriteLine($"Attempting to update SubscriptionTier to {tierName} for UserId: {UserSession.UserId}");
+            
+            // 1. Update Specific User Account (Primary)
+            string userQuery = "UPDATE Users SET SubscriptionTier = @Tier WHERE Id = @UserId";
+            var userParams = new Dictionary<string, object>
+            {
+                { "@Tier", tierName },
+                { "@UserId", UserSession.UserId }
+            };
+            int result = await ExecuteNonQueryAsync(userQuery, userParams);
+
+            // 2. Update Global Settings (Secondary)
+            try 
+            {
+                string globalQuery = "IF EXISTS (SELECT 1 FROM SubscriptionSettings) UPDATE SubscriptionSettings SET TierName = @Tier, LastUpdated = GETDATE(), UpdatedBy = @User ELSE INSERT INTO SubscriptionSettings (TierName, LastUpdated, UpdatedBy) VALUES (@Tier, GETDATE(), @User)";
+                var globalParams = new Dictionary<string, object>
+                {
+                    { "@Tier", tierName },
+                    { "@User", UserSession.UserName ?? "Admin" }
+                };
+                await ExecuteNonQueryAsync(globalQuery, globalParams);
+            }
+            catch { /* Ignore if table doesn't exist yet */ }
+
+            return result;
+        }
     }
 }

@@ -136,7 +136,7 @@ public partial class DeliveryStaffLogisticsPage : ContentPage
         // REQUIREMENT: Must provide location for parcel journey update
         if (string.IsNullOrWhiteSpace(location))
         {
-            await DisplayAlert("Location Required", "Please enter the current location or status details (e.g., 'Sorting Facility', 'At Hub').", "OK");
+            await DisplayAlertAsync("Location Required", "Please enter the current location or status details (e.g., 'Sorting Facility', 'At Hub').", "OK");
             return;
         }
 

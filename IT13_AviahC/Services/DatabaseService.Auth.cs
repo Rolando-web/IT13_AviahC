@@ -19,5 +19,16 @@ namespace IT13_AviahC.Services
             DataTable dt = ExecuteQuery(query, parameters);
             return dt.Rows.Count > 0 ? dt.Rows[0] : null;
         }
+
+        public void RecordLoginSession(int userId, string deviceType = "Desktop")
+        {
+            string query = "INSERT INTO UserSessions (UserId, DeviceType) VALUES (@UserId, @DeviceType)";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@UserId", userId },
+                { "@DeviceType", deviceType }
+            };
+            ExecuteNonQuery(query, parameters);
+        }
     }
 }

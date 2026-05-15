@@ -58,14 +58,22 @@
  
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
                             <VerticalStackLayout Spacing="2">
-                                <Entry x:Name="QuantityEntry" Placeholder="Quantity" Keyboard="Numeric" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
+                                <Label Text="Boutique Stock" FontSize="11" TextColor="#64748B" Margin="2,0,0,0" />
+                                <Entry x:Name="QuantityEntry" Placeholder="Boutique Quantity" Keyboard="Numeric" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
                                 <BoxView HeightRequest="1" BackgroundColor="#3ABEF9" />
                             </VerticalStackLayout>
                             <VerticalStackLayout Grid.Column="1" Spacing="2">
-                                <Entry x:Name="PriceEntry" Placeholder="Price" Keyboard="Numeric" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
+                                <Label Text="Warehouse Stock" FontSize="11" TextColor="#64748B" Margin="2,0,0,0" />
+                                <Entry x:Name="WarehouseQuantityEntry" Placeholder="Warehouse Quantity" Keyboard="Numeric" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
                                 <BoxView HeightRequest="1" BackgroundColor="#3ABEF9" />
                             </VerticalStackLayout>
                         </Grid>
+
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Unit Price" FontSize="11" TextColor="#64748B" Margin="2,0,0,0" />
+                            <Entry x:Name="PriceEntry" Placeholder="Price" Keyboard="Numeric" FontSize="14" TextColor="#1E293B" BackgroundColor="Transparent" />
+                            <BoxView HeightRequest="1" BackgroundColor="#3ABEF9" />
+                        </VerticalStackLayout>
  
                         <VerticalStackLayout Spacing="2">
                             <Picker x:Name="PromotionPicker" Title="Apply Promotion (Optional)" FontSize="14" TextColor="#1E293B" ItemDisplayBinding="{Binding PromotionName}" />

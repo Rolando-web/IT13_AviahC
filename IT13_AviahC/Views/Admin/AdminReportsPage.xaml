@@ -41,7 +41,7 @@
                                     </Border>
                                     <VerticalStackLayout>
                                         <Label Text="Total Revenue" TextColor="#94A3B8" FontSize="12" FontAttributes="Bold" />
-                                        <Label Text="₱314,000" TextColor="#1E293B" FontSize="24" FontAttributes="Bold" />
+                                        <Label x:Name="TotalRevenueLabel" Text="₱0" TextColor="#1E293B" FontSize="24" FontAttributes="Bold" />
                                     </VerticalStackLayout>
                                 </HorizontalStackLayout>
                                 <Label Text="+12.5% from last period" TextColor="#10B981" FontSize="11" FontAttributes="Bold" />
@@ -57,7 +57,7 @@
                                     </Border>
                                     <VerticalStackLayout>
                                         <Label Text="Items Sold" TextColor="#94A3B8" FontSize="12" FontAttributes="Bold" />
-                                        <Label Text="1,245" TextColor="#1E293B" FontSize="24" FontAttributes="Bold" />
+                                        <Label x:Name="ItemsSoldLabel" Text="0" TextColor="#1E293B" FontSize="24" FontAttributes="Bold" />
                                     </VerticalStackLayout>
                                 </HorizontalStackLayout>
                                 <Label Text="-8.2% from last period" TextColor="#EF4444" FontSize="11" FontAttributes="Bold" />
@@ -73,7 +73,7 @@
                                     </Border>
                                     <VerticalStackLayout>
                                         <Label Text="New Customers" TextColor="#94A3B8" FontSize="12" FontAttributes="Bold" />
-                                        <Label Text="89" TextColor="#1E293B" FontSize="24" FontAttributes="Bold" />
+                                        <Label x:Name="NewCustomersLabel" Text="0" TextColor="#1E293B" FontSize="24" FontAttributes="Bold" />
                                     </VerticalStackLayout>
                                 </HorizontalStackLayout>
                                 <Label Text="+15.3% from last period" TextColor="#10B981" FontSize="11" FontAttributes="Bold" />
@@ -88,7 +88,7 @@
                                     </Border>
                                     <VerticalStackLayout>
                                         <Label Text="Profit Margin" TextColor="#94A3B8" FontSize="12" FontAttributes="Bold" />
-                                        <Label Text="42.8%" TextColor="#1E293B" FontSize="24" FontAttributes="Bold" />
+                                        <Label x:Name="ProfitMarginLabel" Text="0%" TextColor="#1E293B" FontSize="24" FontAttributes="Bold" />
                                     </VerticalStackLayout>
                                 </HorizontalStackLayout>
                                 <Label Text="+2.1% from last period" TextColor="#10B981" FontSize="11" FontAttributes="Bold" />
@@ -103,8 +103,8 @@
                             
                             <!-- Simple Line Chart Visual -->
                             <Grid HeightRequest="300">
-                                <Path Data="M0,200 L100,180 L200,210 L300,160 L400,170 L500,140 L600,120 L700,100" Stroke="#624890" StrokeThickness="3" Aspect="Fill" />
-                                <Path Data="M0,250 L100,240 L200,255 L300,230 L400,235 L500,220 L600,210 L700,200" Stroke="#10B981" StrokeThickness="2" Aspect="Fill" />
+                                <Path x:Name="SalesTrendPath" Data="M0,200 L100,180 L200,210 L300,160 L400,170 L500,140 L600,120 L700,100" Stroke="#624890" StrokeThickness="3" Aspect="Fill" />
+                                <Path x:Name="ProfitTrendPath" Data="M0,250 L100,240 L200,255 L300,230 L400,235 L500,220 L600,210 L700,200" Stroke="#10B981" StrokeThickness="2" Aspect="Fill" />
                                 
                                 <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" VerticalOptions="End" />
                                 <Grid ColumnDefinitions="*,*,*,*,*,*,*" VerticalOptions="End" Margin="0,10,0,0">
@@ -138,11 +138,11 @@
                                 <Grid ColumnDefinitions="Auto,*" ColumnSpacing="24">
                                     <Grid HeightRequest="200" WidthRequest="200">
                                         <Ellipse Fill="#624890" />
-                                        <Path Data="M100,100 L100,0 A100,100 0 0,1 186.6,50 Z" Fill="#7D6A9E" />
-                                        <Path Data="M100,100 L186.6,50 A100,100 0 0,1 186.6,150 Z" Fill="#A799C0" />
-                                        <Path Data="M100,100 L186.6,150 A100,100 0 0,1 100,200 Z" Fill="#D1C4E9" />
+                                        <Path x:Name="CategoryPath1" Data="M100,100 L100,0 A100,100 0 0,1 186.6,50 Z" Fill="#7D6A9E" />
+                                        <Path x:Name="CategoryPath2" Data="M100,100 L186.6,50 A100,100 0 0,1 186.6,150 Z" Fill="#A799C0" />
+                                        <Path x:Name="CategoryPath3" Data="M100,100 L186.6,150 A100,100 0 0,1 100,200 Z" Fill="#D1C4E9" />
                                     </Grid>
-                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="16">
+                                    <VerticalStackLayout x:Name="CategoryLegend" Grid.Column="1" VerticalOptions="Center" Spacing="16">
                                         <Label Text="Dresses: 45%" TextColor="#64748B" FontSize="13" />
                                         <Label Text="Tops: 28%" TextColor="#64748B" FontSize="13" />
                                         <Label Text="Bottoms: 18%" TextColor="#64748B" FontSize="13" />
@@ -155,7 +155,7 @@
                         <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="32" StrokeThickness="0">
                             <VerticalStackLayout Spacing="24">
                                 <Label Text="Inventory Turnover Rate" FontSize="18" FontAttributes="Bold" TextColor="#463366" />
-                                <VerticalStackLayout Spacing="20">
+                                <VerticalStackLayout x:Name="TurnoverList" Spacing="20">
                                     <Grid ColumnDefinitions="*,Auto">
                                         <VerticalStackLayout Spacing="4">
                                             <Label Text="Violet Summer Dress" FontAttributes="Bold" FontSize="14" TextColor="#1E293B" />

@@ -15,6 +15,7 @@
        Title="Aviah System">
 
     <ShellContent Title="Login" ContentTemplate="{DataTemplate auth:LoginPage}" Route="Login" />
+    <ShellContent Title="Signup" ContentTemplate="{DataTemplate auth:SignupPage}" Route="Signup" />
     
     <!-- Superadmin Module -->
     <FlyoutItem Title="Superadmin" Route="Superadmin" FlyoutDisplayOptions="AsMultipleItems">
@@ -30,7 +31,8 @@
     <!-- Admin Module -->
     <FlyoutItem Title="Admin" Route="Admin" FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent Title="Admin Dashboard" ContentTemplate="{DataTemplate admin:AdminDashboardPage}" Route="AdminDashboard" />
-        <ShellContent Title="Admin Inventory" ContentTemplate="{DataTemplate admin:AdminInventoryPage}" Route="AdminInventory" />
+        <ShellContent Title="Admin Warehouse" ContentTemplate="{DataTemplate admin:AdminInventoryPage}" Route="AdminInventory" />
+        <ShellContent Title="Admin Boutique" ContentTemplate="{DataTemplate admin:AdminBoutiquePage}" Route="AdminBoutique" />
         <ShellContent Title="Admin Production" ContentTemplate="{DataTemplate admin:AdminProductionPage}" Route="AdminProduction" />
         <ShellContent Title="Admin Sales" ContentTemplate="{DataTemplate admin:AdminSalesPage}" Route="AdminSales" />
         <ShellContent Title="Admin Suppliers" ContentTemplate="{DataTemplate admin:AdminSuppliersPage}" Route="AdminSuppliers" />
@@ -38,6 +40,7 @@
         <ShellContent Title="Admin Logistics" ContentTemplate="{DataTemplate admin:AdminLogisticsPage}" Route="AdminLogistics" />
         <ShellContent Title="Admin Reports" ContentTemplate="{DataTemplate admin:AdminReportsPage}" Route="AdminReports" />
         <ShellContent Title="Admin Promotions" ContentTemplate="{DataTemplate admin:AdminPromotionsPage}" Route="AdminPromotions" />
+        <ShellContent Title="Admin Manage Users" ContentTemplate="{DataTemplate admin:AdminManageUsersPage}" Route="AdminManageUsers" />
         <ShellContent Title="Admin Subscription" ContentTemplate="{DataTemplate admin:AdminSubscriptionPage}" Route="AdminSubscription" />
     </FlyoutItem>
 

@@ -67,7 +67,7 @@ public partial class SpecialOffersPage : ContentPage
         if (sender is Button btn && btn.CommandParameter is Product product)
         {
             decimal finalPrice = product.DiscountPrice ?? product.UnitPrice;
-            bool confirm = await DisplayAlert("Confirm Purchase", $"Order {product.ProductName} for the special price of {finalPrice:₱#,##0.00}?", "Yes", "No");
+            bool confirm = await DisplayAlertAsync("Confirm Purchase", $"Order {product.ProductName} for the special price of {finalPrice:₱#,##0.00}?", "Yes", "No");
             
             if (confirm)
             {
@@ -76,7 +76,7 @@ public partial class SpecialOffersPage : ContentPage
                 
                 if (result > 0)
                 {
-                    await DisplayAlert("Order Placed!", "Your promotional item has been ordered successfully.", "OK");
+                    await DisplayAlertAsync("Order Placed!", "Your promotional item has been ordered successfully.", "OK");
                     await Shell.Current.GoToAsync("///CustomerOrders");
                 }
             }

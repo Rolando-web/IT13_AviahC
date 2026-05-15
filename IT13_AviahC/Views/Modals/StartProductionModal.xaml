@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="IT13_AviahC.Views.Modals.StartProductionModal"
+             BackgroundColor="#80000000">
+    <Grid>
+        <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="32" 
+                HorizontalOptions="Center" VerticalOptions="Center" 
+                WidthRequest="500" StrokeThickness="0">
+            <VerticalStackLayout Spacing="24">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label x:Name="ModalTitle" Text="Start Production" FontSize="22" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="X" FontSize="20" FontAttributes="Bold" TextColor="#94A3B8" VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCloseRequested" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+                
+                <Label x:Name="ProductNameLabel" Text="Product Name" FontSize="18" FontAttributes="Bold" TextColor="#624890" />
+                
+                <!-- Materials Availability -->
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Required Materials Availability:" FontSize="14" FontAttributes="Bold" TextColor="#64748B" />
+                    <VerticalStackLayout x:Name="MaterialsContainer" Spacing="4" />
+                </VerticalStackLayout>
+
+                <!-- Max Possible -->
+                <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 12" Padding="16" StrokeThickness="0">
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="Maximum possible to make:" FontSize="14" TextColor="#64748B" VerticalOptions="Center" />
+                        <Label x:Name="MaxPossibleLabel" Text="0 pcs" FontSize="16" FontAttributes="Bold" TextColor="#624890" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <!-- Input Quantity -->
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Quantity to Produce" FontSize="14" FontAttributes="Bold" TextColor="#64748B" />
+                    <Border StrokeShape="RoundRectangle 12" BackgroundColor="#F8FAFC" StrokeThickness="1" Stroke="#E2E8F0" Padding="16,4">
+                        <Entry x:Name="QuantityEntry" Keyboard="Numeric" Placeholder="Enter quantity..." TextColor="#1E293B" BackgroundColor="Transparent" TextChanged="OnQuantityChanged" />
+                    </Border>
+                    <Label x:Name="ErrorLabel" Text="Quantity exceeds available materials!" TextColor="#EF4444" FontSize="12" IsVisible="False" />
+                </VerticalStackLayout>
+
+                <!-- Actions -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="16" Margin="0,16,0,0">
+                    <Button Text="Cancel" Clicked="OnCloseRequested" BackgroundColor="#F1F5F9" TextColor="#64748B" CornerRadius="12" FontAttributes="Bold" HeightRequest="48" />
+                    <Button x:Name="StartButton" Text="Start Batch" Clicked="OnStartRequested" BackgroundColor="#624890" TextColor="White" CornerRadius="12" FontAttributes="Bold" HeightRequest="48" IsEnabled="False" />
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentView>

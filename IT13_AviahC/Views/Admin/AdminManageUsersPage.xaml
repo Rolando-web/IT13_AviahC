@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Admin.Components"
+             x:Class="IT13_AviahC.Views.Admin.AdminManageUsersPage"
+             BackgroundColor="#F3F0FA">
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Reusable Sidebar -->
+        <components:AdminSidebarView Grid.Column="0" CurrentPage="AdminManageUsers" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <!-- Header -->
+            <components:AdminHeaderView Grid.Row="0" />
+
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="32" Spacing="24">
+                    <!-- Title Row -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout>
+                            <Label Text="User Management" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
+                            <Label x:Name="TierScopeLabel" Text="Managing company users" FontSize="14" TextColor="#64748B" />
+                        </VerticalStackLayout>
+                        
+                        <HorizontalStackLayout Grid.Column="1" Spacing="12">
+                            <Button Text="+ Add New User" BackgroundColor="#624890" TextColor="White" CornerRadius="12" Padding="24,0" FontAttributes="Bold" FontSize="14" HeightRequest="44" Clicked="OnAddUserClicked" />
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <!-- User List Card -->
+                    <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="0" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="0">
+                            <Grid ColumnDefinitions="Auto,*" Padding="32,20">
+                                <Label Text="All Accounts" TextColor="#624890" FontAttributes="Bold" FontSize="18" VerticalOptions="Center" />
+                            </Grid>
+                            
+                            <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" />
+
+                            <!-- Table Header -->
+                            <Grid ColumnDefinitions="2*,2*,*,*,Auto" Padding="32,16" BackgroundColor="#F3F0FA" ColumnSpacing="10">
+                                <Label Text="Name" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                <Label Grid.Column="1" Text="Email" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                <Label Grid.Column="2" Text="Role" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                <Label Grid.Column="3" Text="Tier" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                <Label Grid.Column="4" Text="Actions" FontAttributes="Bold" FontSize="13" TextColor="#624890" HorizontalTextAlignment="End" WidthRequest="100" />
+                            </Grid>
+
+                            <!-- User List -->
+                            <CollectionView x:Name="UsersCollection">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <VerticalStackLayout>
+                                            <Grid ColumnDefinitions="2*,2*,*,*,Auto" Padding="32,20" ColumnSpacing="10">
+                                                <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+                                                    <Border BackgroundColor="#F3F0FA" HeightRequest="32" WidthRequest="32" StrokeShape="RoundRectangle 16">
+                                                        <Label Text="{Binding Initials}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="12" TextColor="#624890" FontAttributes="Bold" />
+                                                    </Border>
+                                                    <Label Text="{Binding FullName}" FontAttributes="Bold" FontSize="14" TextColor="#463366" VerticalOptions="Center" />
+                                                </HorizontalStackLayout>
+                                                
+                                                <Label Grid.Column="1" Text="{Binding Email}" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                                <Label Grid.Column="2" Text="{Binding Role}" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                                <Label Grid.Column="3" Text="{Binding SubscriptionTier}" FontSize="13" TextColor="#624890" FontAttributes="Bold" VerticalOptions="Center" />
+                                                
+                                                <HorizontalStackLayout Grid.Column="4" Spacing="12" HorizontalOptions="End" VerticalOptions="Center">
+                                                    <Label Text="Edit" TextColor="#624890" FontSize="13" TextDecorations="Underline" />
+                                                    <Label Text="Deactivate" TextColor="#EF4444" FontSize="13" TextDecorations="Underline" />
+                                                </HorizontalStackLayout>
+                                            </Grid>
+                                            <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" Margin="32,0" />
+                                        </VerticalStackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Active Sessions (Tier 3 Only) -->
+                    <VerticalStackLayout x:Name="SessionsSection" Spacing="16" Margin="0,16,0,0">
+                        <Label Text="Active Sessions (Real-time)" FontSize="22" FontAttributes="Bold" TextColor="#463366" />
+                        <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="0" StrokeThickness="0">
+                            <CollectionView x:Name="SessionsCollection">
+                                <CollectionView.Header>
+                                    <Grid ColumnDefinitions="2*,2*,*,Auto" Padding="32,16" BackgroundColor="#F3F0FA" ColumnSpacing="10">
+                                        <Label Text="User" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                        <Label Grid.Column="1" Text="Login Time" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                        <Label Grid.Column="2" Text="Device" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                                        <Label Grid.Column="3" Text="Status" FontAttributes="Bold" FontSize="13" TextColor="#624890" HorizontalTextAlignment="End" WidthRequest="80" />
+                                    </Grid>
+                                </CollectionView.Header>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <VerticalStackLayout>
+                                            <Grid ColumnDefinitions="2*,2*,*,Auto" Padding="32,20" ColumnSpacing="10">
+                                                <Label Text="{Binding UserName}" FontAttributes="Bold" FontSize="14" TextColor="#463366" VerticalOptions="Center" />
+                                                <Label Grid.Column="1" Text="{Binding LoginTimeFormatted}" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                                <Label Grid.Column="2" Text="{Binding DeviceType}" FontSize="13" TextColor="#64748B" VerticalOptions="Center" />
+                                                <Border Grid.Column="3" BackgroundColor="#DCFCE7" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="End">
+                                                    <Label Text="Online" TextColor="#15803D" FontSize="11" FontAttributes="Bold" />
+                                                </Border>
+                                            </Grid>
+                                            <BoxView HeightRequest="1" BackgroundColor="#F1F5F9" Margin="32,0" />
+                                        </VerticalStackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </Border>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

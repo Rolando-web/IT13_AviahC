@@ -43,6 +43,7 @@ namespace IT13_AviahC.Services
                        p.IsOnPromotion,
                        p.ImageUrl,
                        p.Description,
+                       ISNULL(p.WarehouseStock, 0) AS WarehouseStock,
                        'PROD-' + CAST(p.ProductID AS VARCHAR) AS SKU,
                        CASE 
                            WHEN p.StockQuantity <= 0 THEN 'Out of Stock'
@@ -93,14 +94,15 @@ namespace IT13_AviahC.Services
             return await ExecuteNonQueryAsync(query, parameters);
         }
 
-        public int AddInventory(string productName, string sku, string category, int stock, string unit, decimal price, string status, string imageUrl, int? promoId = null)
+        public int AddInventory(string productName, string sku, string category, int stock, int warehouseStock, string unit, decimal price, string status, string imageUrl, int? promoId = null)
         {
-            string query = "INSERT INTO Products (ProductName, Category, StockQuantity, Price, ImageUrl, Description, IsOnPromotion) VALUES (@ProductName, @Category, @Stock, @Price, @ImageUrl, @Description, 0)";
+            string query = "INSERT INTO Products (ProductName, Category, StockQuantity, WarehouseStock, Price, ImageUrl, Description, IsOnPromotion) VALUES (@ProductName, @Category, @Stock, @WarehouseStock, @Price, @ImageUrl, @Description, 0)";
             var parameters = new Dictionary<string, object>
             {
                 { "@ProductName", productName },
                 { "@Category", category },
                 { "@Stock", stock },
+                { "@WarehouseStock", warehouseStock },
                 { "@Price", price },
                 { "@ImageUrl", imageUrl },
                 { "@Description", string.Empty }
@@ -108,15 +110,16 @@ namespace IT13_AviahC.Services
             return ExecuteNonQuery(query, parameters);
         }
 
-        public int UpdateInventory(int id, string productName, string sku, string category, int stock, string unit, decimal price, string status, string imageUrl, int? promoId = null)
+        public int UpdateInventory(int id, string productName, string sku, string category, int stock, int warehouseStock, string unit, decimal price, string status, string imageUrl, int? promoId = null)
         {
-            string query = "UPDATE Products SET ProductName = @ProductName, Category = @Category, StockQuantity = @Stock, Price = @Price, ImageUrl = @ImageUrl WHERE ProductID = @Id";
+            string query = "UPDATE Products SET ProductName = @ProductName, Category = @Category, StockQuantity = @Stock, WarehouseStock = @WarehouseStock, Price = @Price, ImageUrl = @ImageUrl WHERE ProductID = @Id";
             var parameters = new Dictionary<string, object>
             {
                 { "@Id", id },
                 { "@ProductName", productName },
                 { "@Category", category },
                 { "@Stock", stock },
+                { "@WarehouseStock", warehouseStock },
                 { "@Price", price },
                 { "@ImageUrl", imageUrl }
             };

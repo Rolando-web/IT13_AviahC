@@ -68,6 +68,15 @@
                             Clicked="OnLoginClicked" />
 
                     <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
+                        <Label Text="Don't have an account?" FontSize="13" TextColor="#7D6A9E" />
+                        <Label Text="Sign Up" FontSize="13" TextColor="#624890" FontAttributes="Bold">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnSignupLabelTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
                         <Label Text="Having trouble?" FontSize="13" TextColor="#7D6A9E" />
                         <Label Text="Contact Support" FontSize="13" TextColor="#624890" FontAttributes="Bold" />
                     </HorizontalStackLayout>

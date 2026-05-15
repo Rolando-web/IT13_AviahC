@@ -58,7 +58,7 @@ namespace IT13_AviahC.Services
 
         public DataTable GetAllSales()
         {
-            // Sales page expects: OrderID, CustomerName, ItemsSummary, SalesDate, TotalAmount, Status
+            // Sales page for Admin: Include all orders as requested
             return ExecuteQuery(@"
                 SELECT 
                     o.OrderRef AS OrderID, 
@@ -72,25 +72,38 @@ namespace IT13_AviahC.Services
                 ORDER BY o.OrderDate DESC");
         }
 
-        public DataTable GetAllProduction()
+        public DataTable GetSystemSales()
         {
-            // Production page expects: BatchID, ProductName, Status, Progress, EndDate, StartDate, TargetQuantity
+            // Sales page for Superadmin: Include ONLY Subscription (SUB-) orders
             return ExecuteQuery(@"
                 SELECT 
-                    po.PONumber AS BatchID, 
-                    rm.ItemName AS ProductName, 
-                    po.Status, 
-                    CASE 
-                        WHEN po.Status = 'Ready' THEN 100 
-                        WHEN po.Status = 'In Production' THEN 65 
-                        ELSE 20 
-                    END AS Progress,
-                    po.DueDate AS EndDate,
-                    DATEADD(day, -7, po.DueDate) AS StartDate,
-                    po.Quantity AS TargetQuantity
-                FROM PurchaseOrders po
-                LEFT JOIN RawMaterials rm ON po.MaterialID = rm.MaterialID
-                ORDER BY po.DueDate DESC");
+                    o.OrderRef AS OrderID, 
+                    u.FirstName + ' ' + u.LastName AS CustomerName,
+                    o.ItemSummary AS ItemsSummary,
+                    o.OrderDate AS SalesDate,
+                    o.TotalAmount,
+                    o.Status
+                FROM Orders o
+                LEFT JOIN Users u ON o.UserId = u.Id
+                WHERE o.OrderRef LIKE 'SUB-%'
+                ORDER BY o.OrderDate DESC");
+        }
+
+        public DataTable GetAllProduction()
+        {
+            // Production page: Using the dedicated ProductionBatches table
+            return ExecuteQuery(@"
+                SELECT 
+                    pb.BatchID, 
+                    p.ProductName, 
+                    pb.Status, 
+                    CAST((CAST(pb.ProducedQuantity AS FLOAT) / CASE WHEN pb.TargetQuantity = 0 THEN 1 ELSE pb.TargetQuantity END) * 100 AS INT) AS Progress,
+                    pb.EndDate,
+                    pb.StartDate,
+                    pb.TargetQuantity
+                FROM ProductionBatches pb
+                LEFT JOIN Products p ON pb.ProductID = p.ProductID
+                ORDER BY pb.StartDate DESC");
         }
     }
 }

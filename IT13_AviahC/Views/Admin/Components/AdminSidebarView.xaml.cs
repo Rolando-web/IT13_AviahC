@@ -1,5 +1,6 @@
 using Microsoft.Maui.Controls;
 using System.Windows.Input;
+using IT13_AviahC.Services;
 
 namespace IT13_AviahC.Views.Admin.Components
 {
@@ -44,8 +45,45 @@ namespace IT13_AviahC.Views.Admin.Components
                 }
             });
             InitializeComponent();
-            // BindingContext should not be set to 'this' in a ContentView to avoid memory leaks.
-            // Instead, use x:Reference in XAML or set the content's BindingContext.
+            this.Loaded += (s, e) => Refresh();
+            ApplyTierRestrictions();
+        }
+
+        public void Refresh()
+        {
+            ApplyTierRestrictions();
+        }
+
+        private void ApplyTierRestrictions()
+        {
+            string tier = (UserSession.CurrentTier ?? "Basic").Trim();
+
+            // Initialize all to visible then hide based on tier
+            ProductionNav.IsVisible = true;
+            SuppliersNav.IsVisible = true;
+            LogisticsNav.IsVisible = true;
+            ReportsNav.IsVisible = true;
+            PromotionsNav.IsVisible = true;
+            SubscriptionNav.IsVisible = true;
+            ManageUsersNav.IsVisible = true;
+
+            if (tier.Equals("Basic", StringComparison.OrdinalIgnoreCase))
+            {
+                ProductionNav.IsVisible = false;
+                SuppliersNav.IsVisible = false;
+                LogisticsNav.IsVisible = false;
+                ReportsNav.IsVisible = false;
+                PromotionsNav.IsVisible = false;
+                ManageUsersNav.IsVisible = false;
+                // Basic can see Dashboard, Inventory, Sales, Customers, Subscription
+            }
+            else if (tier.Equals("Standard", StringComparison.OrdinalIgnoreCase))
+            {
+                // Standard adds Production, Suppliers, Reports, Manage Users (Company)
+                LogisticsNav.IsVisible = false;
+                PromotionsNav.IsVisible = false;
+            }
+            // Premium (Tier 3) sees everything
         }
     }
 }

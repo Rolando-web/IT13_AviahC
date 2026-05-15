@@ -22,6 +22,7 @@ namespace IT13_AviahC.Views.Modals
             SKUEntry.Text = string.Empty;
             CategoryPicker.SelectedIndex = -1;
             QuantityEntry.Text = string.Empty;
+            WarehouseQuantityEntry.Text = string.Empty;
             PriceEntry.Text = string.Empty;
             PromotionPicker.SelectedItem = null;
         }
@@ -34,6 +35,7 @@ namespace IT13_AviahC.Views.Modals
             SKUEntry.Text = item.SKU;
             CategoryPicker.SelectedItem = item.Category;
             QuantityEntry.Text = item.StockLevel.ToString();
+            WarehouseQuantityEntry.Text = item.WarehouseStock.ToString();
             PriceEntry.Text = item.UnitPrice.ToString();
 
             if (promotions != null && item.PromoId.HasValue)
@@ -50,6 +52,7 @@ namespace IT13_AviahC.Views.Modals
         public string? SKU => SKUEntry.Text;
         public string Category => CategoryPicker.SelectedItem?.ToString() ?? "General";
         public int StockLevel => int.TryParse(QuantityEntry.Text, out int stock) ? stock : 0;
+        public int WarehouseStock => int.TryParse(WarehouseQuantityEntry.Text, out int wStock) ? wStock : 0;
         public decimal UnitPrice => decimal.TryParse(PriceEntry.Text, out decimal price) ? price : 0m;
         public int? PromoId => (PromotionPicker.SelectedItem as Promotion)?.PromoID;
         public string? ImagePath { get; set; }

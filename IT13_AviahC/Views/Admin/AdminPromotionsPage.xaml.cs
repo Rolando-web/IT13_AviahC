@@ -79,13 +79,13 @@ public partial class AdminPromotionsPage : ContentPage
     {
         if (sender is Button btn && btn.CommandParameter is Product product)
         {
-            bool confirm = await DisplayAlert("Remove Promotion", $"Restore {product.ProductName} to original price of {product.UnitPrice:₱#,##0.00}?", "Yes", "No");
+            bool confirm = await DisplayAlertAsync("Remove Promotion", $"Restore {product.ProductName} to original price of {product.UnitPrice:₱#,##0.00}?", "Yes", "No");
             if (confirm)
             {
                 int res = await _db.SetProductPromotionAsync(product.Id, false, null);
                 if (res > 0)
                 {
-                    await DisplayAlert("Success", "Product restored to Boutique.", "OK");
+                    await DisplayAlertAsync("Success", "Product restored to Boutique.", "OK");
                     await LoadProductsAsync();
                 }
             }
@@ -106,25 +106,25 @@ public partial class AdminPromotionsPage : ContentPage
         {
             if (discountPrice >= _selectedProduct.UnitPrice)
             {
-                await DisplayAlert("Invalid Price", "Discounted price must be lower than the regular price.", "OK");
+                await DisplayAlertAsync("Invalid Price", "Discounted price must be lower than the regular price.", "OK");
                 return;
             }
 
             int result = await _db.SetProductPromotionAsync(_selectedProduct.Id, true, discountPrice);
             if (result > 0)
             {
-                await DisplayAlert("Success", "Promotion applied successfully!", "OK");
+                await DisplayAlertAsync("Success", "Promotion applied successfully!", "OK");
                 PromoModal.IsVisible = false;
                 await LoadProductsAsync();
             }
             else
             {
-                await DisplayAlert("Error", "Could not apply promotion.", "OK");
+                await DisplayAlertAsync("Error", "Could not apply promotion.", "OK");
             }
         }
         else
         {
-            await DisplayAlert("Error", "Please enter a valid numeric discount price.", "OK");
+            await DisplayAlertAsync("Error", "Please enter a valid numeric discount price.", "OK");
         }
     }
 }

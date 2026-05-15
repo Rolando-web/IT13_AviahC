@@ -40,7 +40,7 @@ namespace IT13_AviahC.Views.Admin
             {
                 DataTable dt = await _dbService.GetAllDeliveriesAsync();
                 var deliveries = new List<DeliveryItem>();
-                var pendingOptions = new List<string>();
+                var pendingDeliveries = new List<DeliveryItem>();
 
                 foreach (DataRow row in dt.Rows)
                 {
@@ -53,14 +53,15 @@ namespace IT13_AviahC.Views.Admin
                         ETA = row["ETA"]?.ToString() ?? "TBD",
                         DriverName = row["DriverName"]?.ToString() ?? "Unassigned",
                         CurrentLocation = row["CurrentLocation"]?.ToString() ?? "Unknown",
-                        Destination = row["Destination"]?.ToString() ?? "Not set"
+                        Destination = row["Destination"]?.ToString() ?? "Not set",
+                        ProductImage = row["ProductImage"]?.ToString() ?? "dress.png"
                     };
 
                     deliveries.Add(item);
 
                     if (item.Status == "Pending" || item.Status == "Order placed")
                     {
-                        pendingOptions.Add($"{item.DeliveryID} — {item.OrderRef}");
+                        pendingDeliveries.Add(item);
                     }
                 }
 
@@ -74,8 +75,17 @@ namespace IT13_AviahC.Views.Admin
 
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    DeliveriesCollection.ItemsSource = deliveries;
-                    DeliveryPicker.ItemsSource = pendingOptions;
+                    // Filter out completed deliveries for the main list
+                    var activeDeliveries = deliveries.Where(d => 
+                        !d.Status.Equals("Package delivered successfully", StringComparison.OrdinalIgnoreCase) && 
+                        !d.Status.Equals("Completed", StringComparison.OrdinalIgnoreCase)).ToList();
+
+                    DeliveriesCollection.ItemsSource = activeDeliveries;
+                    TotalLoadLabel.Text = activeDeliveries.Count.ToString();
+
+                    DeliveryPicker.ItemsSource = pendingDeliveries;
+                    DeliveryPicker.ItemDisplayBinding = new Binding("DeliveryID");
+                    
                     DriverPicker.ItemsSource = driverList;
                 });
             }
@@ -93,7 +103,7 @@ namespace IT13_AviahC.Views.Admin
 
             _selectedDeliveryId = delivery.DeliveryID;
 
-            ModalTitle.Text = $"Update: {_selectedDeliveryId}";
+            ModalTitle.Text = $"Update Status: {delivery.OrderRef}";
             DetailsEntry.Text = delivery.CurrentLocation;
 
             // Enforce sequence logic
@@ -137,29 +147,70 @@ namespace IT13_AviahC.Views.Admin
                 return;
             }
 
-            string newStatus = StatusPicker.SelectedItem.ToString()!;
             string location = DetailsEntry.Text?.Trim() ?? string.Empty;
-            string driverName = DriverPicker.SelectedItem?.ToString() ?? "Unassigned";
+            if (string.IsNullOrWhiteSpace(location))
+            {
+                await DisplayAlertAsync("Location Required", "Please enter current location details.", "OK");
+                return;
+            }
+
+            string newStatus = StatusPicker.SelectedItem.ToString()!;
 
             int result = await _dbService.UpdateDeliveryAsync(
                 _selectedDeliveryId, newStatus, location,
                 destination: string.Empty,
                 eta: string.Empty,
-                driverName: driverName);
+                driverName: string.Empty); // Don't change driver here
 
             if (result > 0)
             {
-                await DisplayAlertAsync("Updated",
-                    $"{_selectedDeliveryId} → '{newStatus}'.\nCustomer tracking has been updated.", "OK");
+                ModalOverlay.IsVisible = false;
+                _selectedDeliveryId = string.Empty;
+                _ = LoadDeliveries();
             }
             else
             {
                 await DisplayAlertAsync("Failed", "Could not update delivery status.", "OK");
             }
+        }
 
-            ModalOverlay.IsVisible = false;
-            _selectedDeliveryId = string.Empty;
-            _ = LoadDeliveries();
+        private async void OnViewHistoryClicked(object? sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new AdminDeliveredPage());
+        }
+
+        private async void OnAssignClicked(object? sender, EventArgs e)
+        {
+            if (DeliveryPicker.SelectedItem is DeliveryItem delivery && DriverPicker.SelectedItem is string driverName)
+            {
+                if (driverName == "No drivers registered")
+                {
+                    await DisplayAlertAsync("Error", "No drivers available.", "OK");
+                    return;
+                }
+
+                int result = await _dbService.UpdateDeliveryAsync(
+                    delivery.DeliveryID, 
+                    "Preparing to ship", 
+                    "Warehouse", 
+                    "", 
+                    "", 
+                    driverName);
+
+                if (result > 0)
+                {
+                    await DisplayAlertAsync("Assigned", $"Delivery {delivery.DeliveryID} assigned to {driverName}.", "OK");
+                    _ = LoadDeliveries();
+                }
+                else
+                {
+                    await DisplayAlertAsync("Failed", "Could not assign driver.", "OK");
+                }
+            }
+            else
+            {
+                await DisplayAlertAsync("Required", "Please select both a delivery and a driver.", "OK");
+            }
         }
     }
 }

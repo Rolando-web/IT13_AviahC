@@ -52,13 +52,25 @@
             <Border Grid.Row="2" BackgroundColor="White" StrokeShape="RoundRectangle 24" Margin="32" StrokeThickness="0">
                 <Grid RowDefinitions="Auto,Auto,Auto,*">
                     <!-- Tabs -->
-                    <Grid Grid.Row="0" ColumnDefinitions="*" Padding="0">
+                    <Grid Grid.Row="0" ColumnDefinitions="*,*" Padding="0">
                         <VerticalStackLayout Spacing="0">
                             <HorizontalStackLayout Padding="32,20" Spacing="12" HorizontalOptions="Center">
-                                <Path Data="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z" Fill="#624890" HeightRequest="20" WidthRequest="20" VerticalOptions="Center" />
-                                <Label Text="Boutique (Finished Goods)" TextColor="#624890" FontAttributes="Bold" FontSize="16" VerticalOptions="Center" />
+                                <Label Text="Boutique Inventory" TextColor="{Binding BoutiqueTabColor}" FontAttributes="Bold" FontSize="16" VerticalOptions="Center">
+                                    <Label.GestureRecognizers><TapGestureRecognizer Tapped="OnBoutiqueTabClicked" /></Label.GestureRecognizers>
+                                </Label>
                             </HorizontalStackLayout>
-                            <BoxView HeightRequest="3" BackgroundColor="#624890" HorizontalOptions="Fill" />
+                            <BoxView HeightRequest="3" BackgroundColor="{Binding BoutiqueTabUnderline}" HorizontalOptions="Fill" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="0">
+                            <HorizontalStackLayout Padding="32,20" Spacing="12" HorizontalOptions="Center">
+                                <Label Text="Warehouse (Ready to Stock)" TextColor="{Binding WarehouseTabColor}" FontAttributes="Bold" FontSize="16" VerticalOptions="Center">
+                                    <Label.GestureRecognizers><TapGestureRecognizer Tapped="OnWarehouseTabClicked" /></Label.GestureRecognizers>
+                                </Label>
+                                <Border x:Name="WarehouseBadge" BackgroundColor="#EF4444" IsVisible="False" StrokeShape="RoundRectangle 10" Padding="6,0" VerticalOptions="Center" HeightRequest="18">
+                                    <Label x:Name="WarehouseCountLabel" Text="0" TextColor="White" FontSize="10" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" />
+                                </Border>
+                            </HorizontalStackLayout>
+                            <BoxView HeightRequest="3" BackgroundColor="{Binding WarehouseTabUnderline}" HorizontalOptions="Fill" />
                         </VerticalStackLayout>
                     </Grid>
 
@@ -73,14 +85,14 @@
                     </Grid>
 
                     <!-- Table Header -->
-                    <Grid Grid.Row="2" ColumnDefinitions="80,2*,*,*,*,*,Auto" Padding="32,15" BackgroundColor="#F3F0FA">
-                        <Label Text="Image" FontAttributes="Bold" TextColor="#624890" HorizontalTextAlignment="Center" />
-                        <Label Grid.Column="1" Text="Item Name" FontAttributes="Bold" TextColor="#624890" Margin="10,0,0,0" />
-                        <Label Grid.Column="2" Text="SKU" FontAttributes="Bold" TextColor="#624890" />
-                        <Label Grid.Column="3" Text="Category" FontAttributes="Bold" TextColor="#624890" />
-                        <Label Grid.Column="4" Text="Quantity" FontAttributes="Bold" TextColor="#624890" />
-                        <Label Grid.Column="5" Text="Price" FontAttributes="Bold" TextColor="#624890" />
-                        <Label Grid.Column="6" Text="Actions" FontAttributes="Bold" TextColor="#624890" WidthRequest="100" HorizontalTextAlignment="End" />
+                    <Grid Grid.Row="2" ColumnDefinitions="Auto,2*,*,*,*,*,Auto" Padding="32,16" BackgroundColor="#F3F0FA" ColumnSpacing="10">
+                        <Label Text="Img" FontAttributes="Bold" FontSize="13" TextColor="#624890" WidthRequest="40" />
+                        <Label Grid.Column="1" Text="Product Name" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                        <Label Grid.Column="2" Text="SKU" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                        <Label Grid.Column="3" Text="Category" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                        <Label Grid.Column="4" Text="Price" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                        <Label Grid.Column="5" Text="Stock" FontAttributes="Bold" FontSize="13" TextColor="#624890" />
+                        <Label Grid.Column="6" Text="Actions" FontAttributes="Bold" FontSize="13" TextColor="#624890" HorizontalTextAlignment="End" WidthRequest="110" />
                     </Grid>
 
                     <!-- List Content -->
@@ -89,26 +101,35 @@
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <VerticalStackLayout>
-                                        <Grid ColumnDefinitions="80,2*,*,*,*,*,Auto" Padding="32,15">
-                                            <Border Grid.Column="0" HeightRequest="45" WidthRequest="45" StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="#F3F0FA" HorizontalOptions="Center">
+                                        <Grid ColumnDefinitions="Auto,2*,*,*,*,*,Auto" Padding="32,20" ColumnSpacing="10">
+                                            <Border Grid.Column="0" HeightRequest="40" WidthRequest="40" StrokeShape="RoundRectangle 8" StrokeThickness="0">
                                                 <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />
                                             </Border>
                                             
-                                            <Label Grid.Column="1" Text="{Binding ProductName}" FontAttributes="Bold" TextColor="#1E293B" VerticalOptions="Center" Margin="10,0,0,0" />
-                                            <Label Grid.Column="2" Text="{Binding SKU}" TextColor="#94A3B8" VerticalOptions="Center" />
-                                            <Label Grid.Column="3" Text="{Binding Category}" TextColor="#64748B" VerticalOptions="Center" />
-                                            <HorizontalStackLayout Grid.Column="4" Spacing="4" VerticalOptions="Center">
-                                                <Label Text="{Binding StockLevel}" FontAttributes="Bold" TextColor="#463366" FontSize="15" />
-                                                <Label Text="pcs" TextColor="#64748B" FontSize="13" VerticalOptions="End" Margin="0,0,0,1" />
-                                            </HorizontalStackLayout>
+                                            <Label Grid.Column="1" Text="{Binding ProductName}" FontAttributes="Bold" FontSize="14" TextColor="#463366" VerticalOptions="Center" />
+                                            <Label Grid.Column="2" Text="{Binding SKU}" FontSize="13" TextColor="#94A3B8" VerticalOptions="Center" FontAttributes="Bold" />
+                                            <Label Grid.Column="3" Text="{Binding Category}" FontSize="14" TextColor="#64748B" VerticalOptions="Center" />
                                             
-                                            <Label Grid.Column="5" Text="{Binding FormattedPrice}" TextColor="#624890" FontAttributes="Bold" VerticalOptions="Center" />
+                                            <Label Grid.Column="4" Text="{Binding FormattedPrice}" FontAttributes="Bold" FontSize="14" TextColor="#624890" VerticalOptions="Center" />
 
-                                            <HorizontalStackLayout Grid.Column="6" Spacing="15" HorizontalOptions="End" VerticalOptions="Center">
-                                                <Label Text="Edit" TextColor="#624890" FontSize="13" TextDecorations="Underline">
+                                            <VerticalStackLayout Grid.Column="5" Spacing="2" VerticalOptions="Center">
+                                                <HorizontalStackLayout Spacing="4">
+                                                    <Label Text="{Binding StockLevel}" FontAttributes="Bold" FontSize="15" TextColor="#463366" />
+                                                    <Label Text="pcs" FontSize="13" TextColor="#64748B" VerticalOptions="End" Margin="0,0,0,2" />
+                                                </HorizontalStackLayout>
+                                                <Border BackgroundColor="{Binding StatusColor}" StrokeShape="RoundRectangle 12" Padding="8,2" HorizontalOptions="Start" StrokeThickness="0">
+                                                    <Label Text="{Binding StatusText}" TextColor="{Binding StatusTextColor}" FontSize="9" FontAttributes="Bold" />
+                                                </Border>
+                                            </VerticalStackLayout>
+
+                                            <HorizontalStackLayout Grid.Column="6" Spacing="12" HorizontalOptions="End" VerticalOptions="Center" WidthRequest="110">
+                                                <Label Text="Stock-in" TextColor="#059669" FontSize="13" TextDecorations="Underline" IsVisible="{Binding IsWarehouseView}">
+                                                    <Label.GestureRecognizers><TapGestureRecognizer Tapped="OnStockInClicked" CommandParameter="{Binding .}" /></Label.GestureRecognizers>
+                                                </Label>
+                                                <Label Text="Edit" TextColor="#624890" FontSize="13" TextDecorations="Underline" IsVisible="{Binding IsBoutiqueView}">
                                                     <Label.GestureRecognizers><TapGestureRecognizer Tapped="OnEditItemClicked" CommandParameter="{Binding .}" /></Label.GestureRecognizers>
                                                 </Label>
-                                                <Label Text="Del" TextColor="#EF4444" FontSize="13" TextDecorations="Underline">
+                                                <Label Text="Del" TextColor="#EF4444" FontSize="13" TextDecorations="Underline" IsVisible="{Binding IsBoutiqueView}">
                                                     <Label.GestureRecognizers><TapGestureRecognizer Tapped="OnDeleteItemClicked" CommandParameter="{Binding .}" /></Label.GestureRecognizers>
                                                 </Label>
                                             </HorizontalStackLayout>

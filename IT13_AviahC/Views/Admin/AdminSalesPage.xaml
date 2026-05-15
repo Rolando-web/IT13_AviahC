@@ -41,7 +41,7 @@
                                           Fill="White" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
                                 </Border>
                                 <Label Text="Today's Sales" TextColor="#D1C4E9" FontSize="13" FontAttributes="Bold" />
-                                <Label Text="₱12,450.00" TextColor="White" FontSize="28" FontAttributes="Bold" />
+                                <Label x:Name="TodaySalesLabel" Text="₱0.00" TextColor="White" FontSize="28" FontAttributes="Bold" />
                             </VerticalStackLayout>
                         </Border>
 
@@ -52,7 +52,7 @@
                                           Fill="#624890" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
                                 </Border>
                                 <Label Text="Weekly Revenue" TextColor="#7D6A9E" FontSize="13" FontAttributes="Bold" />
-                                <Label Text="₱84,500.00" TextColor="#463366" FontSize="28" FontAttributes="Bold" />
+                                <Label x:Name="WeeklyRevenueLabel" Text="₱0.00" TextColor="#463366" FontSize="28" FontAttributes="Bold" />
                             </VerticalStackLayout>
                         </Border>
 
@@ -63,7 +63,7 @@
                                           Fill="#EA580C" Aspect="Uniform" HeightRequest="20" WidthRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
                                 </Border>
                                 <Label Text="Pending Orders" TextColor="#7D6A9E" FontSize="13" FontAttributes="Bold" />
-                                <Label Text="14" TextColor="#463366" FontSize="28" FontAttributes="Bold" />
+                                <Label x:Name="PendingOrdersLabel" Text="0" TextColor="#463366" FontSize="28" FontAttributes="Bold" />
                             </VerticalStackLayout>
                         </Border>
                     </Grid>

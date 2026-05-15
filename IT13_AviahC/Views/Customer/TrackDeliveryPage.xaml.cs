@@ -250,7 +250,7 @@ namespace IT13_AviahC.Views.Customer
                 return;
             }
 
-            int result = await _databaseService.SubmitFeedbackAsync(UserSession.UserEmail ?? "customer@aviah.com", subject, message);
+            int result = await _databaseService.SubmitFeedbackAsync(UserSession.UserEmail ?? "customer@aviah.com", UserSession.SelectedOrderRef ?? "N/A", subject, message);
             if (result > 0)
             {
                 await DisplayAlertAsync("Thank You", "Your feedback has been received!", "OK");

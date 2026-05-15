@@ -62,7 +62,7 @@
                 </Border>
 
                 <!-- Inventory -->
-                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                <Border x:Name="WarehouseNav" Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminInventory" />
                     </Border.GestureRecognizers>
@@ -74,7 +74,7 @@
                               WidthRequest="18"
                               HorizontalOptions="Center"
                               VerticalOptions="Center" />
-                        <Label Grid.Column="1" Text="Inventory" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="Warehouse" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
                     </Grid>
                     <Border.Triggers>
                         <DataTrigger TargetType="Border" Binding="{Binding CurrentPage}" Value="AdminInventory">
@@ -83,8 +83,25 @@
                     </Border.Triggers>
                 </Border>
 
+                <!-- Boutique -->
+                <Border x:Name="BoutiqueNav" Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminBoutique" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="30,*" ColumnSpacing="12">
+                        <Path Data="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                              Fill="White" Aspect="Uniform" HeightRequest="18" WidthRequest="18" HorizontalOptions="Center" VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="Boutique" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                    </Grid>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding CurrentPage}" Value="AdminBoutique">
+                            <Setter Property="BackgroundColor" Value="#463366" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                </Border>
+
                 <!-- Production -->
-                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                <Border x:Name="ProductionNav" Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminProduction" />
                     </Border.GestureRecognizers>
@@ -128,7 +145,7 @@
                 </Border>
 
                 <!-- Suppliers -->
-                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                <Border x:Name="SuppliersNav" Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminSuppliers" />
                     </Border.GestureRecognizers>
@@ -150,7 +167,7 @@
                 </Border>
 
                 <!-- Customers -->
-                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                <Border x:Name="CustomersNav" Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminCustomers" />
                     </Border.GestureRecognizers>
@@ -172,7 +189,7 @@
                 </Border>
 
                 <!-- Logistics -->
-                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="#01000000" InputTransparent="False">
+                <Border x:Name="LogisticsNav" Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="#01000000" InputTransparent="False">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminLogistics" />
                     </Border.GestureRecognizers>
@@ -194,7 +211,7 @@
                 </Border>
 
                 <!-- Reports -->
-                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                <Border x:Name="ReportsNav" Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminReports" />
                     </Border.GestureRecognizers>
@@ -216,7 +233,7 @@
                 </Border>
 
                 <!-- Promotions -->
-                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                <Border x:Name="PromotionsNav" Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminPromotions" />
                     </Border.GestureRecognizers>
@@ -237,8 +254,30 @@
                     </Border.Triggers>
                 </Border>
 
+                <!-- Manage Users (Tier 2 & 3) -->
+                <Border x:Name="ManageUsersNav" Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminManageUsers" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="30,*" ColumnSpacing="12">
+                        <Path Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                              Fill="White"
+                              Aspect="Uniform"
+                              HeightRequest="18"
+                              WidthRequest="18"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="Manage Users" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" />
+                    </Grid>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding CurrentPage}" Value="AdminManageUsers">
+                            <Setter Property="BackgroundColor" Value="#463366" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                </Border>
+
                 <!-- Subscription -->
-                <Border Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
+                <Border x:Name="SubscriptionNav" Stroke="Transparent" StrokeShape="RoundRectangle 12" Padding="12,12" BackgroundColor="Transparent">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="AdminSubscription" />
                     </Border.GestureRecognizers>

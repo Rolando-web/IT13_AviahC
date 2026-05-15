@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="IT13_AviahC.Views.Auth.SignupPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F3F0FA">
+
+    <Grid>
+        <!-- Background Decoration -->
+        <BoxView Color="#624890" HorizontalOptions="Fill" HeightRequest="400" VerticalOptions="Start" />
+        
+        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="32" Padding="20">
+            <!-- Logo Section -->
+            <VerticalStackLayout Spacing="12" HorizontalOptions="Center">
+                <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" HeightRequest="80" WidthRequest="80" StrokeThickness="0">
+                    <Label Text="A" TextColor="#624890" FontAttributes="Bold" FontSize="32" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label Text="Join Aviah Collection" FontSize="28" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <!-- Signup Card -->
+            <Border BackgroundColor="White" 
+                    StrokeShape="RoundRectangle 32" 
+                    Padding="48" 
+                    StrokeThickness="0"
+                    WidthRequest="450"
+                    Shadow="{Shadow Brush=Black, Offset='0,20', Radius=40, Opacity=0.1}">
+                <VerticalStackLayout Spacing="24">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Create Account" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                        <Label Text="Join our boutique community today" FontSize="14" TextColor="#7D6A9E" />
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                        <VerticalStackLayout Grid.Column="0" Spacing="8">
+                            <Label Text="First Name" FontSize="13" FontAttributes="Bold" TextColor="#463366" />
+                            <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 16" Padding="16,4" StrokeThickness="0">
+                                <Entry x:Name="FirstNameEntry" Placeholder="Jane" TextColor="#1E293B" PlaceholderColor="#94A3B8" BackgroundColor="Transparent" FontSize="15" HeightRequest="48" />
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="8">
+                            <Label Text="Last Name" FontSize="13" FontAttributes="Bold" TextColor="#463366" />
+                            <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 16" Padding="16,4" StrokeThickness="0">
+                                <Entry x:Name="LastNameEntry" Placeholder="Doe" TextColor="#1E293B" PlaceholderColor="#94A3B8" BackgroundColor="Transparent" FontSize="15" HeightRequest="48" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Email Address" FontSize="13" FontAttributes="Bold" TextColor="#463366" />
+                        <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 16" Padding="16,4" StrokeThickness="0">
+                            <Entry x:Name="EmailEntry" Keyboard="Email" Placeholder="jane@example.com" TextColor="#1E293B" PlaceholderColor="#94A3B8" BackgroundColor="Transparent" FontSize="15" HeightRequest="48" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Password" FontSize="13" FontAttributes="Bold" TextColor="#463366" />
+                        <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 16" Padding="16,4" StrokeThickness="0">
+                            <Entry x:Name="PasswordEntry" IsPassword="True" Placeholder="••••••••" TextColor="#1E293B" PlaceholderColor="#94A3B8" BackgroundColor="Transparent" FontSize="15" HeightRequest="48" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <Button Text="Create Account" 
+                            BackgroundColor="#624890" 
+                            TextColor="White" 
+                            CornerRadius="16" 
+                            FontAttributes="Bold" 
+                            FontSize="16" 
+                            HeightRequest="56" 
+                            Margin="0,10,0,0"
+                            Clicked="OnSignupClicked" />
+
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
+                        <Label Text="Already have an account?" FontSize="13" TextColor="#7D6A9E" />
+                        <Label Text="Sign In" FontSize="13" TextColor="#624890" FontAttributes="Bold">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnLoginLabelTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+            
+            <Label Text="© 2026 Aviah Collection. All rights reserved." FontSize="12" TextColor="#7D6A9E" HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

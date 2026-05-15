@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:IT13_AviahC.Views.Admin.Components"
+             xmlns:models="clr-namespace:IT13_AviahC.Models"
+             x:Class="IT13_AviahC.Views.Admin.AdminDeliveredPage"
+             BackgroundColor="#F3F0FA">
+
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Sidebar -->
+        <components:AdminSidebarView Grid.Column="0" CurrentPage="AdminLogistics" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <components:AdminHeaderView Grid.Row="0" />
+
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="32" Spacing="24">
+                    <HorizontalStackLayout Spacing="16">
+                        <Button Text="← Back" Clicked="OnBackClicked" BackgroundColor="Transparent" TextColor="#624890" FontAttributes="Bold" />
+                        <Label Text="Delivery History" FontSize="24" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <CollectionView x:Name="DeliveredCollection">
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout Padding="40" Spacing="12" HorizontalOptions="Center">
+                                <Label Text="No completed deliveries" FontSize="18" FontAttributes="Bold" TextColor="#64748B" HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:DeliveryItem">
+                                <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" Padding="24" StrokeThickness="0" Margin="0,0,0,16" Opacity="0.8">
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <!-- Product Image -->
+                                        <Border Grid.Column="0" BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 12" HeightRequest="64" WidthRequest="64" StrokeThickness="0">
+                                            <Image Source="{Binding ProductImage}" Aspect="AspectFill" />
+                                        </Border>
+
+                                        <!-- Info -->
+                                        <VerticalStackLayout Grid.Column="1" Margin="20,0" Spacing="4">
+                                            <HorizontalStackLayout Spacing="12">
+                                                <Label Text="{Binding DeliveryID}" FontAttributes="Bold" FontSize="18" TextColor="#463366" />
+                                                <Border BackgroundColor="#F0FDF4" StrokeShape="RoundRectangle 8" Padding="12,2" StrokeThickness="0" VerticalOptions="Center">
+                                                    <Label Text="COMPLETED" FontSize="10" TextColor="#166534" FontAttributes="Bold" />
+                                                </Border>
+                                            </HorizontalStackLayout>
+                                            <Label Text="{Binding CustomerName}" FontSize="13" TextColor="#64748B" />
+                                            <Label Text="{Binding OrderRef, StringFormat='Ref: {0}'}" FontSize="12" TextColor="#94A3B8" />
+                                        </VerticalStackLayout>
+
+                                        <!-- Status Info -->
+                                        <VerticalStackLayout Grid.Column="2" Spacing="4" HorizontalOptions="End" VerticalOptions="Center">
+                                            <Label Text="Status: Delivered Successfully" FontSize="12" TextColor="#166534" FontAttributes="Bold" HorizontalOptions="End" />
+                                            <Label Text="{Binding DriverName, StringFormat='Driver: {0}'}" FontSize="11" TextColor="#64748B" HorizontalOptions="End" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

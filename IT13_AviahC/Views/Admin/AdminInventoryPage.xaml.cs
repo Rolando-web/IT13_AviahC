@@ -39,6 +39,7 @@ public partial class AdminInventoryPage : ContentPage
     private string? _editingMaterialId;
     private string _selectedImagePath = string.Empty;
     public ObservableCollection<WarehouseDisplayItem> InventoryItems { get; } = new();
+    public bool IsCrudEnabled => UserSession.CurrentTier != "Basic";
 
     public AdminInventoryPage()
     {
@@ -48,6 +49,15 @@ public partial class AdminInventoryPage : ContentPage
         ItemModalView.CloseRequested += OnCloseModalRequested;
         ItemModalView.SaveRequested += OnSaveItemRequested;
         ItemModalView.UploadImageRequested += OnUploadImageRequested;
+
+        ApplyTierLocking();
+    }
+
+    private void ApplyTierLocking()
+    {
+        bool allowed = IsCrudEnabled;
+        AddItemButton.IsVisible = allowed;
+        ActionsColumnHeader.IsVisible = allowed;
     }
 
     protected override void OnAppearing()

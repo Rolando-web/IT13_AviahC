@@ -21,10 +21,10 @@
                             <Label Text="Welcome back, Admin!" FontSize="28" FontAttributes="Bold" TextColor="#463366" />
                             <Label Text="Business Insights &amp; Performance Overview" FontSize="14" TextColor="#7D6A9E" />
                         </VerticalStackLayout>
-                        <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="16,8" StrokeThickness="0">
+                        <Border x:Name="TierIndicatorBorder" Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="16,8" StrokeThickness="0">
                             <HorizontalStackLayout Spacing="10">
-                                <Ellipse Fill="#FBBF24" HeightRequest="8" WidthRequest="8" VerticalOptions="Center" />
-                                <Label Text="Premium Tier" FontSize="13" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
+                                <Ellipse x:Name="TierIndicatorDot" Fill="#FBBF24" HeightRequest="8" WidthRequest="8" VerticalOptions="Center" />
+                                <Label x:Name="TierLabel" Text="Premium Tier" FontSize="13" FontAttributes="Bold" TextColor="#463366" VerticalOptions="Center" />
                             </HorizontalStackLayout>
                         </Border>
                     </Grid>
@@ -45,7 +45,7 @@
                                 </Grid>
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="MONTHLY SALES" FontSize="11" TextColor="#94A3B8" FontAttributes="Bold" CharacterSpacing="1" />
-                                    <Label Text="₱124,500" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                                    <Label x:Name="MonthlySalesLabel" Text="₱0" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Border>
@@ -64,7 +64,7 @@
                                 </Grid>
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="TOTAL ORDERS" FontSize="11" TextColor="#94A3B8" FontAttributes="Bold" CharacterSpacing="1" />
-                                    <Label Text="842" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                                    <Label x:Name="TotalOrdersLabel" Text="0" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Border>
@@ -83,7 +83,7 @@
                                 </Grid>
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="LOW STOCK ITEMS" FontSize="11" TextColor="#94A3B8" FontAttributes="Bold" CharacterSpacing="1" />
-                                    <Label Text="12" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                                    <Label x:Name="LowStockLabel" Text="0" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Border>
@@ -102,7 +102,7 @@
                                 </Grid>
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="CONVERSION RATE" FontSize="11" TextColor="#94A3B8" FontAttributes="Bold" CharacterSpacing="1" />
-                                    <Label Text="3.2%" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
+                                    <Label x:Name="ConversionRateLabel" Text="0%" FontSize="24" FontAttributes="Bold" TextColor="#463366" />
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Border>
@@ -126,12 +126,12 @@
                                     
                                     <!-- Bars -->
                                     <Grid Grid.Column="1" ColumnDefinitions="*,*,*,*,*,*" VerticalOptions="End" HeightRequest="200" ColumnSpacing="12">
-                                        <Border Grid.Column="0" BackgroundColor="#624890" StrokeShape="RoundRectangle 8" HeightRequest="120" StrokeThickness="0" WidthRequest="45" VerticalOptions="End" />
-                                        <Border Grid.Column="1" BackgroundColor="#624890" StrokeShape="RoundRectangle 8" HeightRequest="90" StrokeThickness="0" WidthRequest="45" VerticalOptions="End" />
-                                        <Border Grid.Column="2" BackgroundColor="#624890" StrokeShape="RoundRectangle 8" HeightRequest="140" StrokeThickness="0" WidthRequest="45" VerticalOptions="End" />
-                                        <Border Grid.Column="3" BackgroundColor="#624890" StrokeShape="RoundRectangle 8" HeightRequest="130" StrokeThickness="0" WidthRequest="45" VerticalOptions="End" />
-                                        <Border Grid.Column="4" BackgroundColor="#624890" StrokeShape="RoundRectangle 8" HeightRequest="170" StrokeThickness="0" WidthRequest="45" VerticalOptions="End" />
-                                        <Border Grid.Column="5" BackgroundColor="#624890" StrokeShape="RoundRectangle 8" HeightRequest="200" StrokeThickness="0" WidthRequest="45" VerticalOptions="End" />
+                                        <Border x:Name="Bar1" Grid.Column="0" BackgroundColor="#624890" StrokeShape="RoundRectangle 8" HeightRequest="20" StrokeThickness="0" WidthRequest="45" VerticalOptions="End" />
+                                        <Border x:Name="Bar2" Grid.Column="1" BackgroundColor="#624890" StrokeShape="RoundRectangle 8" HeightRequest="20" StrokeThickness="0" WidthRequest="45" VerticalOptions="End" />
+                                        <Border x:Name="Bar3" Grid.Column="2" BackgroundColor="#624890" StrokeShape="RoundRectangle 8" HeightRequest="20" StrokeThickness="0" WidthRequest="45" VerticalOptions="End" />
+                                        <Border x:Name="Bar4" Grid.Column="3" BackgroundColor="#624890" StrokeShape="RoundRectangle 8" HeightRequest="20" StrokeThickness="0" WidthRequest="45" VerticalOptions="End" />
+                                        <Border x:Name="Bar5" Grid.Column="4" BackgroundColor="#624890" StrokeShape="RoundRectangle 8" HeightRequest="20" StrokeThickness="0" WidthRequest="45" VerticalOptions="End" />
+                                        <Border x:Name="Bar6" Grid.Column="5" BackgroundColor="#624890" StrokeShape="RoundRectangle 8" HeightRequest="20" StrokeThickness="0" WidthRequest="45" VerticalOptions="End" />
                                     </Grid>
                                 </Grid>
                                 <!-- X-Axis -->
@@ -151,66 +151,8 @@
                             <VerticalStackLayout Spacing="24">
                                 <Label Text="Popular Products" FontSize="18" FontAttributes="Bold" TextColor="#463366" />
                                 
-                                <VerticalStackLayout Spacing="16">
-                                    <!-- Product 1 -->
-                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16">
-                                        <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 12" HeightRequest="56" WidthRequest="56" StrokeThickness="0">
-                                            <Label Text="👗" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
-                                        </Border>
-                                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                                            <Label Text="Silk Maxi Dress" FontAttributes="Bold" TextColor="#463366" FontSize="14" />
-                                            <Label Text="124 sold • ₱2,490" FontSize="11" TextColor="#94A3B8" />
-                                        </VerticalStackLayout>
-                                        <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End">
-                                            <Label Text="45 left" FontAttributes="Bold" TextColor="#15803D" FontSize="12" />
-                                            <Label Text="Stock" FontSize="10" TextColor="#94A3B8" HorizontalTextAlignment="End" />
-                                        </VerticalStackLayout>
-                                    </Grid>
-
-                                    <!-- Product 2 -->
-                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16">
-                                        <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 12" HeightRequest="56" WidthRequest="56" StrokeThickness="0">
-                                            <Label Text="👕" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
-                                        </Border>
-                                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                                            <Label Text="Cotton Linen Shirt" FontAttributes="Bold" TextColor="#463366" FontSize="14" />
-                                            <Label Text="98 sold • ₱1,200" FontSize="11" TextColor="#94A3B8" />
-                                        </VerticalStackLayout>
-                                        <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End">
-                                            <Label Text="12 left" FontAttributes="Bold" TextColor="#B91C1C" FontSize="12" />
-                                            <Label Text="Stock" FontSize="10" TextColor="#94A3B8" HorizontalTextAlignment="End" />
-                                        </VerticalStackLayout>
-                                    </Grid>
-
-                                    <!-- Product 3 -->
-                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16">
-                                        <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 12" HeightRequest="56" WidthRequest="56" StrokeThickness="0">
-                                            <Label Text="👖" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
-                                        </Border>
-                                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                                            <Label Text="High-Waist Trousers" FontAttributes="Bold" TextColor="#463366" FontSize="14" />
-                                            <Label Text="85 sold • ₱1,850" FontSize="11" TextColor="#94A3B8" />
-                                        </VerticalStackLayout>
-                                        <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End">
-                                            <Label Text="67 left" FontAttributes="Bold" TextColor="#15803D" FontSize="12" />
-                                            <Label Text="Stock" FontSize="10" TextColor="#94A3B8" HorizontalTextAlignment="End" />
-                                        </VerticalStackLayout>
-                                    </Grid>
-
-                                    <!-- Product 4 -->
-                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16">
-                                        <Border BackgroundColor="#F3F0FA" StrokeShape="RoundRectangle 12" HeightRequest="56" WidthRequest="56" StrokeThickness="0">
-                                            <Label Text="👚" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
-                                        </Border>
-                                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                                            <Label Text="Floral Summer Top" FontAttributes="Bold" TextColor="#463366" FontSize="14" />
-                                            <Label Text="72 sold • ₱950" FontSize="11" TextColor="#94A3B8" />
-                                        </VerticalStackLayout>
-                                        <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End">
-                                            <Label Text="8 left" FontAttributes="Bold" TextColor="#B91C1C" FontSize="12" />
-                                            <Label Text="Stock" FontSize="10" TextColor="#94A3B8" HorizontalTextAlignment="End" />
-                                        </VerticalStackLayout>
-                                    </Grid>
+                                <VerticalStackLayout x:Name="PopularProductsList" Spacing="16">
+                                    <!-- Dynamic Items will be added here -->
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Border>

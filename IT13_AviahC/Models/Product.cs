@@ -19,6 +19,9 @@ namespace IT13_AviahC.Models
         public string? PromoCode { get; set; }
         public string? DiscountValue { get; set; }
         public string? PromotionName { get; set; }
+        public int WarehouseStock { get; set; }
+        public bool IsWarehouseView { get; set; } = false;
+        public bool IsBoutiqueView { get; set; } = true;
 
         public string FormattedPrice => UnitPrice.ToString("₱#,##0.00");
         public string FormattedDiscountPrice => IsOnPromotion && DiscountPrice.HasValue 
