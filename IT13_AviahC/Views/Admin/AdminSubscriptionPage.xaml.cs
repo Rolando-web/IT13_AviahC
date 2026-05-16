@@ -11,8 +11,9 @@ public partial class AdminSubscriptionPage : ContentPage
     {
         InitializeComponent();
         _dbService = new DatabaseService();
-        // Secure key from User Request
-        _paymongoService = new IT13_AviahC.Services.Paymongo.PaymongoService("YOUR_PAYMONGO_SECRET_KEY");
+        // Load Paymongo Secret Key from .env file for security
+        string paymongoKey = EnvService.Get("PAYMONGO_SECRET_KEY", "YOUR_PAYMONGO_SECRET_KEY");
+        _paymongoService = new IT13_AviahC.Services.Paymongo.PaymongoService(paymongoKey);
     }
 
     protected override void OnAppearing()
